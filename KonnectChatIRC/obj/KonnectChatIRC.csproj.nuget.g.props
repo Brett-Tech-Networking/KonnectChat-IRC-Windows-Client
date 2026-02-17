@@ -26,13 +26,11 @@
     <Import Project="$(NuGetPackageRoot)microsoft.windowsappsdk.dwrite\1.8.25122902\buildTransitive\Microsoft.WindowsAppSDK.DWrite.props" Condition="Exists('$(NuGetPackageRoot)microsoft.windowsappsdk.dwrite\1.8.25122902\buildTransitive\Microsoft.WindowsAppSDK.DWrite.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.windowsappsdk.ai\1.8.47\buildTransitive\Microsoft.WindowsAppSDK.AI.props" Condition="Exists('$(NuGetPackageRoot)microsoft.windowsappsdk.ai\1.8.47\buildTransitive\Microsoft.WindowsAppSDK.AI.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.windowsappsdk\1.8.260209005\buildTransitive\Microsoft.WindowsAppSDK.props" Condition="Exists('$(NuGetPackageRoot)microsoft.windowsappsdk\1.8.260209005\buildTransitive\Microsoft.WindowsAppSDK.props')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\8.0.24\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\8.0.24\build\Microsoft.NET.ILLink.Tasks.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_Windows_SDK_BuildTools_MSIX Condition=" '$(PkgMicrosoft_Windows_SDK_BuildTools_MSIX)' == '' ">C:\Users\Brett\.nuget\packages\microsoft.windows.sdk.buildtools.msix\1.7.20250829.1</PkgMicrosoft_Windows_SDK_BuildTools_MSIX>
     <PkgMicrosoft_Web_WebView2 Condition=" '$(PkgMicrosoft_Web_WebView2)' == '' ">C:\Users\Brett\.nuget\packages\microsoft.web.webview2\1.0.3179.45</PkgMicrosoft_Web_WebView2>
     <PkgMicrosoft_WindowsAppSDK_WinUI Condition=" '$(PkgMicrosoft_WindowsAppSDK_WinUI)' == '' ">C:\Users\Brett\.nuget\packages\microsoft.windowsappsdk.winui\1.8.260204000</PkgMicrosoft_WindowsAppSDK_WinUI>
     <PkgMicrosoft_WindowsAppSDK_Runtime Condition=" '$(PkgMicrosoft_WindowsAppSDK_Runtime)' == '' ">C:\Users\Brett\.nuget\packages\microsoft.windowsappsdk.runtime\1.8.260209005</PkgMicrosoft_WindowsAppSDK_Runtime>
-    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\Brett\.nuget\packages\microsoft.net.illink.tasks\8.0.24</PkgMicrosoft_NET_ILLink_Tasks>
   </PropertyGroup>
 </Project>
