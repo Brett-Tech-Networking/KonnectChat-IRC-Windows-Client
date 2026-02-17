@@ -394,7 +394,7 @@ namespace KonnectChatIRC.ViewModels
                         Content = content,
                         Timestamp = DateTime.Now,
                         IsIncoming = true,
-                        IsSystem = !target.StartsWith("#") && !target.StartsWith("&")
+                        IsSystem = true // Notices should usually be system-width
                     });
                 }
             }
@@ -730,7 +730,8 @@ namespace KonnectChatIRC.ViewModels
                 Sender = "", 
                 Content = e.RawMessage, 
                 Timestamp = DateTime.Now,
-                IsIncoming = true
+                IsIncoming = true,
+                IsSystem = true
             });
         }
 

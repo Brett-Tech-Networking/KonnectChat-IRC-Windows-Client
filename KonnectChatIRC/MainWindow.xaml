@@ -18,13 +18,36 @@
             <ThemeShadow x:Name="SharedShadow" />
         </Grid.Resources>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!-- Custom Title Bar -->
+        <Grid x:Name="AppTitleBar" Grid.ColumnSpan="2" Background="Transparent" VerticalAlignment="Top" Height="32">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="0">
+                <Button x:Name="MinimizeButton" Width="46" Height="32" Background="Transparent" BorderThickness="0" Click="MinimizeButton_Click" ToolTipService.ToolTip="Minimize">
+                    <FontIcon Glyph="&#xE921;" FontSize="10"/>
+                </Button>
+                <Button x:Name="CloseButton" Width="46" Height="32" Background="Transparent" BorderThickness="0" Click="CloseButton_Click" ToolTipService.ToolTip="Close">
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FFC42B1C"/>
+                        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FFC42B1C"/>
+                        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="White"/>
+                    </Button.Resources>
+                    <FontIcon Glyph="&#xE8BB;" FontSize="10"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
         <!-- Server Sidebar (Multi-server) -->
-        <Border Grid.Column="0" Background="{StaticResource AppBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0" 
+        <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource AppBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0" 
                 Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource InverseBoolToVis}}">
             <Grid Width="68">
                 <Grid.RowDefinitions>
@@ -88,11 +111,19 @@
                         </Button>
                     </StackPanel>
                 </ScrollViewer>
+
+                <!-- Settings Button (Bottom) -->
+                <Button Grid.Row="2" Command="{Binding SettingsCommand}" 
+                        HorizontalAlignment="Center" Margin="0,8"
+                        Background="Transparent" BorderThickness="0" Padding="8"
+                        ToolTipService.ToolTip="App Settings">
+                    <FontIcon Glyph="&#xE713;" FontSize="18" Foreground="{StaticResource TextSecondaryBrush}"/>
+                </Button>
             </Grid>
         </Border>
 
         <!-- Main Workspace -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="1">
             <!-- Main Chat Interface -->
             <Grid Visibility="{Binding SelectedServer, Converter={StaticResource NullToVis}}">
                 <Grid.ColumnDefinitions>
@@ -207,12 +238,50 @@
                                 
                                 <TextBlock Text="{Binding FormattedTime}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" VerticalAlignment="Top" Margin="0,0,8,0"
                                            Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Sender}" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,0,8,0"
-                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}">
-                                    <TextBlock.Foreground>
-                                        <SolidColorBrush Color="{Binding SenderPrefix, Converter={StaticResource StatusToColorConverter}}"/>
-                                    </TextBlock.Foreground>
-                                </TextBlock>
+                                
+                                <!-- Sender Name Container (Hidden for System Messages) -->
+                                <Grid Grid.Column="1" VerticalAlignment="Top" Margin="0,0,8,0"
+                                      Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}">
+                                    
+                                    <!-- Normal Sender Name -->
+                                    <TextBlock Text="{Binding Sender}" FontWeight="SemiBold"
+                                               Visibility="{Binding DataContext.IsRainbowNicksEnabled, ElementName=MainGrid, Converter={StaticResource InverseBoolToVis}}">
+                                        <TextBlock.Foreground>
+                                            <SolidColorBrush Color="{Binding SenderPrefix, Converter={StaticResource StatusToColorConverter}}"/>
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+
+                                    <!-- Rainbow Sender Name (Visible only when Rainbow Enabled) -->
+                                    <TextBlock Text="{Binding Sender}" FontWeight="Bold"
+                                               Visibility="{Binding DataContext.IsRainbowNicksEnabled, ElementName=MainGrid, Converter={StaticResource BoolToVis}}">
+                                        <TextBlock.Foreground>
+                                            <LinearGradientBrush x:Name="RainbowBrush" StartPoint="0,0.5" EndPoint="1,0.5" SpreadMethod="Repeat" MappingMode="RelativeToBoundingBox">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <TranslateTransform x:Name="RainbowBrushTransform" X="0"/>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#FF0000" Offset="0"/>
+                                                <GradientStop Color="#FFFF00" Offset="0.16"/>
+                                                <GradientStop Color="#00FF00" Offset="0.33"/>
+                                                <GradientStop Color="#00FFFF" Offset="0.5"/>
+                                                <GradientStop Color="#0000FF" Offset="0.66"/>
+                                                <GradientStop Color="#FF00FF" Offset="0.83"/>
+                                                <GradientStop Color="#FF0000" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </TextBlock.Foreground>
+                                        <TextBlock.Triggers>
+                                            <!-- Continuous Scrolling Animation (Speed: 1s) -->
+                                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                                <BeginStoryboard>
+                                                    <Storyboard RepeatBehavior="Forever">
+                                                        <DoubleAnimation Storyboard.TargetName="RainbowBrushTransform" 
+                                                                         Storyboard.TargetProperty="X"
+                                                                         From="0" To="-1" Duration="0:0:1" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </TextBlock.Triggers>
+                                    </TextBlock>
+                                </Grid>
                                 
                                 <!-- Regular Message Content -->
                                 <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Top"
@@ -235,7 +304,7 @@
                         </TransitionCollection>
                     </ListView.ItemContainerTransitions>
                 </ListView>
-
+                
                 <!-- Input -->
                 <Grid Grid.Row="2" Margin="16">
                     <Grid.ColumnDefinitions>
@@ -304,6 +373,8 @@
                                                                 <SolidColorBrush Color="{Binding Prefix, Converter={StaticResource StatusToColorConverter}}"/>
                                                             </TextBlock.Foreground>
                                                         </TextBlock>
+                                                        
+                                                        <!-- Normal User List Nick -->
                                                         <TextBlock Grid.Column="2" Text="{Binding Nickname}">
                                                             <TextBlock.Foreground>
                                                                 <SolidColorBrush Color="{Binding Prefix, Converter={StaticResource StatusToColorConverter}}"/>
@@ -386,6 +457,24 @@
                     </Grid>
                 </Border>
             </Grid>
+
+            <!-- Settings Dialog -->
+            <ContentDialog x:Name="SettingsDialog"
+                           Title="App Settings"
+                           CloseButtonText="Close"
+                           RequestedTheme="Dark"
+                           Background="{StaticResource SidebarBackgroundBrush}">
+                <StackPanel Width="400" Spacing="20">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Appearance" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                        <ToggleSwitch Header="Rainbow Nicks" 
+                                      OnContent="Enabled" OffContent="Disabled"
+                                      IsOn="{Binding IsRainbowNicksEnabled, Mode=TwoWay}"/>
+                        <TextBlock Text="When enabled, nicknames in chat will cycle colors consistently in a smooth rainbow pattern." 
+                                   FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </StackPanel>
+            </ContentDialog>
 
             <!-- Connection Overlay (Centered in Workspace) -->
             <Grid Background="Transparent" Visibility="{Binding SelectedServer, Converter={StaticResource NullToVis}, ConverterParameter=Invert}">

@@ -27,6 +27,7 @@ namespace KonnectChatIRC
             }
 
             Handle.PropertyChanged += MainViewModel_PropertyChanged;
+            Handle.RequestSettingsDialog += Handle_RequestSettingsDialog;
 
             // --- START: Set Window to Maximize (Fullscreen) ---
             IntPtr hWnd = WindowNative.GetWindowHandle(this);
@@ -39,9 +40,60 @@ namespace KonnectChatIRC
                 if (presenter != null)
                 {
                     presenter.Maximize();
+                    // Remove default title bar but keep border for resizing
+                    presenter.SetBorderAndTitleBar(true, false);
                 }
             }
             // --- END: Set Window to Maximize ---
+
+            // Enable dragging on the custom title bar
+            AppTitleBar.PointerPressed += AppTitleBar_PointerPressed;
+        }
+
+
+
+        private async void Handle_RequestSettingsDialog(object? sender, EventArgs e)
+        {
+            if (SettingsDialog != null)
+            {
+                SettingsDialog.XamlRoot = this.Content.XamlRoot;
+                await SettingsDialog.ShowAsync();
+            }
+        }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HT_CAPTION = 0x2;
+
+        private void AppTitleBar_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
+            {
+                ReleaseCapture();
+                IntPtr hWnd = WindowNative.GetWindowHandle(this);
+                SendMessage(hWnd, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            IntPtr hWnd = WindowNative.GetWindowHandle(this);
+            Microsoft.UI.WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+            AppWindow appWindow = AppWindow.GetFromWindowId(windowId);
+            if (appWindow.Presenter is OverlappedPresenter presenter)
+            {
+                presenter.Minimize();
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
         private ServerViewModel? _currentServer;

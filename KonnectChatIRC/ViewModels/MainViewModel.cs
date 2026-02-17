@@ -70,8 +70,31 @@ namespace KonnectChatIRC.ViewModels
             RemoveServerCommand = new RelayCommand(ExecuteRemoveServer);
             ToggleSidebarCommand = new RelayCommand(_ => IsSidebarCollapsed = !IsSidebarCollapsed);
             ToggleUserListCommand = new RelayCommand(_ => IsUserListCollapsed = !IsUserListCollapsed);
+            SettingsCommand = new RelayCommand(ExecuteOpenSettings);
             
             _ = LoadSettingsAsync();
+        }
+
+        private bool _isRainbowNicksEnabled;
+        public bool IsRainbowNicksEnabled
+        {
+            get => _isRainbowNicksEnabled;
+            set
+            {
+                if (SetProperty(ref _isRainbowNicksEnabled, value))
+                {
+                    Windows.Storage.ApplicationData.Current.LocalSettings.Values["IsRainbowNicksEnabled"] = value;
+                }
+            }
+        }
+
+        public ICommand SettingsCommand { get; }
+        
+        public event System.EventHandler? RequestSettingsDialog;
+
+        private void ExecuteOpenSettings(object? obj)
+        {
+            RequestSettingsDialog?.Invoke(this, System.EventArgs.Empty);
         }
 
         private List<ServerConfig> _savedConfigs = new List<ServerConfig>();
@@ -79,6 +102,11 @@ namespace KonnectChatIRC.ViewModels
         private async System.Threading.Tasks.Task LoadSettingsAsync()
         {
             _savedConfigs = await SettingsService.LoadServersAsync();
+            
+            if (Windows.Storage.ApplicationData.Current.LocalSettings.Values.TryGetValue("IsRainbowNicksEnabled", out object? val) && val is bool b)
+            {
+                IsRainbowNicksEnabled = b;
+            }
         }
 
         public async System.Threading.Tasks.Task SaveSettingsAsync()
