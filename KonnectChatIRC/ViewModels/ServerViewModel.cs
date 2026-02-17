@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -16,9 +17,30 @@ namespace KonnectChatIRC.ViewModels
         private string _serverName;
         private ChannelViewModel _selectedChannel;
         private readonly DispatcherQueue _dispatcherQueue;
+        private string _address;
+        private int _port;
+        private string _realname;
+        private string? _password;
+        private string? _autoJoinChannel;
+
+        public event EventHandler? RequestSave;
+        public List<string> InitialFavoriteChannels { get; } = new List<string>();
         
         // Thread-safe lookup
         private ConcurrentDictionary<string, ChannelViewModel> _channelLookup = new ConcurrentDictionary<string, ChannelViewModel>(StringComparer.OrdinalIgnoreCase);
+
+
+        public string ChannelSearchText
+        {
+            get => _channelSearchText;
+            set
+            {
+                if (SetProperty(ref _channelSearchText, value))
+                {
+                    RefreshFilteredAvailableChannels();
+                }
+            }
+        }
 
         public string ServerName
         {
@@ -55,6 +77,8 @@ namespace KonnectChatIRC.ViewModels
         }
 
         public ObservableCollection<ChannelViewModel> Channels { get; } = new ObservableCollection<ChannelViewModel>();
+        public ObservableCollection<ChannelViewModel> FavoriteChannels { get; } = new ObservableCollection<ChannelViewModel>();
+        public ObservableCollection<ChannelViewModel> OtherChannels { get; } = new ObservableCollection<ChannelViewModel>();
 
         public ChannelViewModel SelectedChannel
         {
@@ -67,10 +91,16 @@ namespace KonnectChatIRC.ViewModels
         public ICommand ChangeNickCommand { get; }
         public ICommand PartChannelCommand { get; }
         public ICommand ChangeTopicCommand { get; }
+        public ICommand ToggleFavoriteCommand { get; }
 
         public ServerViewModel(string serverName, string address, int port, string nick, string realname, string? password = null, string? autoJoinChannel = null)
         {
             _serverName = serverName;
+            _address = address;
+            _port = port;
+            _realname = realname;
+            _password = password;
+            _autoJoinChannel = autoJoinChannel;
             _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
             _ircService = new IrcClientService();
             
@@ -103,6 +133,7 @@ namespace KonnectChatIRC.ViewModels
                             user.Username = info.Username;
                             user.Realname = info.Realname;
                             user.Server = info.Server;
+                            user.ConnectingFrom = info.ConnectingFrom;
                             user.Channels.Clear();
                             foreach(var c in info.Channels) user.Channels.Add(c);
                         }
@@ -117,6 +148,7 @@ namespace KonnectChatIRC.ViewModels
             var serverChan = new ChannelViewModel("Server");
             _channelLookup.TryAdd("Server", serverChan);
             Channels.Add(serverChan);
+            OtherChannels.Add(serverChan);
             _selectedChannel = serverChan; // Initialize backing field
             _currentNick = nick;
 
@@ -130,6 +162,68 @@ namespace KonnectChatIRC.ViewModels
                 {
                     _ircService?.SendRawAsync($"TOPIC {SelectedChannel.Name} :{topic}");
                 }
+            });
+
+            ToggleFavoriteCommand = new RelayCommand(param =>
+            {
+                _dispatcherQueue.TryEnqueue(() =>
+                {
+                    string channelName = "";
+                    bool isSetToFavorite = false;
+
+                    if (param is ChannelViewModel channel)
+                    {
+                        channel.IsFavorite = !channel.IsFavorite;
+                        channelName = channel.Name;
+                        isSetToFavorite = channel.IsFavorite;
+
+                        if (isSetToFavorite)
+                        {
+                            if (OtherChannels.Contains(channel)) OtherChannels.Remove(channel);
+                            if (!FavoriteChannels.Contains(channel)) FavoriteChannels.Add(channel);
+                        }
+                        else
+                        {
+                            if (FavoriteChannels.Contains(channel)) FavoriteChannels.Remove(channel);
+                            if (!OtherChannels.Contains(channel)) OtherChannels.Add(channel);
+                        }
+                    }
+                    else if (param is IrcChannelInfo info)
+                    {
+                        info.IsFavorite = !info.IsFavorite;
+                        channelName = info.Name;
+                        isSetToFavorite = info.IsFavorite;
+                        
+                        // If this channel is already joined, sync its ViewModel
+                        if (_channelLookup.TryGetValue(channelName, out var joinedChan))
+                        {
+                            joinedChan.IsFavorite = isSetToFavorite;
+                            if (isSetToFavorite)
+                            {
+                                if (OtherChannels.Contains(joinedChan)) OtherChannels.Remove(joinedChan);
+                                if (!FavoriteChannels.Contains(joinedChan)) FavoriteChannels.Add(joinedChan);
+                            }
+                            else
+                            {
+                                if (FavoriteChannels.Contains(joinedChan)) FavoriteChannels.Remove(joinedChan);
+                                if (!OtherChannels.Contains(joinedChan)) OtherChannels.Add(joinedChan);
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(channelName))
+                    {
+                        if (isSetToFavorite)
+                        {
+                            if (!InitialFavoriteChannels.Contains(channelName)) InitialFavoriteChannels.Add(channelName);
+                        }
+                        else
+                        {
+                            InitialFavoriteChannels.Remove(channelName);
+                        }
+                        RequestSave?.Invoke(this, EventArgs.Empty);
+                    }
+                });
             });
 
             // Start connection
@@ -288,19 +382,41 @@ namespace KonnectChatIRC.ViewModels
             else if (e.Command == "PART")
             {
                 var channelName = e.Parameters[0];
-                var channel = GetOrCreateChannel(channelName);
-                if (channel != null)
+                var nick = GetNickFromPrefix(e.Prefix);
+
+                if (nick.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
                 {
-                    var nick = GetNickFromPrefix(e.Prefix);
-                    channel.RemoveUser(nick);
-                    channel.AddMessage(new ChatMessage 
-                    { 
-                        Sender = "", 
-                        Content = $"* {nick} left {channelName}", 
-                        Timestamp = DateTime.Now,
-                        IsIncoming = true,
-                        IsSystem = true
+                    // If WE are parting, remove the channel entirely
+                    _dispatcherQueue.TryEnqueue(() =>
+                    {
+                        if (_channelLookup.TryRemove(channelName, out var removedChannel))
+                        {
+                            Channels.Remove(removedChannel);
+                            if (FavoriteChannels.Contains(removedChannel)) FavoriteChannels.Remove(removedChannel);
+                            if (OtherChannels.Contains(removedChannel)) OtherChannels.Remove(removedChannel);
+
+                            if (SelectedChannel == removedChannel)
+                            {
+                                SelectedChannel = Channels[0]; // Usually "Server"
+                            }
+                        }
                     });
+                }
+                else
+                {
+                    var channel = GetOrCreateChannel(channelName);
+                    if (channel != null)
+                    {
+                        channel.RemoveUser(nick);
+                        channel.AddMessage(new ChatMessage
+                        {
+                            Sender = "",
+                            Content = $"* {nick} left {channelName}",
+                            Timestamp = DateTime.Now,
+                            IsIncoming = true,
+                            IsSystem = true
+                        });
+                    }
                 }
             }
             else if (e.Command == "QUIT")
@@ -500,7 +616,9 @@ namespace KonnectChatIRC.ViewModels
                     {
                         _dispatcherQueue.TryEnqueue(() => 
                         {
-                            AvailableChannels.Add(new IrcChannelInfo { Name = chanName, UserCount = count, Topic = topic });
+                            var info = new IrcChannelInfo { Name = chanName, UserCount = count, Topic = topic };
+                            info.IsFavorite = InitialFavoriteChannels.Contains(chanName);
+                            AvailableChannels.Add(info);
                         });
                     }
                 }
@@ -514,16 +632,40 @@ namespace KonnectChatIRC.ViewModels
                     var sorted = AvailableChannels.OrderByDescending(c => c.UserCount).ToList();
                     AvailableChannels.Clear();
                     foreach (var c in sorted) AvailableChannels.Add(c);
+                    RefreshFilteredAvailableChannels();
                 });
                 return; // Don't show in chat log
             }
-            
+
+            // Fallback: show unknown messages in the server tab
             Channels[0].AddMessage(new ChatMessage 
             { 
                 Sender = "", 
                 Content = e.RawMessage, 
                 Timestamp = DateTime.Now,
                 IsIncoming = true
+            });
+        }
+
+        private void RefreshFilteredAvailableChannels()
+        {
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                var filtered = AvailableChannels.AsEnumerable();
+                if (!string.IsNullOrWhiteSpace(ChannelSearchText))
+                {
+                    filtered = filtered.Where(c => c.Name.Contains(ChannelSearchText, StringComparison.OrdinalIgnoreCase) || 
+                                                 c.Topic.Contains(ChannelSearchText, StringComparison.OrdinalIgnoreCase));
+                }
+
+                FavoriteAvailableChannels.Clear();
+                OtherAvailableChannels.Clear();
+
+                foreach (var c in filtered)
+                {
+                    if (c.IsFavorite) FavoriteAvailableChannels.Add(c);
+                    else OtherAvailableChannels.Add(c);
+                }
             });
         }
 
@@ -552,7 +694,19 @@ namespace KonnectChatIRC.ViewModels
              var newChan = new ChannelViewModel(name);
              if (_channelLookup.TryAdd(name, newChan))
              {
-                 _dispatcherQueue.TryEnqueue(() => Channels.Add(newChan));
+                 _dispatcherQueue.TryEnqueue(() => 
+                 {
+                      Channels.Add(newChan);
+                      if (InitialFavoriteChannels.Contains(name))
+                      {
+                          newChan.IsFavorite = true;
+                          FavoriteChannels.Add(newChan);
+                      }
+                      else
+                      {
+                          OtherChannels.Add(newChan);
+                      }
+                  });
                  return newChan;
              }
              
@@ -575,7 +729,11 @@ namespace KonnectChatIRC.ViewModels
              });
         }
         
+        private string _channelSearchText = "";
+        
         public ObservableCollection<IrcChannelInfo> AvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
+        public ObservableCollection<IrcChannelInfo> FavoriteAvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
+        public ObservableCollection<IrcChannelInfo> OtherAvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
         
         public ICommand RefreshChannelListCommand => new RelayCommand(async _ => 
         {
@@ -621,9 +779,12 @@ namespace KonnectChatIRC.ViewModels
                  _channelLookup.Clear();
                  _channelLookup.TryAdd("Server", serverChan);
                  
-                 Channels.Clear();
-                 Channels.Add(serverChan);
-                 SelectedChannel = serverChan;
+                  Channels.Clear();
+                  Channels.Add(serverChan);
+                  FavoriteChannels.Clear();
+                  OtherChannels.Clear();
+                  OtherChannels.Add(serverChan);
+                  SelectedChannel = serverChan;
              });
         }
 
@@ -651,8 +812,20 @@ namespace KonnectChatIRC.ViewModels
                  _ = _ircService?.SendRawAsync($"WHOIS {user.Nickname}");
              }
         });
-        
-        // Event for View to subscribe to for showing dialog
-        // public event EventHandler<WhoisInfo>? ShowWhoisDialog;
+
+        public ServerConfig ToConfig()
+        {
+            return new ServerConfig
+            {
+                ServerName = ServerName,
+                Address = _address,
+                Port = _port,
+                Nick = CurrentNick,
+                Realname = _realname,
+                Password = _password,
+                AutoJoinChannel = _autoJoinChannel,
+                FavoriteChannels = FavoriteChannels.Select(c => c.Name).ToList()
+            };
+        }
     }
 }

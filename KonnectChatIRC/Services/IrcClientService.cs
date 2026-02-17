@@ -247,6 +247,16 @@ namespace KonnectChatIRC.Services
                 _currentWhois.Server = parameters[2];
                 if (parameters.Count > 3) _currentWhois.ServerInfo = parameters[3];
             }
+            // 378 RPL_WHOISHOST: <nick> <target> :is connecting from <user>@<host> <ip>
+            else if (command == "378" && _currentWhois != null && parameters.Count >= 3)
+            {
+                string hostInfo = parameters[2];
+                if (hostInfo.StartsWith("is connecting from ", StringComparison.OrdinalIgnoreCase))
+                {
+                    hostInfo = hostInfo.Substring("is connecting from ".Length);
+                }
+                _currentWhois.ConnectingFrom = hostInfo;
+            }
             // 319 RPL_WHOISCHANNELS: <nick> :<channel> <channel> ...
             else if (command == "319" && _currentWhois != null && parameters.Count >= 3)
             {

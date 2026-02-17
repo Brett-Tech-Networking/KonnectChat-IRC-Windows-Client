@@ -14,5 +14,6 @@ namespace KonnectChatIRC.Models
         public bool IsOperator { get; set; }
         public bool IsAway { get; set; }
         public string AwayMessage { get; set; } = "";
+        public string ConnectingFrom { get; set; } = "";
     }
 }

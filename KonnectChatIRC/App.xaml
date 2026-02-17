@@ -53,15 +53,29 @@
             <DataTemplate x:Key="ProChannelTemplate">
                 <Grid Padding="12,8" Background="Transparent">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     
-                    <StackPanel Orientation="Horizontal">
+                    <Button Grid.Column="0"
+                            Command="{Binding DataContext.SelectedServer.ToggleFavoriteCommand, ElementName=MainGrid}"
+                            CommandParameter="{Binding}"
+                            Background="Transparent" BorderThickness="0" Padding="4"
+                            VerticalAlignment="Center" Margin="0,0,4,0">
+                        <Grid>
+                            <FontIcon Glyph="&#xE734;" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" 
+                                      Visibility="{Binding IsFavorite, Converter={StaticResource InverseBoolToVis}}"/>
+                            <FontIcon Glyph="&#xE735;" FontSize="14" Foreground="Gold" 
+                                      Visibility="{Binding IsFavorite, Converter={StaticResource BoolToVis}}"/>
+                        </Grid>
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Medium"/>
                     </StackPanel>
 
-                    <Button Grid.Column="1" 
+                    <Button Grid.Column="2" 
                             Command="{Binding DataContext.SelectedServer.PartChannelCommand, ElementName=MainGrid}"
                             CommandParameter="{Binding Name}"
                             Background="Transparent" BorderThickness="0" Padding="4"

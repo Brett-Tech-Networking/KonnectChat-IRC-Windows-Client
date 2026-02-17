@@ -68,6 +68,7 @@ namespace KonnectChatIRC.Models
         private string _username = "";
         private string _realname = "";
         private string _server = "";
+        private string _connectingFrom = "";
         private ObservableCollection<string> _channels = new ObservableCollection<string>();
 
         public string Hostname 
@@ -92,6 +93,12 @@ namespace KonnectChatIRC.Models
         { 
             get => _server; 
             set { _server = value; OnPropertyChanged(); }
+        }
+
+        public string ConnectingFrom
+        {
+            get => _connectingFrom;
+            set { _connectingFrom = value; OnPropertyChanged(); }
         }
 
         public ObservableCollection<string> Channels 

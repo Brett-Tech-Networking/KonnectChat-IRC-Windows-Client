@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using KonnectChatIRC.Models;
@@ -10,7 +11,27 @@ namespace KonnectChatIRC.ViewModels
     {
         private string _name;
         private string _topic = "No Topic";
+        private bool _isFavorite;
+        private string _userSearchText = string.Empty;
         private readonly DispatcherQueue _dispatcherQueue;
+
+        public bool IsFavorite
+        {
+            get => _isFavorite;
+            set => SetProperty(ref _isFavorite, value);
+        }
+
+        public string UserSearchText
+        {
+            get => _userSearchText;
+            set
+            {
+                if (SetProperty(ref _userSearchText, value))
+                {
+                    RefreshFilteredUsers();
+                }
+            }
+        }
 
         public string Name
         {
@@ -46,8 +67,23 @@ namespace KonnectChatIRC.ViewModels
             _halfOpsGroup = new UserGroup("Half-Ops");
             _voiceGroup = new UserGroup("Voice");
             _usersGroup = new UserGroup("Users");
-            
-            // Groups are added dynamically when they have users
+        }
+
+        private void RefreshFilteredUsers()
+        {
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                GroupedUsers.Clear();
+                _opsGroup?.Clear();
+                _halfOpsGroup?.Clear();
+                _voiceGroup?.Clear();
+                _usersGroup?.Clear();
+
+                foreach (var user in Users)
+                {
+                    AddToGroup(user);
+                }
+            });
         }
         
         private void EnsureGroupVisible(UserGroup? group)
@@ -134,6 +170,12 @@ namespace KonnectChatIRC.ViewModels
 
         private void AddToGroup(IrcUser user)
         {
+            if (!string.IsNullOrWhiteSpace(UserSearchText) && 
+                !user.Nickname.Contains(UserSearchText, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
             UserGroup? target = user.Rank switch
             {
                 0 => _opsGroup,
@@ -144,7 +186,7 @@ namespace KonnectChatIRC.ViewModels
 
             if (target != null)
             {
-                target.Add(user);
+                if (!target.Contains(user)) target.Add(user);
                 EnsureGroupVisible(target);
             }
         }

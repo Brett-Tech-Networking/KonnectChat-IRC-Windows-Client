@@ -211,24 +211,29 @@ namespace KonnectChatIRC
                 }
             }
         }
-    }
 
-    public class NullToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        private void FavoriteChannelsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            bool invert = parameter != null && parameter.ToString() == "Invert";
-            bool isNull = value == null;
-
-            if (invert)
-                return isNull ? Visibility.Visible : Visibility.Collapsed;
-
-            return isNull ? Visibility.Collapsed : Visibility.Visible;
+            if (FavoriteChannelsList.SelectedItem is ChannelViewModel selected)
+            {
+                if (Handle.SelectedServer != null)
+                {
+                    Handle.SelectedServer.SelectedChannel = selected;
+                }
+                OtherChannelsList.SelectedItem = null;
+            }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        private void OtherChannelsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (OtherChannelsList.SelectedItem is ChannelViewModel selected)
+            {
+                if (Handle.SelectedServer != null)
+                {
+                    Handle.SelectedServer.SelectedChannel = selected;
+                }
+                FavoriteChannelsList.SelectedItem = null;
+            }
         }
     }
 }

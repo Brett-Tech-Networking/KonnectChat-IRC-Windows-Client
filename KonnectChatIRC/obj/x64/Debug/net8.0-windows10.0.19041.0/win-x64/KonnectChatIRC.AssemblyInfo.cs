@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KonnectChatIRC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42e28dd6a6d849f6d6c79d7b615b0234ee69d23e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23ede0395b919c5900b513dd42359c4934d98806")]
 [assembly: System.Reflection.AssemblyProductAttribute("KonnectChatIRC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KonnectChatIRC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
