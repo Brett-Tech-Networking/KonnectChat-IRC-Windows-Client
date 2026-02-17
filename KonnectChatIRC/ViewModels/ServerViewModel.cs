@@ -89,23 +89,57 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _selectedChannel, value);
         }
 
-        public ICommand SendCommand { get; }
+        private bool _isIrcOp;
+        
+        public bool IsIrcOp 
+        { 
+            get => _isIrcOp; 
+            set => SetProperty(ref _isIrcOp, value); 
+        }
+
+        public ICommand ConnectCommand { get; }
         public ICommand DisconnectCommand { get; }
+        public ICommand SendCommand { get; }
+        public ICommand RemoveServerCommand { get; }
+        public ICommand RefreshChannelListCommand { get; }
+        public ICommand JoinChannelCommand { get; }
+        public ICommand WhoisUserCommand { get; }
+        public ICommand KickUserCommand { get; }
+        public ICommand BanUserCommand { get; }
+        public ICommand KillUserCommand { get; }
+        public ICommand GlineUserCommand { get; }
         public ICommand ChangeNickCommand { get; }
         public ICommand PartChannelCommand { get; }
         public ICommand ChangeTopicCommand { get; }
         public ICommand ToggleFavoriteCommand { get; }
 
-        public ServerViewModel(string serverName, string address, int port, string nick, string realname, string? password = null, string? autoJoinChannel = null)
+        public event EventHandler<IrcUser>? RequestKillDialog;
+        public event EventHandler<IrcUser>? RequestGlineDialog;
+
+        public ServerViewModel(string serverName, string address, int port, string nick, string realname, string? password, string? autoJoinChannel)
         {
             _serverName = serverName;
             _address = address;
             _port = port;
+            _currentNick = nick;
             _realname = realname;
             _password = password;
             _autoJoinChannel = autoJoinChannel;
+
             _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
             _ircService = new IrcClientService();
+
+            ConnectCommand = new RelayCommand(_ => ExecuteConnect());
+            DisconnectCommand = new RelayCommand(_ => ExecuteDisconnect());
+            SendCommand = new RelayCommand(ExecuteSendCommand);
+            RemoveServerCommand = new RelayCommand(_ => ExecuteRemoveServer());
+            RefreshChannelListCommand = new RelayCommand(_ => ExecuteRefreshChannelList());
+            JoinChannelCommand = new RelayCommand(param => ExecuteJoinChannel(param as string));
+            WhoisUserCommand = new RelayCommand(param => ExecuteWhoisUser(param as IrcUser));
+            KickUserCommand = new RelayCommand(param => ExecuteKickUser(param as IrcUser));
+            BanUserCommand = new RelayCommand(param => ExecuteBanUser(param as IrcUser));
+            KillUserCommand = new RelayCommand(param => ExecuteKillUser(param as IrcUser));
+            GlineUserCommand = new RelayCommand(param => ExecuteGlineUser(param as IrcUser));
             
             _ircService.MessageReceived += OnMessageReceived;
             
@@ -159,12 +193,13 @@ namespace KonnectChatIRC.ViewModels
             _selectedChannel = serverChan; // Initialize backing field
             _currentNick = nick;
 
-            SendCommand = new RelayCommand(ExecuteSendCommand);
-            DisconnectCommand = new RelayCommand(_ => ExecuteDisconnect());
+            // SendCommand already initialized above
+            // DisconnectCommand already initialized above
             ChangeNickCommand = new RelayCommand(nick => _ircService?.SendRawAsync($"NICK {nick}"));
             PartChannelCommand = new RelayCommand(chan => _ircService?.SendRawAsync($"PART {chan}"));
-            ChangeTopicCommand = new RelayCommand(topic => 
+            ChangeTopicCommand = new RelayCommand(topicObj => 
             {
+                var topic = topicObj as string;
                 if (SelectedChannel != null)
                 {
                     _ircService?.SendRawAsync($"TOPIC {SelectedChannel.Name} :{topic}");
@@ -336,9 +371,7 @@ namespace KonnectChatIRC.ViewModels
                 }
                 else if (target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
                 {
-                    // If it's a personal notice from someone specific, maybe show it in their query tab?
-                    // But usually notices are from server or specific users. 
-                    // To avoid creating a self-tab, if target == CurrentNick, we route to Server or existing sender tab.
+                    // If it's a personal notice, and we have a query window, show it there
                     if (!string.IsNullOrEmpty(senderNick) && _channelLookup.ContainsKey(senderNick))
                     {
                         channel = _channelLookup[senderNick];
@@ -361,7 +394,7 @@ namespace KonnectChatIRC.ViewModels
                         Content = content,
                         Timestamp = DateTime.Now,
                         IsIncoming = true,
-                        IsSystem = !target.StartsWith("#") && !target.StartsWith("&") // System style if not a channel notice
+                        IsSystem = !target.StartsWith("#") && !target.StartsWith("&")
                     });
                 }
             }
@@ -376,7 +409,19 @@ namespace KonnectChatIRC.ViewModels
                         var nick = GetNickFromPrefix(e.Prefix);
                         if (!nick.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
                         {
-                            channel.AddUser(new IrcUser(nick));
+                            var newUser = new IrcUser(nick);
+                            
+                            // Parse hostname from prefix: nick!user@host
+                            if (e.Prefix.Contains("@"))
+                            {
+                                var parts = e.Prefix.Split('@');
+                                if (parts.Length > 1)
+                                {
+                                    newUser.Hostname = parts[1];
+                                }
+                            }
+
+                            channel.AddUser(newUser);
                         }
                         
                         channel.AddMessage(new ChatMessage 
@@ -471,75 +516,93 @@ namespace KonnectChatIRC.ViewModels
                     });
                 }
             }
+            else if (e.Command == "381") // RPL_YOUREOPER
+            {
+                _dispatcherQueue.TryEnqueue(() => IsIrcOp = true);
+            }
             else if (e.Command == "MODE")
             {
                 if (e.Parameters.Length >= 2)
                 {
-                    var channelName = e.Parameters[0];
-                    var mode = e.Parameters[1];
-                    var setter = GetNickFromPrefix(e.Prefix);
-                    var channel = GetOrCreateChannel(channelName);
-
-                    if (channel != null)
+                    var target = e.Parameters[0];
+                    var modeStr = e.Parameters[1];
+                    
+                    // Check if mode is for us
+                    if (target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
                     {
-                        // Handle user mode changes (Owner/Admin/OP/HalfOp/Voice)
-                        // Modes: q(Owner), a(Admin), o(Op), h(HalfOp), v(Voice)
-                        if (e.Parameters.Length >= 3)
+                        // User mode change for self
+                        if (modeStr.Contains("+o") || modeStr.Contains("+O") || modeStr.Contains("+a") || modeStr.Contains("+A"))
                         {
-                            bool isUserMode = false;
-                            foreach(char c in mode)
-                            {
-                                if ("qaohv".Contains(c)) isUserMode = true;
-                            }
+                            _dispatcherQueue.TryEnqueue(() => IsIrcOp = true);
+                        }
+                        // Optionally handle removal, though usually stays once granted until disconnect
+                    }
+                    else if (target.StartsWith("#") || target.StartsWith("&"))
+                    {
+                        // Channel mode
+                        var channel = GetOrCreateChannel(target);
 
-                            if (isUserMode)
+                        if (channel != null)
+                        {
+                            // Handle user mode changes (Owner/Admin/OP/HalfOp/Voice)
+                            // Modes: q(Owner), a(Admin), o(Op), h(HalfOp), v(Voice)
+                            if (e.Parameters.Length >= 3)
                             {
-                                var targetNick = e.Parameters[2];
-                                var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
-                                if (user != null)
+                                bool isUserMode = false;
+                                foreach(char c in modeStr)
                                 {
-                                    // Simple logic: Apply highest rank if multiple? 
-                                    // Or just apply the specific change. 
-                                    // Since we only store one prefix, we should try to determine the "best" one.
-                                    // A robust client tracks all modes per user. Here we just map the latest change or best guess.
-                                    
-                                    if (mode.Contains("+q")) user.Prefix = "~";
-                                    else if (mode.Contains("-q") && user.Prefix == "~") user.Prefix = "";
-                                    
-                                    else if (mode.Contains("+a")) user.Prefix = "&";
-                                    else if (mode.Contains("-a") && user.Prefix == "&") user.Prefix = "";
-
-                                    else if (mode.Contains("+o")) user.Prefix = "@";
-                                    else if (mode.Contains("-o") && user.Prefix == "@") user.Prefix = "";
-                                    
-                                    else if (mode.Contains("+h")) user.Prefix = "%";
-                                    else if (mode.Contains("-h") && user.Prefix == "%") user.Prefix = "";
-
-                                    else if (mode.Contains("+v")) user.Prefix = "+";
-                                    else if (mode.Contains("-v") && user.Prefix == "+") user.Prefix = "";
+                                    if ("qaohv".Contains(c)) isUserMode = true;
                                 }
 
-                                channel.AddMessage(new ChatMessage 
-                                { 
-                                    Sender = "", 
-                                    Content = $"* {setter} sets mode {mode} {targetNick}", 
-                                    Timestamp = DateTime.Now,
-                                    IsIncoming = true,
-                                    IsSystem = true
-                                });
-                            }
-                            else
-                            {
-                                // Channel mode
-                                var mask = e.Parameters[2];
-                                channel.AddMessage(new ChatMessage 
-                                { 
-                                    Sender = "", 
-                                    Content = $"* {setter} sets mode {mode} {mask}", 
-                                    Timestamp = DateTime.Now,
-                                    IsIncoming = true,
-                                    IsSystem = true
-                                });
+                                if (isUserMode)
+                                {
+                                    var targetNick = e.Parameters[2];
+                                    var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
+                                    if (user != null)
+                                    {
+                                        // Simple logic: Apply highest rank if multiple? 
+                                        // Or just apply the specific change. 
+                                        // Since we only store one prefix, we should try to determine the "best" one.
+                                        // A robust client tracks all modes per user. Here we just map the latest change or best guess.
+                                        
+                                        if (modeStr.Contains("+q")) user.Prefix = "~";
+                                        else if (modeStr.Contains("-q") && user.Prefix == "~") user.Prefix = "";
+                                        
+                                        else if (modeStr.Contains("+a")) user.Prefix = "&";
+                                        else if (modeStr.Contains("-a") && user.Prefix == "&") user.Prefix = "";
+
+                                        else if (modeStr.Contains("+o")) user.Prefix = "@";
+                                        else if (modeStr.Contains("-o") && user.Prefix == "@") user.Prefix = "";
+                                        
+                                        else if (modeStr.Contains("+h")) user.Prefix = "%";
+                                        else if (modeStr.Contains("-h") && user.Prefix == "%") user.Prefix = "";
+
+                                        else if (modeStr.Contains("+v")) user.Prefix = "+";
+                                        else if (modeStr.Contains("-v") && user.Prefix == "+") user.Prefix = "";
+                                    }
+                                    
+                                    var setter = GetNickFromPrefix(e.Prefix);
+                                    channel.AddMessage(new ChatMessage 
+                                    { 
+                                        Sender = "", 
+                                        Content = $"* {setter} sets mode {modeStr} {targetNick}", 
+                                        Timestamp = DateTime.Now,
+                                        IsIncoming = true,
+                                        IsSystem = true
+                                    });
+                                }
+                                else
+                                {
+                                    // Channel mode
+                                    channel.AddMessage(new ChatMessage 
+                                    { 
+                                        Sender = "", 
+                                        Content = $"* {GetNickFromPrefix(e.Prefix)} sets mode {modeStr} {e.Parameters[2]}", 
+                                        Timestamp = DateTime.Now,
+                                        IsIncoming = true,
+                                        IsSystem = true
+                                    });
+                                }
                             }
                         }
                     }
@@ -771,7 +834,7 @@ namespace KonnectChatIRC.ViewModels
         public ObservableCollection<IrcChannelInfo> FavoriteAvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
         public ObservableCollection<IrcChannelInfo> OtherAvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
         
-        public ICommand RefreshChannelListCommand => new RelayCommand(async _ => 
+        private async void ExecuteRefreshChannelList()
         {
             lock (_channelListLock)
             {
@@ -783,11 +846,11 @@ namespace KonnectChatIRC.ViewModels
                 OtherAvailableChannels.Clear();
             });
             await _ircService!.ListChannelsAsync();
-        });
+        }
 
-        public ICommand JoinChannelCommand => new RelayCommand(param => 
+        private void ExecuteJoinChannel(string channelName)
         {
-            if (param is string channelName && !string.IsNullOrWhiteSpace(channelName))
+            if (!string.IsNullOrWhiteSpace(channelName))
             {
                 // Strip status prefixes like @, +, %, ~
                 char[] statusPrefixes = { '@', '+', '%', '~', '&' };
@@ -810,52 +873,32 @@ namespace KonnectChatIRC.ViewModels
                     _ircService?.JoinChannelAsync(channelName);
                 }
             }
-        });
-
-        private void ExecuteDisconnect() 
-        {
-            Disconnect("KonnectChat IRC Desktop Client");
-            
-             _dispatcherQueue.TryEnqueue(() => 
-             {
-                 // Clear channels
-                 var serverChan = _channelLookup["Server"];
-                 _channelLookup.Clear();
-                 _channelLookup.TryAdd("Server", serverChan);
-                 
-                  Channels.Clear();
-                  Channels.Add(serverChan);
-                  FavoriteChannels.Clear();
-                  OtherChannels.Clear();
-                  OtherChannels.Add(serverChan);
-                  SelectedChannel = serverChan;
-             });
         }
 
-        public ICommand KickUserCommand => new RelayCommand(param => 
+        private void ExecuteKickUser(IrcUser user)
         {
-             if (param is IrcUser user && SelectedChannel != null)
+             if (user != null && SelectedChannel != null)
              {
                  _ = _ircService?.SendRawAsync($"KICK {SelectedChannel.Name} {user.Nickname} :Kicked by admin");
              }
-        });
+        }
 
-        public ICommand BanUserCommand => new RelayCommand(param => 
+        private void ExecuteBanUser(IrcUser user)
         {
-             if (param is IrcUser user && SelectedChannel != null)
+             if (user != null && SelectedChannel != null)
              {
                  _ = _ircService?.SendRawAsync($"MODE {SelectedChannel.Name} +b {user.Nickname}!*@*");
                  _ = _ircService?.SendRawAsync($"KICK {SelectedChannel.Name} {user.Nickname} :Banned by admin");
              }
-        });
+        }
 
-        public ICommand WhoisUserCommand => new RelayCommand(param => 
+        private void ExecuteWhoisUser(IrcUser user)
         {
-             if (param is IrcUser user)
+             if (user != null)
              {
                  _ = _ircService?.SendRawAsync($"WHOIS {user.Nickname}");
              }
-        });
+        }
 
         public ServerConfig ToConfig()
         {
@@ -870,6 +913,50 @@ namespace KonnectChatIRC.ViewModels
                 AutoJoinChannel = _autoJoinChannel,
                 FavoriteChannels = FavoriteChannels.Select(c => c.Name).ToList()
             };
+        }
+        private void ExecuteKillUser(IrcUser user)
+        {
+            if (user == null) return;
+            RequestKillDialog?.Invoke(this, user);
+        }
+
+        private void ExecuteGlineUser(IrcUser user)
+        {
+            if (user == null) return;
+            RequestGlineDialog?.Invoke(this, user);
+        }
+
+        public event EventHandler? RequestRemove;
+
+        private void ExecuteConnect()
+        {
+            HandleConnection(_address, _port, CurrentNick, _realname, _password);
+        }
+
+        private void ExecuteDisconnect()
+        {
+            Disconnect("KonnectChat IRC Desktop Client");
+        }
+
+        private void ExecuteRemoveServer()
+        {
+            RequestRemove?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void PerformKill(IrcUser user, string reason)
+        {
+            if (user == null) return;
+            // KILL <nick> <reason>
+            _ = _ircService?.SendRawAsync($"KILL {user.Nickname} :{reason}");
+        }
+
+        public void PerformGline(IrcUser user, string mask, long durationSeconds, string reason)
+        {
+            if (user == null) return;
+            // GLINE <mask> <duration> <reason>
+            // Note: Command syntax varies by IRCD. Standard often: GLINE <mask> <duration> :<reason>
+            // Some use +duration. Assuming standard numeric duration.
+            _ = _ircService?.SendRawAsync($"GLINE {mask} {durationSeconds} :{reason}");
         }
     }
 }

@@ -26,6 +26,8 @@ namespace KonnectChatIRC
                 fe.DataContext = Handle;
             }
 
+            Handle.PropertyChanged += MainViewModel_PropertyChanged;
+
             // --- START: Set Window to Maximize (Fullscreen) ---
             IntPtr hWnd = WindowNative.GetWindowHandle(this);
             Microsoft.UI.WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
@@ -40,6 +42,105 @@ namespace KonnectChatIRC
                 }
             }
             // --- END: Set Window to Maximize ---
+        }
+
+        private ServerViewModel? _currentServer;
+
+        private void MainViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainViewModel.SelectedServer))
+            {
+                if (_currentServer != null)
+                {
+                    _currentServer.RequestKillDialog -= Server_RequestKillDialog;
+                    _currentServer.RequestGlineDialog -= Server_RequestGlineDialog;
+                }
+
+                _currentServer = Handle.SelectedServer;
+
+                if (_currentServer != null)
+                {
+                    _currentServer.RequestKillDialog += Server_RequestKillDialog;
+                    _currentServer.RequestGlineDialog += Server_RequestGlineDialog;
+                }
+            }
+        }
+
+        private async void Server_RequestKillDialog(object? sender, IrcUser user)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = $"Kill {user.Nickname}",
+                PrimaryButtonText = "Kill",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            var stack = new StackPanel { Spacing = 10 };
+            var reasonBox = new TextBox { Header = "Reason", PlaceholderText = "Spamming/Abuse" };
+            stack.Children.Add(reasonBox);
+            dialog.Content = stack;
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var reason = reasonBox.Text;
+                if (string.IsNullOrWhiteSpace(reason)) reason = "No reason given";
+                _currentServer?.PerformKill(user, reason);
+            }
+        }
+
+        private async void Server_RequestGlineDialog(object? sender, IrcUser user)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = $"Gline {user.Nickname}",
+                PrimaryButtonText = "Gline",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            var stack = new StackPanel { Spacing = 10 };
+            
+            // Mask
+            var maskBox = new TextBox { Header = "Mask", Text = $"*@{(string.IsNullOrEmpty(user.Hostname) ? "*" : user.Hostname)}" };
+            stack.Children.Add(maskBox);
+
+            // Duration
+            var durationCombo = new ComboBox { Header = "Duration", HorizontalAlignment = HorizontalAlignment.Stretch };
+            durationCombo.Items.Add(new ComboBoxItem { Content = "5 Minutes", Tag = 300 });
+            durationCombo.Items.Add(new ComboBoxItem { Content = "30 Minutes", Tag = 1800 });
+            durationCombo.Items.Add(new ComboBoxItem { Content = "1 Hour", Tag = 3600 });
+            durationCombo.Items.Add(new ComboBoxItem { Content = "1 Day", Tag = 86400 });
+            durationCombo.Items.Add(new ComboBoxItem { Content = "7 Days", Tag = 604800 });
+            durationCombo.SelectedIndex = 2; // Default 1 hour
+            stack.Children.Add(durationCombo);
+
+            // Reason
+            var reasonBox = new TextBox { Header = "Reason", PlaceholderText = "Spamming/Abuse" };
+            stack.Children.Add(reasonBox);
+
+            dialog.Content = stack;
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var mask = maskBox.Text;
+                if (string.IsNullOrWhiteSpace(mask)) mask = $"*@{(string.IsNullOrEmpty(user.Hostname) ? "*" : user.Hostname)}";
+
+                int duration = 3600;
+                if (durationCombo.SelectedItem is ComboBoxItem item && item.Tag is int tagVal)
+                {
+                    duration = tagVal;
+                }
+
+                var reason = reasonBox.Text;
+                if (string.IsNullOrWhiteSpace(reason)) reason = "No reason given";
+
+                _currentServer?.PerformGline(user, mask, duration, reason);
+            }
         }
 
         private void ChatInput_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)

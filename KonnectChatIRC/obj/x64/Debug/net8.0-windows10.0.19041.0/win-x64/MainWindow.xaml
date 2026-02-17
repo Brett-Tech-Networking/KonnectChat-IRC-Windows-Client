@@ -354,6 +354,23 @@
                                                                                 Command="{Binding DataContext.SelectedServer.BanUserCommand, ElementName=MainGrid}" 
                                                                                 CommandParameter="{Binding}"/>
                                                                     </Grid>
+
+                                                                    <StackPanel Visibility="{Binding DataContext.SelectedServer.IsIrcOp, ElementName=MainGrid, Converter={StaticResource BoolToVis}}">
+                                                                        <MenuFlyoutSeparator/>
+                                                                        <TextBlock Text="Operator Actions" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4"/>
+                                                                        <Grid ColumnSpacing="8">
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                            </Grid.ColumnDefinitions>
+                                                                            <Button Content="Kill" HorizontalAlignment="Stretch" 
+                                                                                    Command="{Binding DataContext.SelectedServer.KillUserCommand, ElementName=MainGrid}" 
+                                                                                    CommandParameter="{Binding}"/>
+                                                                            <Button Grid.Column="1" Content="Gline" HorizontalAlignment="Stretch" 
+                                                                                    Command="{Binding DataContext.SelectedServer.GlineUserCommand, ElementName=MainGrid}" 
+                                                                                    CommandParameter="{Binding}"/>
+                                                                        </Grid>
+                                                                    </StackPanel>
                                                                 </StackPanel>
                                                             </Flyout>
                                                         </FlyoutBase.AttachedFlyout>
