@@ -30,7 +30,7 @@
     <AppXManifest Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-02-17T05:00:43.932</Modified>
+      <Modified>2026-02-17T05:15:14.016</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -40,11 +40,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>KonnectChatIRC.exe</PackagePath>
-      <Modified>2026-02-17T05:00:43.664</Modified>
+      <Modified>2026-02-17T05:15:13.312</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.dll">
       <PackagePath>KonnectChatIRC.dll</PackagePath>
-      <Modified>2026-02-17T05:00:43.657</Modified>
+      <Modified>2026-02-17T05:15:13.296</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Brett\.nuget\packages\microsoft.netcore.app.runtime.win-x64\8.0.24\runtimes\win-x64\lib\net8.0\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -972,7 +972,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2026-02-17T05:00:43.750</Modified>
+      <Modified>2026-02-17T05:15:13.625</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

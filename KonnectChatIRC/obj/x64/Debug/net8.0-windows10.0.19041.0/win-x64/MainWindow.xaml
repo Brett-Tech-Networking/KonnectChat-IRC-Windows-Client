@@ -157,7 +157,11 @@
                 </Border>
 
                 <!-- Messages -->
-                <ListView x:ConnectionId='15' x:Name="ChatList" Grid.Row="1" ItemsSource="{Binding SelectedServer.SelectedChannel.Messages}" SelectionMode="None"                         >
+                <ListView x:ConnectionId='15' x:Name="ChatList" Grid.Row="1" ItemsSource="{Binding SelectedServer.SelectedChannel.Messages}" 
+                          SelectionMode="None"                          
+                          ShowsScrollingPlaceholders="False"
+                          IncrementalLoadingThreshold="2"
+                          DataFetchSize="3">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,4,0,4">
@@ -182,7 +186,16 @@
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    <!-- AutoScroll behavior would ideally be here but skipping complex behaviors for now -->
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel ItemsUpdatingScrollMode="KeepLastItemInView" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemContainerTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="False" />
+                        </TransitionCollection>
+                    </ListView.ItemContainerTransitions>
                 </ListView>
 
                 <!-- Input -->

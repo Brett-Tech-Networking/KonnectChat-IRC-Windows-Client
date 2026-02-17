@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls.Primitives; // Required for FlyoutBase
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Windowing; // Required for AppWindow
+using Microsoft.UI.Dispatching;
 using System;
 using KonnectChatIRC.ViewModels;
 using KonnectChatIRC.Models; // Required for IrcUser
