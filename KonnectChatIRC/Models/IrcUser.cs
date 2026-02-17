@@ -33,10 +33,12 @@ namespace KonnectChatIRC.Models
         {
             get
             {
-                if (Prefix.Contains("~") || Prefix.Contains("&") || Prefix.Contains("@")) return 0; // Admin/Op
-                if (Prefix.Contains("%")) return 1; // HalfOp
-                if (Prefix.Contains("+")) return 2; // Voice
-                return 3; // Normal
+                if (Prefix.Contains("~")) return 0; // Owner
+                if (Prefix.Contains("&")) return 1; // Admin
+                if (Prefix.Contains("@")) return 2; // Operator
+                if (Prefix.Contains("%")) return 3; // HalfOp
+                if (Prefix.Contains("+")) return 4; // Voice
+                return 5; // Normal
             }
         }
 
@@ -44,9 +46,11 @@ namespace KonnectChatIRC.Models
         {
              get
              {
-                 if (Rank == 0) return "Operators";
-                 if (Rank == 1) return "Half-Ops";
-                 if (Rank == 2) return "Voice";
+                 if (Rank == 0) return "Owners";
+                 if (Rank == 1) return "Admins";
+                 if (Rank == 2) return "Operators";
+                 if (Rank == 3) return "Half-Ops";
+                 if (Rank == 4) return "Voice";
                  return "Users";
              }
         }

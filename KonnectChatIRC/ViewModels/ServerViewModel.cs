@@ -309,9 +309,13 @@ namespace KonnectChatIRC.ViewModels
                 var channel = GetOrCreateChannel(channelName);
                 if (channel != null)
                 {
+                    var senderUser = channel.Users.FirstOrDefault(u => u.Nickname.Equals(senderNick, StringComparison.OrdinalIgnoreCase));
+                    string prefix = senderUser?.Prefix ?? "";
+
                     channel.AddMessage(new ChatMessage 
                     { 
                         Sender = senderNick, 
+                        SenderPrefix = prefix,
                         Content = content,
                         Timestamp = DateTime.Now,
                         IsIncoming = true
@@ -478,41 +482,65 @@ namespace KonnectChatIRC.ViewModels
 
                     if (channel != null)
                     {
-                        // Handle user mode changes (OP/VOICE)
-                        if (e.Parameters.Length >= 3 && (mode.Contains("o") || mode.Contains("v")))
+                        // Handle user mode changes (Owner/Admin/OP/HalfOp/Voice)
+                        // Modes: q(Owner), a(Admin), o(Op), h(HalfOp), v(Voice)
+                        if (e.Parameters.Length >= 3)
                         {
-                            var targetNick = e.Parameters[2];
-                            var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
-                            if (user != null)
+                            bool isUserMode = false;
+                            foreach(char c in mode)
                             {
-                                // Simple prefix update - in a real client we'd track multiple modes
-                                if (mode.Contains("+o")) user.Prefix = "@";
-                                else if (mode.Contains("-o")) user.Prefix = "";
-                                else if (mode.Contains("+v")) user.Prefix = "+";
-                                else if (mode.Contains("-v")) user.Prefix = "";
+                                if ("qaohv".Contains(c)) isUserMode = true;
                             }
 
-                            channel.AddMessage(new ChatMessage 
-                            { 
-                                Sender = "", 
-                                Content = $"* {setter} sets mode {mode} {targetNick}", 
-                                Timestamp = DateTime.Now,
-                                IsIncoming = true,
-                                IsSystem = true
-                            });
-                        }
-                        // Handle channel modes (bans, etc)
-                        else if (e.Parameters.Length >= 3)
-                        {
-                            var mask = e.Parameters[2];
-                            channel.AddMessage(new ChatMessage 
-                            { 
-                                Sender = "", 
-                                Content = $"* {setter} sets mode {mode} {mask}", 
-                                Timestamp = DateTime.Now,
-                                IsIncoming = true,
-                                IsSystem = true
-                            });
+                            if (isUserMode)
+                            {
+                                var targetNick = e.Parameters[2];
+                                var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
+                                if (user != null)
+                                {
+                                    // Simple logic: Apply highest rank if multiple? 
+                                    // Or just apply the specific change. 
+                                    // Since we only store one prefix, we should try to determine the "best" one.
+                                    // A robust client tracks all modes per user. Here we just map the latest change or best guess.
+                                    
+                                    if (mode.Contains("+q")) user.Prefix = "~";
+                                    else if (mode.Contains("-q") && user.Prefix == "~") user.Prefix = "";
+                                    
+                                    else if (mode.Contains("+a")) user.Prefix = "&";
+                                    else if (mode.Contains("-a") && user.Prefix == "&") user.Prefix = "";
+
+                                    else if (mode.Contains("+o")) user.Prefix = "@";
+                                    else if (mode.Contains("-o") && user.Prefix == "@") user.Prefix = "";
+                                    
+                                    else if (mode.Contains("+h")) user.Prefix = "%";
+                                    else if (mode.Contains("-h") && user.Prefix == "%") user.Prefix = "";
+
+                                    else if (mode.Contains("+v")) user.Prefix = "+";
+                                    else if (mode.Contains("-v") && user.Prefix == "+") user.Prefix = "";
+                                }
+
+                                channel.AddMessage(new ChatMessage 
+                                { 
+                                    Sender = "", 
+                                    Content = $"* {setter} sets mode {mode} {targetNick}", 
+                                    Timestamp = DateTime.Now,
+                                    IsIncoming = true,
+                                    IsSystem = true
+                                });
+                            }
+                            else
+                            {
+                                // Channel mode
+                                var mask = e.Parameters[2];
+                                channel.AddMessage(new ChatMessage 
+                                { 
+                                    Sender = "", 
+                                    Content = $"* {setter} sets mode {mode} {mask}", 
+                                    Timestamp = DateTime.Now,
+                                    IsIncoming = true,
+                                    IsSystem = true
+                                });
+                            }
                         }
                     }
                 }
@@ -584,14 +612,25 @@ namespace KonnectChatIRC.ViewModels
                         {
                             string cleanNick = nick;
                             string prefix = "";
-                            if (nick.StartsWith("@") || nick.StartsWith("+") || nick.StartsWith("%"))
+                            // Check for prefixes: ~, &, @, %, +
+                            if (nick.StartsWith("~") || nick.StartsWith("&") || nick.StartsWith("@") || nick.StartsWith("%") || nick.StartsWith("+"))
                             {
                                 prefix = nick.Substring(0, 1);
                                 cleanNick = nick.Substring(1);
                             }
-                            if (!channel.Users.Any(u => u.Nickname == cleanNick))
+                            
+                            lock (_channelListLock) // Re-use lock or ensure thread safety? ObservableCollection typically UI thread.
                             {
-                                channel.AddUser(new IrcUser(cleanNick) { Prefix = prefix });
+                                // Check if user exists to update prefix or add new
+                                var existingUser = channel.Users.FirstOrDefault(u => u.Nickname == cleanNick);
+                                if (existingUser != null)
+                                {
+                                    if(string.IsNullOrEmpty(existingUser.Prefix)) existingUser.Prefix = prefix;
+                                }
+                                else
+                                {
+                                     channel.AddUser(new IrcUser(cleanNick) { Prefix = prefix });
+                                }
                             }
                         }
                     }

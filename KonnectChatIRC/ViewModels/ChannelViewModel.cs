@@ -49,6 +49,8 @@ namespace KonnectChatIRC.ViewModels
         public ObservableCollection<IrcUser> Users { get; } = new ObservableCollection<IrcUser>();
         public ObservableCollection<UserGroup> GroupedUsers { get; } = new ObservableCollection<UserGroup>();
 
+        private UserGroup? _ownerGroup;
+        private UserGroup? _adminGroup;
         private UserGroup? _opsGroup;
         private UserGroup? _halfOpsGroup;
         private UserGroup? _voiceGroup;
@@ -63,6 +65,8 @@ namespace KonnectChatIRC.ViewModels
 
         private void InitializeGroups()
         {
+            _ownerGroup = new UserGroup("Owners");
+            _adminGroup = new UserGroup("Admins");
             _opsGroup = new UserGroup("Operators");
             _halfOpsGroup = new UserGroup("Half-Ops");
             _voiceGroup = new UserGroup("Voice");
@@ -74,6 +78,8 @@ namespace KonnectChatIRC.ViewModels
             _dispatcherQueue.TryEnqueue(() =>
             {
                 GroupedUsers.Clear();
+                _ownerGroup?.Clear();
+                _adminGroup?.Clear();
                 _opsGroup?.Clear();
                 _halfOpsGroup?.Clear();
                 _voiceGroup?.Clear();
@@ -90,17 +96,33 @@ namespace KonnectChatIRC.ViewModels
         {
             if (group != null && !GroupedUsers.Contains(group))
             {
-                // Find correct insertion index based on priority: Ops > HalfOps > Voice > Users
+                // Find correct insertion index based on priority: Owner > Admin > Op > HalfOps > Voice > Users
                 int targetIndex = 0;
-                if (group == _opsGroup) targetIndex = 0;
+                
+                if (group == _ownerGroup) targetIndex = 0;
+                else if (group == _adminGroup)
+                {
+                    if (GroupedUsers.Contains(_ownerGroup!)) targetIndex = 1;
+                    else targetIndex = 0;
+                }
+                else if (group == _opsGroup)
+                {
+                    targetIndex = 0;
+                    if (GroupedUsers.Contains(_ownerGroup!)) targetIndex++;
+                    if (GroupedUsers.Contains(_adminGroup!)) targetIndex++;
+                }
                 else if (group == _halfOpsGroup)
                 {
-                    if (GroupedUsers.Contains(_opsGroup!)) targetIndex = 1;
-                    else targetIndex = 0;
+                    targetIndex = 0;
+                    if (GroupedUsers.Contains(_ownerGroup!)) targetIndex++;
+                    if (GroupedUsers.Contains(_adminGroup!)) targetIndex++;
+                    if (GroupedUsers.Contains(_opsGroup!)) targetIndex++;
                 }
                 else if (group == _voiceGroup)
                 {
                     targetIndex = 0;
+                    if (GroupedUsers.Contains(_ownerGroup!)) targetIndex++;
+                    if (GroupedUsers.Contains(_adminGroup!)) targetIndex++;
                     if (GroupedUsers.Contains(_opsGroup!)) targetIndex++;
                     if (GroupedUsers.Contains(_halfOpsGroup!)) targetIndex++;
                 }
@@ -178,9 +200,11 @@ namespace KonnectChatIRC.ViewModels
 
             UserGroup? target = user.Rank switch
             {
-                0 => _opsGroup,
-                1 => _halfOpsGroup,
-                2 => _voiceGroup,
+                0 => _ownerGroup,
+                1 => _adminGroup,
+                2 => _opsGroup,
+                3 => _halfOpsGroup,
+                4 => _voiceGroup,
                 _ => _usersGroup
             };
 
@@ -193,11 +217,15 @@ namespace KonnectChatIRC.ViewModels
 
         private void RemoveFromGroups(IrcUser user)
         {
+            _ownerGroup?.Remove(user);
+            _adminGroup?.Remove(user);
             _opsGroup?.Remove(user);
             _halfOpsGroup?.Remove(user);
             _voiceGroup?.Remove(user);
             _usersGroup?.Remove(user);
 
+            CheckGroupEmpty(_ownerGroup);
+            CheckGroupEmpty(_adminGroup);
             CheckGroupEmpty(_opsGroup);
             CheckGroupEmpty(_halfOpsGroup);
             CheckGroupEmpty(_voiceGroup);

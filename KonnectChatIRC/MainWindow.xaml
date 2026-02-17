@@ -207,8 +207,12 @@
                                 
                                 <TextBlock Text="{Binding FormattedTime}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" VerticalAlignment="Top" Margin="0,0,8,0"
                                            Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Sender}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,0,8,0"
-                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Sender}" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,0,8,0"
+                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding SenderPrefix, Converter={StaticResource StatusToColorConverter}}"/>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
                                 
                                 <!-- Regular Message Content -->
                                 <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Top"
@@ -295,8 +299,16 @@
                                                             </Ellipse.Fill>
                                                         </Ellipse>
 
-                                                        <TextBlock Grid.Column="1" Text="{Binding Prefix}" Foreground="{StaticResource AccentLightBrush}" FontWeight="Bold"/>
-                                                        <TextBlock Grid.Column="2" Text="{Binding Nickname}" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding Prefix}" FontWeight="Bold">
+                                                            <TextBlock.Foreground>
+                                                                <SolidColorBrush Color="{Binding Prefix, Converter={StaticResource StatusToColorConverter}}"/>
+                                                            </TextBlock.Foreground>
+                                                        </TextBlock>
+                                                        <TextBlock Grid.Column="2" Text="{Binding Nickname}">
+                                                            <TextBlock.Foreground>
+                                                                <SolidColorBrush Color="{Binding Prefix, Converter={StaticResource StatusToColorConverter}}"/>
+                                                            </TextBlock.Foreground>
+                                                        </TextBlock>
 
                                                         <FlyoutBase.AttachedFlyout>
                                                             <Flyout>
