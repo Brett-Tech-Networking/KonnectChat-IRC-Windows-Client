@@ -209,10 +209,7 @@ namespace KonnectChatIRC.Services
 
                      if (charName.StartsWith("#") || charName.StartsWith("&"))
                      {
-                         _dispatcherQueue.TryEnqueue(() => 
-                         {
-                             ChannelFound?.Invoke(this, new IrcChannelInfo { Name = charName, UserCount = userCountVal, Topic = topicVal });
-                         });
+                         ChannelFound?.Invoke(this, new IrcChannelInfo { Name = charName, UserCount = userCountVal, Topic = topicVal });
                      }
                  }
             }

@@ -74,25 +74,39 @@ namespace KonnectChatIRC.ViewModels
             _ = LoadSettingsAsync();
         }
 
+        private List<ServerConfig> _savedConfigs = new List<ServerConfig>();
+
         private async System.Threading.Tasks.Task LoadSettingsAsync()
         {
-            var configs = await SettingsService.LoadServersAsync();
-            foreach (var config in configs)
-            {
-                var vm = new ServerViewModel(config.ServerName, config.Address, config.Port, config.Nick, config.Realname, config.Password, config.AutoJoinChannel);
-                foreach (var fav in config.FavoriteChannels)
-                {
-                    vm.InitialFavoriteChannels.Add(fav);
-                }
-                vm.RequestSave += (s, e) => _ = SaveSettingsAsync();
-                Servers.Add(vm);
-            }
+            _savedConfigs = await SettingsService.LoadServersAsync();
         }
 
         public async System.Threading.Tasks.Task SaveSettingsAsync()
         {
-            var configs = Servers.Select(s => s.ToConfig()).ToList();
-            await SettingsService.SaveServersAsync(configs);
+            // We want to save both currently active servers AND any previously saved configs
+            // that aren't currently active (so we don't lose them just because we aren't connected).
+            
+            // 1. Create a dictionary of saved configs for easy lookup by address
+            var configMap = new Dictionary<string, ServerConfig>();
+            foreach (var cfg in _savedConfigs)
+            {
+                var key = $"{cfg.Address}:{cfg.Port}";
+                if (!configMap.ContainsKey(key))
+                {
+                    configMap[key] = cfg;
+                }
+            }
+
+            // 2. Update configs from currently active servers
+            foreach (var server in Servers)
+            {
+                var key = $"{server.ServerAddress}:{server.Port}";
+                configMap[key] = server.ToConfig();
+            }
+
+            // 3. Save everything back to disk and update our in-memory cache
+            _savedConfigs = configMap.Values.ToList();
+            await SettingsService.SaveServersAsync(_savedConfigs);
         }
 
         private void ExecuteConnect(object? obj)
@@ -103,8 +117,33 @@ namespace KonnectChatIRC.ViewModels
                 return;
             }
 
+            // Check if we are already connected to this server (Deduplication)
+            var duplicate = Servers.FirstOrDefault(s => 
+                s.ServerAddress.Equals(ConnectAddress, System.StringComparison.OrdinalIgnoreCase) && 
+                s.Port == ConnectPort);
+
+            if (duplicate != null)
+            {
+                SelectedServer = duplicate;
+                return; // Already connected, just switch to it
+            }
+
             var password = UseServerPassword ? ServerPassword : null;
             var serverVm = new ServerViewModel(ConnectAddress, ConnectAddress, ConnectPort, ConnectNick, "Konnect Realname", password, AutoJoinChannel);
+            
+            // Check if we have a saved config for this server to restore favorites
+            var saved = _savedConfigs.FirstOrDefault(c => 
+                c.Address.Equals(ConnectAddress, System.StringComparison.OrdinalIgnoreCase) && 
+                c.Port == ConnectPort);
+
+            if (saved != null && saved.FavoriteChannels != null)
+            {
+                foreach (var fav in saved.FavoriteChannels)
+                {
+                    serverVm.InitialFavoriteChannels.Add(fav);
+                }
+            }
+
             serverVm.RequestSave += (s, e) => _ = SaveSettingsAsync();
             Servers.Add(serverVm);
             SelectedServer = serverVm;
@@ -123,7 +162,10 @@ namespace KonnectChatIRC.ViewModels
                 {
                     SelectedServer = Servers.Count > 0 ? Servers[0] : null;
                 }
-                _ = SaveSettingsAsync();
+                
+                // We do NOT remove from _savedConfigs here, effectively "remembering" it for next time
+                // The user just said "remove from list", implies closing the active connection.
+                // If they want to "forget" settings, that would be a different delete action.
             }
         }
     }

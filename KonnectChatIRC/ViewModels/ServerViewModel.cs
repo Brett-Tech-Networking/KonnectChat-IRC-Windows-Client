@@ -30,6 +30,9 @@ namespace KonnectChatIRC.ViewModels
         private ConcurrentDictionary<string, ChannelViewModel> _channelLookup = new ConcurrentDictionary<string, ChannelViewModel>(StringComparer.OrdinalIgnoreCase);
 
 
+        public string ServerAddress => _address;
+        public int Port => _port;
+
         public string ChannelSearchText
         {
             get => _channelSearchText;
@@ -117,7 +120,11 @@ namespace KonnectChatIRC.ViewModels
 
             _ircService.ChannelFound += (s, info) => 
             {
-                AvailableChannels.Add(info);
+                lock (_channelListLock)
+                {
+                    info.IsFavorite = InitialFavoriteChannels.Any(c => c.Equals(info.Name, StringComparison.OrdinalIgnoreCase));
+                    _allAvailableChannels.Add(info);
+                }
             };
 
             _ircService.WhoisReceived += (s, info) => 
@@ -603,37 +610,15 @@ namespace KonnectChatIRC.ViewModels
                     }
                 }
             }
-            else if (e.Command == "322") // RPL_LIST
-            {
-                // 322 Nick #channel 5 :topic
-                if (e.Parameters.Length >= 3)
-                {
-                    var chanName = e.Parameters[1];
-                    var userCountStr = e.Parameters[2];
-                    var topic = e.Parameters.Length > 3 ? e.Parameters[3] : "";
-                    
-                    if (int.TryParse(userCountStr, out int count))
-                    {
-                        _dispatcherQueue.TryEnqueue(() => 
-                        {
-                            var info = new IrcChannelInfo { Name = chanName, UserCount = count, Topic = topic };
-                            info.IsFavorite = InitialFavoriteChannels.Contains(chanName);
-                            AvailableChannels.Add(info);
-                        });
-                    }
-                }
-                return; // Don't show in chat log
-            }
             else if (e.Command == "323") // RPL_LISTEND
             {
                 // End of list - Sort by user count descending
-                _dispatcherQueue.TryEnqueue(() => 
+                lock (_channelListLock)
                 {
-                    var sorted = AvailableChannels.OrderByDescending(c => c.UserCount).ToList();
-                    AvailableChannels.Clear();
-                    foreach (var c in sorted) AvailableChannels.Add(c);
-                    RefreshFilteredAvailableChannels();
-                });
+                    _allAvailableChannels.Sort((a, b) => b.UserCount.CompareTo(a.UserCount));
+                }
+                
+                RefreshFilteredAvailableChannels();
                 return; // Don't show in chat log
             }
 
@@ -651,17 +636,27 @@ namespace KonnectChatIRC.ViewModels
         {
             _dispatcherQueue.TryEnqueue(() =>
             {
-                var filtered = AvailableChannels.AsEnumerable();
-                if (!string.IsNullOrWhiteSpace(ChannelSearchText))
+                IEnumerable<IrcChannelInfo> source;
+                lock (_channelListLock)
                 {
-                    filtered = filtered.Where(c => c.Name.Contains(ChannelSearchText, StringComparison.OrdinalIgnoreCase) || 
-                                                 c.Topic.Contains(ChannelSearchText, StringComparison.OrdinalIgnoreCase));
+                    if (string.IsNullOrWhiteSpace(ChannelSearchText))
+                    {
+                        source = _allAvailableChannels.Take(500).ToList();
+                    }
+                    else
+                    {
+                        source = _allAvailableChannels
+                            .Where(c => c.Name.Contains(ChannelSearchText, StringComparison.OrdinalIgnoreCase) || 
+                                        c.Topic.Contains(ChannelSearchText, StringComparison.OrdinalIgnoreCase))
+                            .Take(200)
+                            .ToList();
+                    }
                 }
-
+                
                 FavoriteAvailableChannels.Clear();
                 OtherAvailableChannels.Clear();
 
-                foreach (var c in filtered)
+                foreach (var c in source)
                 {
                     if (c.IsFavorite) FavoriteAvailableChannels.Add(c);
                     else OtherAvailableChannels.Add(c);
@@ -731,13 +726,23 @@ namespace KonnectChatIRC.ViewModels
         
         private string _channelSearchText = "";
         
-        public ObservableCollection<IrcChannelInfo> AvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
+        private List<IrcChannelInfo> _allAvailableChannels = new List<IrcChannelInfo>();
+        private object _channelListLock = new object();
+        
         public ObservableCollection<IrcChannelInfo> FavoriteAvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
         public ObservableCollection<IrcChannelInfo> OtherAvailableChannels { get; } = new ObservableCollection<IrcChannelInfo>();
         
         public ICommand RefreshChannelListCommand => new RelayCommand(async _ => 
         {
-            AvailableChannels.Clear();
+            lock (_channelListLock)
+            {
+                _allAvailableChannels.Clear();
+            }
+            _dispatcherQueue.TryEnqueue(() => 
+            {
+                FavoriteAvailableChannels.Clear();
+                OtherAvailableChannels.Clear();
+            });
             await _ircService!.ListChannelsAsync();
         });
 
