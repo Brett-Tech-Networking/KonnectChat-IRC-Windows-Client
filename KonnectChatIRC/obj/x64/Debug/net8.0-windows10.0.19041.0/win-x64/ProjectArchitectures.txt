@@ -1,0 +1,1 @@
+C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\KonnectChatIRC.csproj;x64

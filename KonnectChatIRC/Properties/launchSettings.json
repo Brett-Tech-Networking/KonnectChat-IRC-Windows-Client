@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "KonnectChatIRC (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "KonnectChatIRC (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
