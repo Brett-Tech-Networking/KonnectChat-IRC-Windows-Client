@@ -150,11 +150,20 @@
                 <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="16,12">
                     <StackPanel>
                         <TextBlock Text="{Binding SelectedServer.SelectedChannel.Name}" Style="{StaticResource ProHeaderStyle}"/>
-                        <TextBlock Text="{Binding SelectedServer.SelectedChannel.Topic}" Foreground="{StaticResource TextSecondaryBrush}" 
-                                   Visibility="{Binding SelectedServer.SelectedChannel.Topic, Converter={StaticResource NullToVis}}"
-                                   TextTrimming="CharacterEllipsis" FontSize="12" Margin="0,4,0,0"/>
+                        <HyperlinkButton Padding="0" Margin="0,4,0,0" HorizontalAlignment="Left" Click="Topic_Click" ToolTipService.ToolTip="View/Edit Topic">
+                            <TextBlock Text="{Binding SelectedServer.SelectedChannel.Topic}" Foreground="{StaticResource TextSecondaryBrush}" 
+                                       Visibility="{Binding SelectedServer.SelectedChannel.Topic, Converter={StaticResource NullToVis}}"
+                                       TextTrimming="CharacterEllipsis" FontSize="12"/>
+                        </HyperlinkButton>
                     </StackPanel>
                 </Border>
+
+                <!-- Right Toggle (For User List) -->
+                <Button Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,12,0"
+                        Command="{Binding ToggleUserListCommand}" Background="Transparent" BorderThickness="0" Padding="4"
+                        Visibility="{Binding IsUserListCollapsed, Converter={StaticResource BoolToVis}}">
+                    <FontIcon Glyph="&#xE700;" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
+                </Button>
 
                 <!-- Messages -->
                 <ListView x:Name="ChatList" Grid.Row="1" ItemsSource="{Binding SelectedServer.SelectedChannel.Messages}" 
@@ -211,105 +220,135 @@
                 </Grid>
             </Grid>
 
-            <!-- User List -->
-            <Border Grid.Column="2" Background="{StaticResource AppBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1,0,0,0">
-                <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding SelectedServer.SelectedChannel.GroupedUsers}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,0,0,12">
-                                    <TextBlock Text="{Binding Key}" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" Margin="12,8,0,4" FontSize="12"/>
-                                    <ItemsControl ItemsSource="{Binding}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                            <Grid Margin="12,2" Background="Transparent" Tapped="UserItem_Tapped">
-                                                <FlyoutBase.AttachedFlyout>
-                                                    <Flyout>
-                                                        <StackPanel Width="220" Spacing="10">
-                                                            <TextBlock Text="{Binding Nickname}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
-                                                            <StackPanel>
-                                                                <TextBlock Text="Host:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                                <TextBlock Text="{Binding Hostname}" IsTextSelectionEnabled="True" TextWrapping="Wrap"/>
-                                                            </StackPanel>
-                                                            <StackPanel>
-                                                                <TextBlock Text="Channels:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                                <ItemsControl ItemsSource="{Binding Channels}">
-                                                                    <ItemsControl.ItemsPanel>
-                                                                        <ItemsPanelTemplate>
-                                                                            <VariableSizedWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="5"/>
-                                                                        </ItemsPanelTemplate>
-                                                                    </ItemsControl.ItemsPanel>
-                                                                    <ItemsControl.ItemTemplate>
-                                                                        <DataTemplate>
-                                                                            <HyperlinkButton Content="{Binding}" Padding="4,2" 
-                                                                                             Command="{Binding DataContext.SelectedServer.JoinChannelCommand, ElementName=MainGrid}"
-                                                                                             CommandParameter="{Binding}"/>
-                                                                        </DataTemplate>
-                                                                    </ItemsControl.ItemTemplate>
-                                                                </ItemsControl>
-                                                            </StackPanel>
-                                                            
-                                                            <MenuFlyoutSeparator/>
-                                                            
-                                                            <Button Content="WHOIS" HorizontalAlignment="Stretch" 
-                                                                    Command="{Binding DataContext.SelectedServer.WhoisUserCommand, ElementName=MainGrid}" 
-                                                                    CommandParameter="{Binding}" Click="ShowAdvancedWhois_Click"/>
-                                                            
-                                                            <Grid ColumnSpacing="8">
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="*"/>
-                                                                    <ColumnDefinition Width="*"/>
-                                                                </Grid.ColumnDefinitions>
-                                                                <Button Content="Kick" HorizontalAlignment="Stretch" 
-                                                                        Command="{Binding DataContext.SelectedServer.KickUserCommand, ElementName=MainGrid}" 
-                                                                        CommandParameter="{Binding}"/>
-                                                                <Button Grid.Column="1" Content="Ban" HorizontalAlignment="Stretch" 
-                                                                        Command="{Binding DataContext.SelectedServer.BanUserCommand, ElementName=MainGrid}" 
-                                                                        CommandParameter="{Binding}"/>
-                                                            </Grid>
-                                                        </StackPanel>
-                                                    </Flyout>
-                                                </FlyoutBase.AttachedFlyout>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Prefix}" Foreground="{StaticResource AccentLightBrush}" Width="15" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="1" Text="{Binding Nickname}" Foreground="{StaticResource TextPrimaryBrush}"/>
-                                            </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
-        </Grid>
+                <!-- User List -->
+                <Border Grid.Column="2" Background="{StaticResource AppBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1,0,0,0"
+                        Visibility="{Binding IsUserListCollapsed, Converter={StaticResource InverseBoolToVis}}">
+                    <Grid Width="200">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-        <!-- Connection Overlay -->
-        <Grid Background="{StaticResource AppBackgroundBrush}" Visibility="{Binding SelectedServer, Converter={StaticResource NullToVis}, ConverterParameter=Invert}">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Spacing="16">
-                <Image Source="ms-appx:///konnectchat2.png" MaxHeight="100" Margin="0,0,0,16"/>
-                <TextBlock Text="KonnectChat IRC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource AccentBrush}"/>
-                
-                <TextBox Header="Server Address" Text="{Binding ConnectAddress, Mode=TwoWay}"/>
-                <StackPanel Orientation="Horizontal" Spacing="16">
-                     <NumberBox Header="Port" Value="{Binding ConnectPort, Mode=TwoWay}" Width="100"/>
+                        <Grid Padding="12,12,12,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Users" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <Button Grid.Column="1" Command="{Binding ToggleUserListCommand}" Background="Transparent" BorderThickness="0" Padding="4">
+                                <FontIcon Glyph="&#xE700;" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </Button>
+                        </Grid>
+
+                        <ScrollViewer Grid.Row="1">
+                            <ItemsControl ItemsSource="{Binding SelectedServer.SelectedChannel.GroupedUsers}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,0,0,12">
+                                            <TextBlock Text="{Binding Key}" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" Margin="12,8,0,4" FontSize="12"/>
+                                            <ItemsControl ItemsSource="{Binding}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                    <Grid Margin="12,2" Background="Transparent" Tapped="UserItem_Tapped">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="16"/>
+                                                            <ColumnDefinition Width="Auto" MinWidth="12"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        
+                                                        <!-- Status Indicator -->
+                                                        <Ellipse Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center">
+                                                            <Ellipse.Fill>
+                                                                <SolidColorBrush Color="{Binding IsOnline, Converter={StaticResource StatusToColorConverter}}"/>
+                                                            </Ellipse.Fill>
+                                                        </Ellipse>
+
+                                                        <TextBlock Grid.Column="1" Text="{Binding Prefix}" Foreground="{StaticResource AccentLightBrush}" FontWeight="Bold"/>
+                                                        <TextBlock Grid.Column="2" Text="{Binding Nickname}" Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                                                        <FlyoutBase.AttachedFlyout>
+                                                            <Flyout>
+                                                                <StackPanel Width="220" Spacing="10">
+                                                                    <TextBlock Text="{Binding Nickname}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
+                                                                    <StackPanel>
+                                                                        <TextBlock Text="Host:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                        <TextBlock Text="{Binding Hostname}" IsTextSelectionEnabled="True" TextWrapping="Wrap"/>
+                                                                    </StackPanel>
+                                                                    <StackPanel>
+                                                                        <TextBlock Text="Channels:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                        <ItemsControl ItemsSource="{Binding Channels}">
+                                                                            <ItemsControl.ItemsPanel>
+                                                                                <ItemsPanelTemplate>
+                                                                                    <VariableSizedWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="5"/>
+                                                                                </ItemsPanelTemplate>
+                                                                            </ItemsControl.ItemsPanel>
+                                                                            <ItemsControl.ItemTemplate>
+                                                                                <DataTemplate>
+                                                                                    <HyperlinkButton Content="{Binding}" Padding="4,2" 
+                                                                                                    Command="{Binding DataContext.SelectedServer.JoinChannelCommand, ElementName=MainGrid}"
+                                                                                                    CommandParameter="{Binding}"/>
+                                                                                </DataTemplate>
+                                                                            </ItemsControl.ItemTemplate>
+                                                                        </ItemsControl>
+                                                                    </StackPanel>
+                                                                    
+                                                                    <MenuFlyoutSeparator/>
+                                                                    
+                                                                    <Button Content="WHOIS" HorizontalAlignment="Stretch" 
+                                                                            Command="{Binding DataContext.SelectedServer.WhoisUserCommand, ElementName=MainGrid}" 
+                                                                            CommandParameter="{Binding}" Click="ShowAdvancedWhois_Click"/>
+                                                                    
+                                                                    <Grid ColumnSpacing="8">
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <Button Content="Kick" HorizontalAlignment="Stretch" 
+                                                                                Command="{Binding DataContext.SelectedServer.KickUserCommand, ElementName=MainGrid}" 
+                                                                                CommandParameter="{Binding}"/>
+                                                                        <Button Grid.Column="1" Content="Ban" HorizontalAlignment="Stretch" 
+                                                                                Command="{Binding DataContext.SelectedServer.BanUserCommand, ElementName=MainGrid}" 
+                                                                                CommandParameter="{Binding}"/>
+                                                                    </Grid>
+                                                                </StackPanel>
+                                                            </Flyout>
+                                                        </FlyoutBase.AttachedFlyout>
+                                                    </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Connection Overlay (Centered in Workspace) -->
+            <Grid Background="{StaticResource AppBackgroundBrush}" Visibility="{Binding SelectedServer, Converter={StaticResource NullToVis}, ConverterParameter=Invert}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Spacing="16">
+                    <Image Source="ms-appx:///konnectchat2.png" MaxHeight="100" Margin="0,0,0,16"/>
+                    <TextBlock Text="KonnectChat IRC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource AccentBrush}"/>
+                    
+                    <TextBox Header="Server Address" Text="{Binding ConnectAddress, Mode=TwoWay}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                         <NumberBox Header="Port" Value="{Binding ConnectPort, Mode=TwoWay}" Width="100"/>
+                    </StackPanel>
+                   
+                    <TextBox Header="Nickname" Text="{Binding ConnectNick, Mode=TwoWay}"/>
+                    <TextBox Header="Auto-Join Channel" Text="{Binding AutoJoinChannel, Mode=TwoWay}" PlaceholderText="#konnect-chat"/>
+                    
+                    <CheckBox Content="Use Password" IsChecked="{Binding UseServerPassword, Mode=TwoWay}"/>
+                    <PasswordBox Header="Password" Password="{Binding ServerPassword, Mode=TwoWay}" 
+                                 Visibility="{Binding UseServerPassword, Converter={StaticResource BoolToVis}}"/>
+                    
+                    <Button Content="Connect" HorizontalAlignment="Stretch" Margin="0,8,0,0" 
+                            Background="{StaticResource AccentBrush}" Foreground="White"
+                            Command="{Binding ConnectCommand}"/>
                 </StackPanel>
-               
-                <TextBox Header="Nickname" Text="{Binding ConnectNick, Mode=TwoWay}"/>
-                <TextBox Header="Auto-Join Channel" Text="{Binding AutoJoinChannel, Mode=TwoWay}" PlaceholderText="#konnect-chat"/>
-                
-                <CheckBox Content="Use Password" IsChecked="{Binding UseServerPassword, Mode=TwoWay}"/>
-                <PasswordBox Header="Password" Password="{Binding ServerPassword, Mode=TwoWay}" 
-                             Visibility="{Binding UseServerPassword, Converter={StaticResource BoolToVis}}"/>
-                
-                <Button Content="Connect" HorizontalAlignment="Stretch" Margin="0,8,0,0" 
-                        Background="{StaticResource AccentBrush}" Foreground="White"
-                        Command="{Binding ConnectCommand}"/>
-            </StackPanel>
+            </Grid>
         </Grid>
 
         <!-- Channel List Dialog -->
@@ -431,6 +470,22 @@
                 </StackPanel>
             </StackPanel>
         </ContentDialog>
-        </Grid>
+
+        <!-- Topic View/Edit Dialog -->
+        <ContentDialog x:Name="TopicEditDialog"
+                       Title="Channel Topic"
+                       PrimaryButtonText="Update Topic"
+                       CloseButtonText="Close"
+                       DefaultButton="Primary">
+            <StackPanel Spacing="12" Width="400">
+                <TextBlock Text="Current Topic:" Foreground="{StaticResource TextSecondaryBrush}"/>
+                <TextBlock Text="{Binding SelectedServer.SelectedChannel.Topic}" TextWrapping="Wrap" FontWeight="SemiBold"/>
+                
+                <StackPanel x:Name="TopicEditStack" Spacing="8" Margin="0,12,0,0">
+                    <TextBlock Text="Edit Topic (Operators Only):" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"/>
+                    <TextBox x:Name="TopicTextBox" PlaceholderText="Enter new topic..." TextWrapping="Wrap" AcceptsReturn="True" Height="80"/>
+                </StackPanel>
+            </StackPanel>
+        </ContentDialog>
     </Grid>
 </Window>

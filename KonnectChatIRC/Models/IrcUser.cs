@@ -57,6 +57,13 @@ namespace KonnectChatIRC.Models
 
         public string FullDisplayName => $"{Prefix}{Nickname}";
 
+        private bool _isOnline = true;
+        public bool IsOnline
+        {
+            get => _isOnline;
+            set { _isOnline = value; OnPropertyChanged(); }
+        }
+
         private string _hostname = "";
         private string _username = "";
         private string _realname = "";

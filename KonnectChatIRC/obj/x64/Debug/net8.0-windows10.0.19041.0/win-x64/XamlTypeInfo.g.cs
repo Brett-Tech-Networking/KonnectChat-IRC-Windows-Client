@@ -226,7 +226,7 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[29];
+            _typeNameTable = new string[30];
             _typeNameTable[0] = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
             _typeNameTable[1] = "Microsoft.UI.Xaml.ResourceDictionary";
             _typeNameTable[2] = "Object";
@@ -234,30 +234,31 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeNameTable[4] = "KonnectChatIRC.Converters.BoolToVisibilityConverter";
             _typeNameTable[5] = "KonnectChatIRC.Converters.InitialsConverter";
             _typeNameTable[6] = "KonnectChatIRC.Converters.NotServerWindowConverter";
-            _typeNameTable[7] = "KonnectChatIRC.NullToVisibilityConverter";
-            _typeNameTable[8] = "Microsoft.UI.Xaml.Controls.NumberBox";
-            _typeNameTable[9] = "Microsoft.UI.Xaml.Controls.Control";
-            _typeNameTable[10] = "Double";
-            _typeNameTable[11] = "Microsoft.UI.Xaml.DataTemplate";
-            _typeNameTable[12] = "Windows.Globalization.NumberFormatting.INumberFormatter2";
-            _typeNameTable[13] = "String";
-            _typeNameTable[14] = "Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase";
-            _typeNameTable[15] = "Microsoft.UI.Xaml.Media.SolidColorBrush";
-            _typeNameTable[16] = "Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode";
-            _typeNameTable[17] = "System.Enum";
-            _typeNameTable[18] = "System.ValueType";
-            _typeNameTable[19] = "Microsoft.UI.Xaml.TextReadingOrder";
-            _typeNameTable[20] = "Microsoft.UI.Xaml.Controls.NumberBoxValidationMode";
-            _typeNameTable[21] = "KonnectChatIRC.MainWindow";
-            _typeNameTable[22] = "Microsoft.UI.Xaml.Window";
-            _typeNameTable[23] = "KonnectChatIRC.ViewModels.MainViewModel";
-            _typeNameTable[24] = "KonnectChatIRC.MVVM.ViewModelBase";
-            _typeNameTable[25] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[26] = "Microsoft.UI.Xaml.DependencyObject";
-            _typeNameTable[27] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[28] = "Int32";
+            _typeNameTable[7] = "KonnectChatIRC.Converters.StatusToColorConverter";
+            _typeNameTable[8] = "KonnectChatIRC.NullToVisibilityConverter";
+            _typeNameTable[9] = "Microsoft.UI.Xaml.Controls.NumberBox";
+            _typeNameTable[10] = "Microsoft.UI.Xaml.Controls.Control";
+            _typeNameTable[11] = "Double";
+            _typeNameTable[12] = "Microsoft.UI.Xaml.DataTemplate";
+            _typeNameTable[13] = "Windows.Globalization.NumberFormatting.INumberFormatter2";
+            _typeNameTable[14] = "String";
+            _typeNameTable[15] = "Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase";
+            _typeNameTable[16] = "Microsoft.UI.Xaml.Media.SolidColorBrush";
+            _typeNameTable[17] = "Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode";
+            _typeNameTable[18] = "System.Enum";
+            _typeNameTable[19] = "System.ValueType";
+            _typeNameTable[20] = "Microsoft.UI.Xaml.TextReadingOrder";
+            _typeNameTable[21] = "Microsoft.UI.Xaml.Controls.NumberBoxValidationMode";
+            _typeNameTable[22] = "KonnectChatIRC.MainWindow";
+            _typeNameTable[23] = "Microsoft.UI.Xaml.Window";
+            _typeNameTable[24] = "KonnectChatIRC.ViewModels.MainViewModel";
+            _typeNameTable[25] = "KonnectChatIRC.MVVM.ViewModelBase";
+            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[27] = "Microsoft.UI.Xaml.DependencyObject";
+            _typeNameTable[28] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[29] = "Int32";
 
-            _typeTable = new global::System.Type[29];
+            _typeTable = new global::System.Type[30];
             _typeTable[0] = typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources);
             _typeTable[1] = typeof(global::Microsoft.UI.Xaml.ResourceDictionary);
             _typeTable[2] = typeof(global::System.Object);
@@ -265,28 +266,29 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeTable[4] = typeof(global::KonnectChatIRC.Converters.BoolToVisibilityConverter);
             _typeTable[5] = typeof(global::KonnectChatIRC.Converters.InitialsConverter);
             _typeTable[6] = typeof(global::KonnectChatIRC.Converters.NotServerWindowConverter);
-            _typeTable[7] = typeof(global::KonnectChatIRC.NullToVisibilityConverter);
-            _typeTable[8] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBox);
-            _typeTable[9] = typeof(global::Microsoft.UI.Xaml.Controls.Control);
-            _typeTable[10] = typeof(global::System.Double);
-            _typeTable[11] = typeof(global::Microsoft.UI.Xaml.DataTemplate);
-            _typeTable[12] = typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2);
-            _typeTable[13] = typeof(global::System.String);
-            _typeTable[14] = typeof(global::Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase);
-            _typeTable[15] = typeof(global::Microsoft.UI.Xaml.Media.SolidColorBrush);
-            _typeTable[16] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode);
-            _typeTable[17] = typeof(global::System.Enum);
-            _typeTable[18] = typeof(global::System.ValueType);
-            _typeTable[19] = typeof(global::Microsoft.UI.Xaml.TextReadingOrder);
-            _typeTable[20] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode);
-            _typeTable[21] = typeof(global::KonnectChatIRC.MainWindow);
-            _typeTable[22] = typeof(global::Microsoft.UI.Xaml.Window);
-            _typeTable[23] = typeof(global::KonnectChatIRC.ViewModels.MainViewModel);
-            _typeTable[24] = typeof(global::KonnectChatIRC.MVVM.ViewModelBase);
-            _typeTable[25] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
-            _typeTable[27] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[28] = typeof(global::System.Int32);
+            _typeTable[7] = typeof(global::KonnectChatIRC.Converters.StatusToColorConverter);
+            _typeTable[8] = typeof(global::KonnectChatIRC.NullToVisibilityConverter);
+            _typeTable[9] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBox);
+            _typeTable[10] = typeof(global::Microsoft.UI.Xaml.Controls.Control);
+            _typeTable[11] = typeof(global::System.Double);
+            _typeTable[12] = typeof(global::Microsoft.UI.Xaml.DataTemplate);
+            _typeTable[13] = typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2);
+            _typeTable[14] = typeof(global::System.String);
+            _typeTable[15] = typeof(global::Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase);
+            _typeTable[16] = typeof(global::Microsoft.UI.Xaml.Media.SolidColorBrush);
+            _typeTable[17] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode);
+            _typeTable[18] = typeof(global::System.Enum);
+            _typeTable[19] = typeof(global::System.ValueType);
+            _typeTable[20] = typeof(global::Microsoft.UI.Xaml.TextReadingOrder);
+            _typeTable[21] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode);
+            _typeTable[22] = typeof(global::KonnectChatIRC.MainWindow);
+            _typeTable[23] = typeof(global::Microsoft.UI.Xaml.Window);
+            _typeTable[24] = typeof(global::KonnectChatIRC.ViewModels.MainViewModel);
+            _typeTable[25] = typeof(global::KonnectChatIRC.MVVM.ViewModelBase);
+            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[27] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
+            _typeTable[28] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[29] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -325,28 +327,30 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private object Activate_4_BoolToVisibilityConverter() { return new global::KonnectChatIRC.Converters.BoolToVisibilityConverter(); }
         private object Activate_5_InitialsConverter() { return new global::KonnectChatIRC.Converters.InitialsConverter(); }
         private object Activate_6_NotServerWindowConverter() { return new global::KonnectChatIRC.Converters.NotServerWindowConverter(); }
-        private object Activate_7_NullToVisibilityConverter() { return new global::KonnectChatIRC.NullToVisibilityConverter(); }
-        private object Activate_8_NumberBox() { return new global::Microsoft.UI.Xaml.Controls.NumberBox(); }
-        private object Activate_21_MainWindow() { return new global::KonnectChatIRC.MainWindow(); }
-        private object Activate_23_MainViewModel() { return new global::KonnectChatIRC.ViewModels.MainViewModel(); }
-        private object Activate_24_ViewModelBase() { return new global::KonnectChatIRC.MVVM.ViewModelBase(); }
-        private object Activate_25_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_7_StatusToColorConverter() { return new global::KonnectChatIRC.Converters.StatusToColorConverter(); }
+        private object Activate_8_NullToVisibilityConverter() { return new global::KonnectChatIRC.NullToVisibilityConverter(); }
+        private object Activate_9_NumberBox() { return new global::Microsoft.UI.Xaml.Controls.NumberBox(); }
+        private object Activate_22_MainWindow() { return new global::KonnectChatIRC.MainWindow(); }
+        private object Activate_24_MainViewModel() { return new global::KonnectChatIRC.ViewModels.MainViewModel(); }
+        private object Activate_25_ViewModelBase() { return new global::KonnectChatIRC.MVVM.ViewModelBase(); }
+        private object Activate_26_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_XamlControlsResources() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources).TypeHandle);
         private void StaticInitializer_4_BoolToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.BoolToVisibilityConverter).TypeHandle);
         private void StaticInitializer_5_InitialsConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.InitialsConverter).TypeHandle);
         private void StaticInitializer_6_NotServerWindowConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.NotServerWindowConverter).TypeHandle);
-        private void StaticInitializer_7_NullToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.NullToVisibilityConverter).TypeHandle);
-        private void StaticInitializer_8_NumberBox() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBox).TypeHandle);
-        private void StaticInitializer_12_INumberFormatter2() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2).TypeHandle);
-        private void StaticInitializer_16_NumberBoxSpinButtonPlacementMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode).TypeHandle);
-        private void StaticInitializer_17_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
-        private void StaticInitializer_18_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
-        private void StaticInitializer_20_NumberBoxValidationMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode).TypeHandle);
-        private void StaticInitializer_21_MainWindow() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MainWindow).TypeHandle);
-        private void StaticInitializer_23_MainViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.ViewModels.MainViewModel).TypeHandle);
-        private void StaticInitializer_24_ViewModelBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MVVM.ViewModelBase).TypeHandle);
-        private void StaticInitializer_25_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_27_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void StaticInitializer_7_StatusToColorConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.StatusToColorConverter).TypeHandle);
+        private void StaticInitializer_8_NullToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.NullToVisibilityConverter).TypeHandle);
+        private void StaticInitializer_9_NumberBox() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBox).TypeHandle);
+        private void StaticInitializer_13_INumberFormatter2() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2).TypeHandle);
+        private void StaticInitializer_17_NumberBoxSpinButtonPlacementMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode).TypeHandle);
+        private void StaticInitializer_18_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
+        private void StaticInitializer_19_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
+        private void StaticInitializer_21_NumberBoxValidationMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode).TypeHandle);
+        private void StaticInitializer_22_MainWindow() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MainWindow).TypeHandle);
+        private void StaticInitializer_24_MainViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.ViewModels.MainViewModel).TypeHandle);
+        private void StaticInitializer_25_ViewModelBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MVVM.ViewModelBase).TypeHandle);
+        private void StaticInitializer_26_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_28_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
         private void MapAdd_0_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -354,7 +358,7 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newKey, newItem);
         }
-        private void VectorAdd_27_IList(object instance, object item)
+        private void VectorAdd_28_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -417,18 +421,26 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 7:   //  KonnectChatIRC.NullToVisibilityConverter
+            case 7:   //  KonnectChatIRC.Converters.StatusToColorConverter
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.Activator = Activate_7_NullToVisibilityConverter;
-                userType.StaticInitializer = StaticInitializer_7_NullToVisibilityConverter;
+                userType.Activator = Activate_7_StatusToColorConverter;
+                userType.StaticInitializer = StaticInitializer_7_StatusToColorConverter;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 8:   //  Microsoft.UI.Xaml.Controls.NumberBox
+            case 8:   //  KonnectChatIRC.NullToVisibilityConverter
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                userType.Activator = Activate_8_NullToVisibilityConverter;
+                userType.StaticInitializer = StaticInitializer_8_NullToVisibilityConverter;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 9:   //  Microsoft.UI.Xaml.Controls.NumberBox
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Control"));
-                userType.Activator = Activate_8_NumberBox;
-                userType.StaticInitializer = StaticInitializer_8_NumberBox;
+                userType.Activator = Activate_9_NumberBox;
+                userType.StaticInitializer = StaticInitializer_9_NumberBox;
                 userType.AddMemberName("Header");
                 userType.AddMemberName("Value");
                 userType.AddMemberName("AcceptsExpression");
@@ -451,103 +463,103 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 9:   //  Microsoft.UI.Xaml.Controls.Control
+            case 10:   //  Microsoft.UI.Xaml.Controls.Control
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 10:   //  Double
+            case 11:   //  Double
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 11:   //  Microsoft.UI.Xaml.DataTemplate
+            case 12:   //  Microsoft.UI.Xaml.DataTemplate
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 12:   //  Windows.Globalization.NumberFormatting.INumberFormatter2
+            case 13:   //  Windows.Globalization.NumberFormatting.INumberFormatter2
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_12_INumberFormatter2;
+                userType.StaticInitializer = StaticInitializer_13_INumberFormatter2;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 13:   //  String
+            case 14:   //  String
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 14:   //  Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase
+            case 15:   //  Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 15:   //  Microsoft.UI.Xaml.Media.SolidColorBrush
+            case 16:   //  Microsoft.UI.Xaml.Media.SolidColorBrush
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 16:   //  Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode
+            case 17:   //  Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
-                userType.StaticInitializer = StaticInitializer_16_NumberBoxSpinButtonPlacementMode;
+                userType.StaticInitializer = StaticInitializer_17_NumberBoxSpinButtonPlacementMode;
                 userType.AddEnumValue("Hidden", global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode.Hidden);
                 userType.AddEnumValue("Compact", global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode.Compact);
                 userType.AddEnumValue("Inline", global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode.Inline);
                 xamlType = userType;
                 break;
 
-            case 17:   //  System.Enum
+            case 18:   //  System.Enum
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
-                userType.StaticInitializer = StaticInitializer_17_Enum;
+                userType.StaticInitializer = StaticInitializer_18_Enum;
                 xamlType = userType;
                 break;
 
-            case 18:   //  System.ValueType
+            case 19:   //  System.ValueType
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_18_ValueType;
+                userType.StaticInitializer = StaticInitializer_19_ValueType;
                 xamlType = userType;
                 break;
 
-            case 19:   //  Microsoft.UI.Xaml.TextReadingOrder
+            case 20:   //  Microsoft.UI.Xaml.TextReadingOrder
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 20:   //  Microsoft.UI.Xaml.Controls.NumberBoxValidationMode
+            case 21:   //  Microsoft.UI.Xaml.Controls.NumberBoxValidationMode
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
-                userType.StaticInitializer = StaticInitializer_20_NumberBoxValidationMode;
+                userType.StaticInitializer = StaticInitializer_21_NumberBoxValidationMode;
                 userType.AddEnumValue("InvalidInputOverwritten", global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode.InvalidInputOverwritten);
                 userType.AddEnumValue("Disabled", global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode.Disabled);
                 xamlType = userType;
                 break;
 
-            case 21:   //  KonnectChatIRC.MainWindow
+            case 22:   //  KonnectChatIRC.MainWindow
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.Activator = Activate_21_MainWindow;
-                userType.StaticInitializer = StaticInitializer_21_MainWindow;
+                userType.Activator = Activate_22_MainWindow;
+                userType.StaticInitializer = StaticInitializer_22_MainWindow;
                 userType.AddMemberName("Handle");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 22:   //  Microsoft.UI.Xaml.Window
+            case 23:   //  Microsoft.UI.Xaml.Window
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 23:   //  KonnectChatIRC.ViewModels.MainViewModel
+            case 24:   //  KonnectChatIRC.ViewModels.MainViewModel
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("KonnectChatIRC.MVVM.ViewModelBase"));
-                userType.StaticInitializer = StaticInitializer_23_MainViewModel;
+                userType.StaticInitializer = StaticInitializer_24_MainViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 24:   //  KonnectChatIRC.MVVM.ViewModelBase
+            case 25:   //  KonnectChatIRC.MVVM.ViewModelBase
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.Activator = Activate_24_ViewModelBase;
-                userType.StaticInitializer = StaticInitializer_24_ViewModelBase;
+                userType.Activator = Activate_25_ViewModelBase;
+                userType.StaticInitializer = StaticInitializer_25_ViewModelBase;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 25:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 26:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_25_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_25_TreeViewNode;
+                userType.Activator = Activate_26_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_26_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -559,19 +571,19 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 26:   //  Microsoft.UI.Xaml.DependencyObject
+            case 27:   //  Microsoft.UI.Xaml.DependencyObject
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 27:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 28:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_27_IList;
-                userType.CollectionAdd = VectorAdd_27_IList;
+                userType.StaticInitializer = StaticInitializer_28_IList;
+                userType.CollectionAdd = VectorAdd_28_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 28:   //  Int32
+            case 29:   //  Int32
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }

@@ -65,6 +65,8 @@ namespace KonnectChatIRC.ViewModels
         public ICommand SendCommand { get; }
         public ICommand DisconnectCommand { get; }
         public ICommand ChangeNickCommand { get; }
+        public ICommand PartChannelCommand { get; }
+        public ICommand ChangeTopicCommand { get; }
 
         public ServerViewModel(string serverName, string address, int port, string nick, string realname, string? password = null, string? autoJoinChannel = null)
         {
@@ -121,6 +123,14 @@ namespace KonnectChatIRC.ViewModels
             SendCommand = new RelayCommand(ExecuteSendCommand);
             DisconnectCommand = new RelayCommand(_ => ExecuteDisconnect());
             ChangeNickCommand = new RelayCommand(nick => _ircService?.SendRawAsync($"NICK {nick}"));
+            PartChannelCommand = new RelayCommand(chan => _ircService?.SendRawAsync($"PART {chan}"));
+            ChangeTopicCommand = new RelayCommand(topic => 
+            {
+                if (SelectedChannel != null)
+                {
+                    _ircService?.SendRawAsync($"TOPIC {SelectedChannel.Name} :{topic}");
+                }
+            });
 
             // Start connection
             HandleConnection(address, port, nick, realname, password);
@@ -187,13 +197,20 @@ namespace KonnectChatIRC.ViewModels
             {
                 var target = e.Parameters[0];
                 var content = e.Parameters[1];
+                var senderNick = GetNickFromPrefix(e.Prefix);
+
+                // If the target is our own nick, this is a private message to us.
+                // The "channel" tab should be named after the sender, not us.
+                string channelName = target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase) 
+                    ? senderNick 
+                    : target;
                 
-                var channel = GetOrCreateChannel(target);
+                var channel = GetOrCreateChannel(channelName);
                 if (channel != null)
                 {
                     channel.AddMessage(new ChatMessage 
                     { 
-                        Sender = e.Prefix, 
+                        Sender = senderNick, 
                         Content = content,
                         Timestamp = DateTime.Now,
                         IsIncoming = true
@@ -204,11 +221,32 @@ namespace KonnectChatIRC.ViewModels
             {
                 var target = e.Parameters[0];
                 var content = e.Parameters[1];
+                var senderNick = GetNickFromPrefix(e.Prefix);
 
                 // Route notices to channel if target is channel, otherwise to Server
-                var channel = (target.StartsWith("#") || target.StartsWith("&")) 
-                    ? GetOrCreateChannel(target) 
-                    : _channelLookup["Server"];
+                ChannelViewModel? channel = null;
+                if (target.StartsWith("#") || target.StartsWith("&"))
+                {
+                    channel = GetOrCreateChannel(target);
+                }
+                else if (target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
+                {
+                    // If it's a personal notice from someone specific, maybe show it in their query tab?
+                    // But usually notices are from server or specific users. 
+                    // To avoid creating a self-tab, if target == CurrentNick, we route to Server or existing sender tab.
+                    if (!string.IsNullOrEmpty(senderNick) && _channelLookup.ContainsKey(senderNick))
+                    {
+                        channel = _channelLookup[senderNick];
+                    }
+                    else
+                    {
+                        channel = _channelLookup["Server"];
+                    }
+                }
+                else
+                {
+                    channel = _channelLookup["Server"];
+                }
 
                 if (channel != null)
                 {
@@ -308,25 +346,51 @@ namespace KonnectChatIRC.ViewModels
             }
             else if (e.Command == "MODE")
             {
-                // Simple handle for channel modes like bans
-                if (e.Parameters.Length >= 3 && (e.Parameters[1].Contains("+b") || e.Parameters[1].Contains("-b")))
+                if (e.Parameters.Length >= 2)
                 {
                     var channelName = e.Parameters[0];
                     var mode = e.Parameters[1];
-                    var mask = e.Parameters[2];
                     var setter = GetNickFromPrefix(e.Prefix);
-
                     var channel = GetOrCreateChannel(channelName);
+
                     if (channel != null)
                     {
-                        channel.AddMessage(new ChatMessage 
-                        { 
-                            Sender = "", 
-                            Content = $"* {setter} sets mode {mode} {mask}", 
-                            Timestamp = DateTime.Now,
-                            IsIncoming = true,
-                            IsSystem = true
-                        });
+                        // Handle user mode changes (OP/VOICE)
+                        if (e.Parameters.Length >= 3 && (mode.Contains("o") || mode.Contains("v")))
+                        {
+                            var targetNick = e.Parameters[2];
+                            var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
+                            if (user != null)
+                            {
+                                // Simple prefix update - in a real client we'd track multiple modes
+                                if (mode.Contains("+o")) user.Prefix = "@";
+                                else if (mode.Contains("-o")) user.Prefix = "";
+                                else if (mode.Contains("+v")) user.Prefix = "+";
+                                else if (mode.Contains("-v")) user.Prefix = "";
+                            }
+
+                            channel.AddMessage(new ChatMessage 
+                            { 
+                                Sender = "", 
+                                Content = $"* {setter} sets mode {mode} {targetNick}", 
+                                Timestamp = DateTime.Now,
+                                IsIncoming = true,
+                                IsSystem = true
+                            });
+                        }
+                        // Handle channel modes (bans, etc)
+                        else if (e.Parameters.Length >= 3)
+                        {
+                            var mask = e.Parameters[2];
+                            channel.AddMessage(new ChatMessage 
+                            { 
+                                Sender = "", 
+                                Content = $"* {setter} sets mode {mode} {mask}", 
+                                Timestamp = DateTime.Now,
+                                IsIncoming = true,
+                                IsSystem = true
+                            });
+                        }
                     }
                 }
             }
@@ -472,6 +536,14 @@ namespace KonnectChatIRC.ViewModels
 
         private ChannelViewModel? GetOrCreateChannel(string name)
         {
+             if (string.IsNullOrEmpty(name)) return _channelLookup["Server"];
+
+             // NEVER create a channel tab for our own nickname
+             if (name.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
+             {
+                 return _channelLookup["Server"];
+             }
+
              if (_channelLookup.TryGetValue(name, out var existing))
              {
                  return existing;

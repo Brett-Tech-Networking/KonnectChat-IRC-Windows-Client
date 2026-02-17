@@ -8,6 +8,7 @@ using Microsoft.UI.Dispatching;
 using System;
 using KonnectChatIRC.ViewModels;
 using KonnectChatIRC.Models; // Required for IrcUser
+using System.Linq; // Required for FirstOrDefault
 using WinRT.Interop; // Required for WindowNative
 
 namespace KonnectChatIRC
@@ -167,6 +168,29 @@ namespace KonnectChatIRC
                 }
                 
                 FlyoutBase.ShowAttachedFlyout(fe);
+            }
+        }
+
+        private async void Topic_Click(object sender, RoutedEventArgs e)
+        {
+            if (Handle.SelectedServer?.SelectedChannel == null) return;
+
+            var channel = Handle.SelectedServer.SelectedChannel;
+            TopicTextBox.Text = channel.Topic ?? "";
+            
+            // Check if current user is OP in this channel
+            var currentNick = Handle.SelectedServer.CurrentNick;
+            var currentUser = channel.Users.FirstOrDefault(u => u.Nickname.Equals(currentNick, StringComparison.OrdinalIgnoreCase));
+            
+            TopicEditStack.Visibility = (currentUser != null && currentUser.IsOp) ? Visibility.Visible : Visibility.Collapsed;
+            
+            TopicEditDialog.XamlRoot = this.Content.XamlRoot;
+            var result = await TopicEditDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary && TopicEditStack.Visibility == Visibility.Visible)
+            {
+                var newTopic = TopicTextBox.Text.Trim();
+                Handle.SelectedServer.ChangeTopicCommand.Execute(newTopic);
             }
         }
 

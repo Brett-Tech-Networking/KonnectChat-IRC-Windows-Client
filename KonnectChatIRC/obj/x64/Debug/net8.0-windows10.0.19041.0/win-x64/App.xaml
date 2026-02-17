@@ -18,6 +18,7 @@
             <converters:BoolToVisibilityConverter x:Key="InverseBoolToVis" IsInverted="True" />
             <converters:InitialsConverter x:Key="InitialsConverter" />
             <converters:NotServerWindowConverter x:Key="NotServerWindowConverter" />
+            <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
             <!-- <converters:UserListToggleConverter x:Key="UserListToggleConverter" /> -->
 
 
@@ -50,12 +51,25 @@
             
             <!-- Channel List Item Template -->
             <DataTemplate x:Key="ProChannelTemplate">
-                <Border Padding="12,8" CornerRadius="6">
+                <Grid Padding="12,8" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="#" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,8,0" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Medium"/>
                     </StackPanel>
-                </Border>
+
+                    <Button Grid.Column="1" 
+                            Command="{Binding DataContext.SelectedServer.PartChannelCommand, ElementName=MainGrid}"
+                            CommandParameter="{Binding Name}"
+                            Background="Transparent" BorderThickness="0" Padding="4"
+                            VerticalAlignment="Center" HorizontalAlignment="Right"
+                            ToolTipService.ToolTip="Leave Channel">
+                        <FontIcon Glyph="&#xE711;" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </Button>
+                </Grid>
             </DataTemplate>
 
         </ResourceDictionary>

@@ -17,6 +17,7 @@ namespace KonnectChatIRC.ViewModels
         private string _serverPassword = "";
         private IrcUser? _selectedWhoisUser;
         private bool _isSidebarCollapsed;
+        private bool _isUserListCollapsed;
         
         public string ConnectAddress { get => _connectAddress; set => SetProperty(ref _connectAddress, value); }
         public int ConnectPort { get => _connectPort; set => SetProperty(ref _connectPort, value); }
@@ -45,10 +46,17 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _isSidebarCollapsed, value);
         }
 
+        public bool IsUserListCollapsed
+        {
+            get => _isUserListCollapsed;
+            set => SetProperty(ref _isUserListCollapsed, value);
+        }
+
         public ICommand ConnectCommand { get; }
         public ICommand AddServerCommand { get; }
         public ICommand RemoveServerCommand { get; }
         public ICommand ToggleSidebarCommand { get; }
+        public ICommand ToggleUserListCommand { get; }
 
         public MainViewModel()
         {
@@ -58,6 +66,7 @@ namespace KonnectChatIRC.ViewModels
             AddServerCommand = new RelayCommand(_ => SelectedServer = null);
             RemoveServerCommand = new RelayCommand(ExecuteRemoveServer);
             ToggleSidebarCommand = new RelayCommand(_ => IsSidebarCollapsed = !IsSidebarCollapsed);
+            ToggleUserListCommand = new RelayCommand(_ => IsUserListCollapsed = !IsUserListCollapsed);
         }
 
         private void ExecuteConnect(object? obj)
