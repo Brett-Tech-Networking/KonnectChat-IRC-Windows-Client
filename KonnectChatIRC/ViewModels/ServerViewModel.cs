@@ -23,7 +23,35 @@ namespace KonnectChatIRC.ViewModels
         public string ServerName
         {
             get => _serverName;
-            set => SetProperty(ref _serverName, value);
+            set 
+            {
+                if (SetProperty(ref _serverName, value))
+                {
+                    OnPropertyChanged(nameof(ServerInitials));
+                }
+            }
+        }
+
+        public string ServerInitials
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(ServerName)) return "?";
+                var name = ServerName.ToLower();
+                if (name.StartsWith("irc."))
+                {
+                    var remainder = ServerName.Substring(4);
+                    return string.IsNullOrWhiteSpace(remainder) ? "I" : remainder.Substring(0, 1).ToUpper();
+                }
+                return ServerName.Substring(0, 1).ToUpper();
+            }
+        }
+
+        private string _currentNick;
+        public string CurrentNick
+        {
+            get => _currentNick;
+            set => SetProperty(ref _currentNick, value);
         }
 
         public ObservableCollection<ChannelViewModel> Channels { get; } = new ObservableCollection<ChannelViewModel>();
@@ -35,6 +63,8 @@ namespace KonnectChatIRC.ViewModels
         }
 
         public ICommand SendCommand { get; }
+        public ICommand DisconnectCommand { get; }
+        public ICommand ChangeNickCommand { get; }
 
         public ServerViewModel(string serverName, string address, int port, string nick, string realname, string? password = null, string? autoJoinChannel = null)
         {
@@ -86,8 +116,11 @@ namespace KonnectChatIRC.ViewModels
             _channelLookup.TryAdd("Server", serverChan);
             Channels.Add(serverChan);
             _selectedChannel = serverChan; // Initialize backing field
+            _currentNick = nick;
 
             SendCommand = new RelayCommand(ExecuteSendCommand);
+            DisconnectCommand = new RelayCommand(_ => ExecuteDisconnect());
+            ChangeNickCommand = new RelayCommand(nick => _ircService?.SendRawAsync($"NICK {nick}"));
 
             // Start connection
             HandleConnection(address, port, nick, realname, password);
@@ -132,7 +165,7 @@ namespace KonnectChatIRC.ViewModels
                             _ircService?.SendMessageAsync(SelectedChannel.Name, text);
                             SelectedChannel.AddMessage(new ChatMessage 
                             { 
-                                Sender = "Me", 
+                                Sender = CurrentNick, 
                                 Content = text, 
                                 Timestamp = DateTime.Now, 
                                 IsIncoming = false 
@@ -167,11 +200,51 @@ namespace KonnectChatIRC.ViewModels
                     });
                 }
             }
+            else if (e.Command == "NOTICE")
+            {
+                var target = e.Parameters[0];
+                var content = e.Parameters[1];
+
+                // Route notices to channel if target is channel, otherwise to Server
+                var channel = (target.StartsWith("#") || target.StartsWith("&")) 
+                    ? GetOrCreateChannel(target) 
+                    : _channelLookup["Server"];
+
+                if (channel != null)
+                {
+                    channel.AddMessage(new ChatMessage 
+                    { 
+                        Sender = e.Prefix ?? "Notice", 
+                        Content = content,
+                        Timestamp = DateTime.Now,
+                        IsIncoming = true,
+                        IsSystem = !target.StartsWith("#") && !target.StartsWith("&") // System style if not a channel notice
+                    });
+                }
+            }
             else if (e.Command == "JOIN")
             {
                 if(e.Parameters.Length > 0)
                 {
-                     GetOrCreateChannel(e.Parameters[0]);
+                    var channelName = e.Parameters[0];
+                    var channel = GetOrCreateChannel(channelName);
+                    if (channel != null)
+                    {
+                        var nick = GetNickFromPrefix(e.Prefix);
+                        if (!nick.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
+                        {
+                            channel.AddUser(new IrcUser(nick));
+                        }
+                        
+                        channel.AddMessage(new ChatMessage 
+                        { 
+                            Sender = "", 
+                            Content = $"* {nick} ({e.Prefix}) has joined {channelName}", 
+                            Timestamp = DateTime.Now,
+                            IsIncoming = true,
+                            IsSystem = true
+                        });
+                    }
                 }
             }
             else if (e.Command == "PART")
@@ -185,18 +258,76 @@ namespace KonnectChatIRC.ViewModels
                     channel.AddMessage(new ChatMessage 
                     { 
                         Sender = "", 
-                        Content = $"{nick} left {channelName}", 
+                        Content = $"* {nick} left {channelName}", 
                         Timestamp = DateTime.Now,
-                        IsIncoming = true 
+                        IsIncoming = true,
+                        IsSystem = true
                     });
                 }
             }
             else if (e.Command == "QUIT")
             {
                 var nick = GetNickFromPrefix(e.Prefix);
+                var quitMsg = e.Parameters.Length > 0 ? e.Parameters[0] : "Quit";
                 foreach(var channel in Channels)
                 {
-                    channel.RemoveUser(nick);
+                    if (channel.Users.Any(u => u.Nickname == nick))
+                    {
+                        channel.RemoveUser(nick);
+                        channel.AddMessage(new ChatMessage 
+                        { 
+                            Sender = "", 
+                            Content = $"* {nick} has quit ({quitMsg})", 
+                            Timestamp = DateTime.Now,
+                            IsIncoming = true,
+                            IsSystem = true
+                        });
+                    }
+                }
+            }
+            else if (e.Command == "KICK")
+            {
+                var channelName = e.Parameters[0];
+                var kickedNick = e.Parameters[1];
+                var reason = e.Parameters.Length > 2 ? e.Parameters[2] : "";
+                var kicker = GetNickFromPrefix(e.Prefix);
+                
+                var channel = GetOrCreateChannel(channelName);
+                if (channel != null)
+                {
+                    channel.RemoveUser(kickedNick);
+                    channel.AddMessage(new ChatMessage 
+                    { 
+                        Sender = "", 
+                        Content = $"* {kickedNick} was kicked by {kicker} ({reason})", 
+                        Timestamp = DateTime.Now,
+                        IsIncoming = true,
+                        IsSystem = true
+                    });
+                }
+            }
+            else if (e.Command == "MODE")
+            {
+                // Simple handle for channel modes like bans
+                if (e.Parameters.Length >= 3 && (e.Parameters[1].Contains("+b") || e.Parameters[1].Contains("-b")))
+                {
+                    var channelName = e.Parameters[0];
+                    var mode = e.Parameters[1];
+                    var mask = e.Parameters[2];
+                    var setter = GetNickFromPrefix(e.Prefix);
+
+                    var channel = GetOrCreateChannel(channelName);
+                    if (channel != null)
+                    {
+                        channel.AddMessage(new ChatMessage 
+                        { 
+                            Sender = "", 
+                            Content = $"* {setter} sets mode {mode} {mask}", 
+                            Timestamp = DateTime.Now,
+                            IsIncoming = true,
+                            IsSystem = true
+                        });
+                    }
                 }
             }
             else if (e.Command == "NICK")
@@ -208,11 +339,46 @@ namespace KonnectChatIRC.ViewModels
                 foreach(var channel in Channels)
                 {
                     var user = channel.Users.FirstOrDefault(u => u.Nickname == oldNick);
-                    if (user != null)
+                     if (user != null)
                     {
                          channel.RemoveUser(oldNick);
                          user.Nickname = newNick;
                          channel.AddUser(user);
+                        
+                         channel.AddMessage(new ChatMessage 
+                         { 
+                             Sender = "", 
+                             Content = $"* {oldNick} is now known as {newNick}", 
+                             Timestamp = DateTime.Now,
+                             IsIncoming = true,
+                             IsSystem = true
+                         });
+                    }
+                }
+
+                if (oldNick.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))
+                {
+                    _dispatcherQueue.TryEnqueue(() => CurrentNick = newNick);
+                }
+            }
+            else if (e.Command == "KILL")
+            {
+                var killedNick = e.Parameters[0];
+                var reason = e.Parameters.Length > 1 ? e.Parameters[1] : "";
+                
+                foreach(var channel in Channels)
+                {
+                    if (channel.Users.Any(u => u.Nickname == killedNick))
+                    {
+                        channel.RemoveUser(killedNick);
+                        channel.AddMessage(new ChatMessage 
+                        { 
+                            Sender = "", 
+                            Content = $"* {killedNick} was killed ({reason})", 
+                            Timestamp = DateTime.Now,
+                            IsIncoming = true,
+                            IsSystem = true
+                        });
                     }
                 }
             }
@@ -278,7 +444,13 @@ namespace KonnectChatIRC.ViewModels
             }
             else if (e.Command == "323") // RPL_LISTEND
             {
-                // End of list
+                // End of list - Sort by user count descending
+                _dispatcherQueue.TryEnqueue(() => 
+                {
+                    var sorted = AvailableChannels.OrderByDescending(c => c.UserCount).ToList();
+                    AvailableChannels.Clear();
+                    foreach (var c in sorted) AvailableChannels.Add(c);
+                });
                 return; // Don't show in chat log
             }
             
@@ -325,7 +497,8 @@ namespace KonnectChatIRC.ViewModels
                      Sender = "System", 
                      Content = msg, 
                      Timestamp = DateTime.Now,
-                     IsIncoming = true
+                     IsIncoming = true,
+                     IsSystem = true
                  });
              });
         }
@@ -342,40 +515,45 @@ namespace KonnectChatIRC.ViewModels
         {
             if (param is string channelName && !string.IsNullOrWhiteSpace(channelName))
             {
-                // Ensure # prefix
-                if (!channelName.StartsWith("#")) channelName = "#" + channelName;
-                 _ircService?.JoinChannelAsync(channelName);
-            }
-        });
-
-        public ICommand PartChannelCommand => new RelayCommand(_ => 
-        {
-            if (SelectedChannel != null && SelectedChannel.Name != "Server")
-            {
-                var chanName = SelectedChannel.Name;
-                _ircService?.SendRawAsync($"PART {chanName}");
-                
-                // Remove from list
-                if (_channelLookup.TryRemove(chanName, out var removedChan))
+                // Strip status prefixes like @, +, %, ~
+                char[] statusPrefixes = { '@', '+', '%', '~', '&' };
+                while (channelName.Length > 1 && statusPrefixes.Contains(channelName[0]))
                 {
-                    _dispatcherQueue.TryEnqueue(() => 
-                    {
-                        Channels.Remove(removedChan);
-                        SelectedChannel = Channels.FirstOrDefault(c => c.Name == "Server") ?? Channels.First(); // Go back to Server or first avail
-                    });
+                    // But don't strip # if it's the start of the channel name after prefix
+                    if (channelName[0] == '&' && channelName.Length > 1 && channelName[1] != '#') break; // Local channels might start with &
+                    channelName = channelName.Substring(1);
+                }
+
+                // Ensure # prefix if not already present (and not a local & channel)
+                if (!channelName.StartsWith("#") && !channelName.StartsWith("&")) channelName = "#" + channelName;
+
+                if (_channelLookup.TryGetValue(channelName, out var existing))
+                {
+                    _dispatcherQueue.TryEnqueue(() => SelectedChannel = existing);
+                }
+                else
+                {
+                    _ircService?.JoinChannelAsync(channelName);
                 }
             }
         });
 
-        public ICommand DisconnectCommand => new RelayCommand(_ => 
+        private void ExecuteDisconnect() 
         {
             Disconnect("KonnectChat IRC Desktop Client");
-            // Navigate back to Server tab
+            
              _dispatcherQueue.TryEnqueue(() => 
              {
-                 SelectedChannel = Channels.FirstOrDefault(c => c.Name == "Server") ?? Channels.First();
+                 // Clear channels
+                 var serverChan = _channelLookup["Server"];
+                 _channelLookup.Clear();
+                 _channelLookup.TryAdd("Server", serverChan);
+                 
+                 Channels.Clear();
+                 Channels.Add(serverChan);
+                 SelectedChannel = serverChan;
              });
-        });
+        }
 
         public ICommand KickUserCommand => new RelayCommand(param => 
         {

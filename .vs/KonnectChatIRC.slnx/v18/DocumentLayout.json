@@ -1,12 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\",
-  "Documents": [],
+  "WorkspaceRootPath": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0803EFD6-C9D5-727F-EFC4-455D795714EA}|KonnectChatIRC\\KonnectChatIRC.csproj|d:\\documents\\github\\konnectchat-irc-windows-client\\konnectchatirc\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0803EFD6-C9D5-727F-EFC4-455D795714EA}|KonnectChatIRC\\KonnectChatIRC.csproj|solutionrelative:konnectchatirc\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "KonnectChatIRC\\MainWindow.xaml",
+              "ToolTip": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\MainWindow.xaml",
+              "RelativeToolTip": "KonnectChatIRC\\MainWindow.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-02-17T04:30:17.303Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

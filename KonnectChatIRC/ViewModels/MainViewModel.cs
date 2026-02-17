@@ -16,6 +16,7 @@ namespace KonnectChatIRC.ViewModels
         private bool _useServerPassword;
         private string _serverPassword = "";
         private IrcUser? _selectedWhoisUser;
+        private bool _isSidebarCollapsed;
         
         public string ConnectAddress { get => _connectAddress; set => SetProperty(ref _connectAddress, value); }
         public int ConnectPort { get => _connectPort; set => SetProperty(ref _connectPort, value); }
@@ -38,21 +39,54 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _selectedServer, value);
         }
 
+        public bool IsSidebarCollapsed
+        {
+            get => _isSidebarCollapsed;
+            set => SetProperty(ref _isSidebarCollapsed, value);
+        }
+
         public ICommand ConnectCommand { get; }
+        public ICommand AddServerCommand { get; }
+        public ICommand RemoveServerCommand { get; }
+        public ICommand ToggleSidebarCommand { get; }
 
         public MainViewModel()
         {
             var rnd = new System.Random();
             ConnectNick = $"KonnectUser{rnd.Next(100, 999)}";
             ConnectCommand = new RelayCommand(ExecuteConnect);
+            AddServerCommand = new RelayCommand(_ => SelectedServer = null);
+            RemoveServerCommand = new RelayCommand(ExecuteRemoveServer);
+            ToggleSidebarCommand = new RelayCommand(_ => IsSidebarCollapsed = !IsSidebarCollapsed);
         }
 
         private void ExecuteConnect(object? obj)
         {
+            if (obj is ServerViewModel existingServer)
+            {
+                SelectedServer = existingServer;
+                return;
+            }
+
             var password = UseServerPassword ? ServerPassword : null;
             var serverVm = new ServerViewModel(ConnectAddress, ConnectAddress, ConnectPort, ConnectNick, "Konnect Realname", password, AutoJoinChannel);
             Servers.Add(serverVm);
             SelectedServer = serverVm;
+        }
+
+        private void ExecuteRemoveServer(object? obj)
+        {
+            if (obj is ServerViewModel server)
+            {
+                // Explicitly disconnect first
+                server.Disconnect("KonnectChat IRC Desktop Client - Removed from sidebar");
+                
+                Servers.Remove(server);
+                if (SelectedServer == server)
+                {
+                    SelectedServer = Servers.Count > 0 ? Servers[0] : null;
+                }
+            }
         }
     }
 }

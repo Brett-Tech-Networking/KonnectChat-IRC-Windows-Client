@@ -9,6 +9,7 @@ namespace KonnectChatIRC.Models
         public DateTime Timestamp { get; set; }
         public bool IsIncoming { get; set; }
         public string? Color { get; set; } // For potential nick coloring
+        public bool IsSystem { get; set; } // For styling system messages (JOIN, PART, etc.)
 
         public string FormattedTime => Timestamp.ToString("HH:mm:ss");
     }

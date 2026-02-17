@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RceN1hQSoPs=",
+  "dgSpecHash": "JdtEtavOLO4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\KonnectChatIRC\\KonnectChatIRC.csproj",
+  "projectFilePath": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\KonnectChatIRC.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Brett\\.nuget\\packages\\microsoft.web.webview2\\1.0.3179.45\\microsoft.web.webview2.1.0.3179.45.nupkg.sha512",
     "C:\\Users\\Brett\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.26100.7705\\microsoft.windows.sdk.buildtools.10.0.26100.7705.nupkg.sha512",

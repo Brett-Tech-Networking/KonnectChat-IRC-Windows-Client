@@ -10,7 +10,7 @@
     <PackageArchitecture>x64</PackageArchitecture>
     <PackageIdentityName>4f673713-f0d6-41fa-bd01-d17a76241c9c</PackageIdentityName>
     <PackageIdentityPublisher>CN=Brett</PackageIdentityPublisher>
-    <IntermediateOutputPath>C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\</IntermediateOutputPath>
+    <IntermediateOutputPath>D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\</IntermediateOutputPath>
     <RemoteDeploymentType>CopyToDevice</RemoteDeploymentType>
     <PackageRegistrationPath>
     </PackageRegistrationPath>
@@ -18,7 +18,7 @@
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>
     </WindowsSdkPath>
-    <LayoutDir>C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppX</LayoutDir>
+    <LayoutDir>D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppX</LayoutDir>
     <RegisteredManifestChecksum>91521370D0FDB7526315A1147AC17EF90C1498C26468BFFF175DC20B92AB0D93</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>4f673713-f0d6-41fa-bd01-d17a76241c9c_1.0.0.0_x64__dw33m220tgxa0</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>4f673713-f0d6-41fa-bd01-d17a76241c9c_dw33m220tgxa0!App</RegisteredUserModeAppID>
@@ -27,24 +27,24 @@
     <RegisteredVersion>1.0.0.0</RegisteredVersion>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
+    <AppXManifest Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-02-17T04:22:40.267</Modified>
+      <Modified>2026-02-17T05:00:43.932</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.runtimeconfig.json">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.runtimeconfig.json">
       <PackagePath>KonnectChatIRC.runtimeconfig.json</PackagePath>
-      <Modified>2026-02-17T03:32:53.077</Modified>
+      <Modified>2026-02-17T04:30:21.351</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>KonnectChatIRC.exe</PackagePath>
-      <Modified>2026-02-17T04:22:39.979</Modified>
+      <Modified>2026-02-17T05:00:43.664</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.dll">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.dll">
       <PackagePath>KonnectChatIRC.dll</PackagePath>
-      <Modified>2026-02-17T04:22:39.972</Modified>
+      <Modified>2026-02-17T05:00:43.657</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Brett\.nuget\packages\microsoft.netcore.app.runtime.win-x64\8.0.24\runtimes\win-x64\lib\net8.0\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -926,43 +926,43 @@
       <PackagePath>Microsoft.Web.WebView2.Core.Projection.dll</PackagePath>
       <Modified>2025-03-30T09:04:20.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.deps.json">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.deps.json">
       <PackagePath>KonnectChatIRC.deps.json</PackagePath>
-      <Modified>2026-02-17T04:13:27.132</Modified>
+      <Modified>2026-02-17T04:30:21.308</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\LockScreenLogo.scale-200.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
       <Modified>2026-02-17T00:24:15.333</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\SplashScreen.scale-200.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
       <Modified>2026-02-17T00:24:15.333</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\Square150x150Logo.scale-200.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\Square150x150Logo.scale-200.png">
       <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
       <Modified>2026-02-17T00:24:15.334</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\Square44x44Logo.scale-200.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\Square44x44Logo.scale-200.png">
       <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
       <Modified>2026-02-17T00:24:15.335</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
       <PackagePath>Assets\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
       <Modified>2026-02-17T00:24:15.336</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\StoreLogo.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\StoreLogo.png">
       <PackagePath>Assets\StoreLogo.png</PackagePath>
       <Modified>2026-02-17T00:24:15.338</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\Assets\Wide310x150Logo.scale-200.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\Assets\Wide310x150Logo.scale-200.png">
       <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
       <Modified>2026-02-17T00:24:15.338</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\konnectchat.ico">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\konnectchat.ico">
       <PackagePath>konnectchat.ico</PackagePath>
       <Modified>2026-02-17T03:34:41.756</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\konnectchat2.png">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\konnectchat2.png">
       <PackagePath>konnectchat2.png</PackagePath>
       <Modified>2024-08-20T17:26:59.805</Modified>
     </AppxPackagedFile>
@@ -970,9 +970,9 @@
       <PackagePath>Microsoft.Web.WebView2.Core.winmd</PackagePath>
       <Modified>2025-03-30T09:03:56.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\resources.pri">
+    <AppxPackagedFile Include="D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2026-02-17T04:22:40.070</Modified>
+      <Modified>2026-02-17T05:00:43.750</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

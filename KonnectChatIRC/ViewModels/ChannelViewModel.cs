@@ -46,11 +46,43 @@ namespace KonnectChatIRC.ViewModels
             _halfOpsGroup = new UserGroup("Half-Ops");
             _voiceGroup = new UserGroup("Voice");
             _usersGroup = new UserGroup("Users");
+            
+            // Groups are added dynamically when they have users
+        }
+        
+        private void EnsureGroupVisible(UserGroup? group)
+        {
+            if (group != null && !GroupedUsers.Contains(group))
+            {
+                // Find correct insertion index based on priority: Ops > HalfOps > Voice > Users
+                int targetIndex = 0;
+                if (group == _opsGroup) targetIndex = 0;
+                else if (group == _halfOpsGroup)
+                {
+                    if (GroupedUsers.Contains(_opsGroup!)) targetIndex = 1;
+                    else targetIndex = 0;
+                }
+                else if (group == _voiceGroup)
+                {
+                    targetIndex = 0;
+                    if (GroupedUsers.Contains(_opsGroup!)) targetIndex++;
+                    if (GroupedUsers.Contains(_halfOpsGroup!)) targetIndex++;
+                }
+                else // Users
+                {
+                    targetIndex = GroupedUsers.Count;
+                }
+                
+                GroupedUsers.Insert(System.Math.Min(targetIndex, GroupedUsers.Count), group);
+            }
+        }
 
-            GroupedUsers.Add(_opsGroup);
-            GroupedUsers.Add(_halfOpsGroup);
-            GroupedUsers.Add(_voiceGroup);
-            GroupedUsers.Add(_usersGroup);
+        private void CheckGroupEmpty(UserGroup? group)
+        {
+            if (group != null && group.Count == 0 && GroupedUsers.Contains(group))
+            {
+                GroupedUsers.Remove(group);
+            }
         }
 
         public void AddMessage(ChatMessage message)
@@ -102,12 +134,18 @@ namespace KonnectChatIRC.ViewModels
 
         private void AddToGroup(IrcUser user)
         {
-            switch(user.Rank)
+            UserGroup? target = user.Rank switch
             {
-                case 0: _opsGroup?.Add(user); break;
-                case 1: _halfOpsGroup?.Add(user); break;
-                case 2: _voiceGroup?.Add(user); break;
-                default: _usersGroup?.Add(user); break;
+                0 => _opsGroup,
+                1 => _halfOpsGroup,
+                2 => _voiceGroup,
+                _ => _usersGroup
+            };
+
+            if (target != null)
+            {
+                target.Add(user);
+                EnsureGroupVisible(target);
             }
         }
 
@@ -117,6 +155,11 @@ namespace KonnectChatIRC.ViewModels
             _halfOpsGroup?.Remove(user);
             _voiceGroup?.Remove(user);
             _usersGroup?.Remove(user);
+
+            CheckGroupEmpty(_opsGroup);
+            CheckGroupEmpty(_halfOpsGroup);
+            CheckGroupEmpty(_voiceGroup);
+            CheckGroupEmpty(_usersGroup);
         }
     }
 }

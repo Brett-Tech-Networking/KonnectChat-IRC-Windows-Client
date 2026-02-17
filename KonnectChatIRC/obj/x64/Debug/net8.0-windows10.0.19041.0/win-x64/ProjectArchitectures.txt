@@ -1,1 +1,1 @@
-C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\KonnectChatIRC.csproj;x64
+D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\KonnectChatIRC.csproj;x64

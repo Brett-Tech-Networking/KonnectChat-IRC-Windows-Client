@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\KonnectChatIRC\\KonnectChatIRC.csproj": {}
+    "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\KonnectChatIRC.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\KonnectChatIRC\\KonnectChatIRC.csproj": {
+    "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\KonnectChatIRC.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\KonnectChatIRC\\KonnectChatIRC.csproj",
+        "projectUniqueName": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\KonnectChatIRC.csproj",
         "projectName": "KonnectChatIRC",
-        "projectPath": "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\KonnectChatIRC\\KonnectChatIRC.csproj",
+        "projectPath": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\KonnectChatIRC.csproj",
         "packagesPath": "C:\\Users\\Brett\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Brett\\source\\repos\\KonnectChatIRC\\KonnectChatIRC\\obj\\",
+        "outputPath": "D:\\Documents\\GitHub\\KonnectChat-IRC-Windows-Client\\KonnectChatIRC\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

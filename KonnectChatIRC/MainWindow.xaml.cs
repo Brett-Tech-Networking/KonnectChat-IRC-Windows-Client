@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives; // Required for FlyoutBase
 using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Windowing; // Required for AppWindow
 using System;
 using KonnectChatIRC.ViewModels;
@@ -55,27 +56,44 @@ namespace KonnectChatIRC
         {
             if (sender is ListView lv)
             {
-                // Scroll to bottom initially
-                if (lv.Items.Count > 0)
+                // Scroll to bottom helper
+                Action scrollToBottom = () =>
                 {
-                    lv.ScrollIntoView(lv.Items[lv.Items.Count - 1]);
-                }
-
-                // Subscribe to VectorChanged to scroll on new messages
-                lv.Items.VectorChanged += (s, args) =>
-                {
-                    if (args.CollectionChange == Windows.Foundation.Collections.CollectionChange.ItemInserted)
+                    lv.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
                     {
-                        // Use DispatcherQueue to ensure UI is updated before scrolling
-                        lv.DispatcherQueue.TryEnqueue(() =>
+                        if (lv.Items.Count > 0)
                         {
-                            if (lv.Items.Count > 0)
-                            {
-                                lv.ScrollIntoView(lv.Items[lv.Items.Count - 1]);
-                            }
-                        });
+                            lv.ScrollIntoView(lv.Items[lv.Items.Count - 1]);
+                        }
+                    });
+                };
+
+                // ItemsUpdatingScrollMode="KeepLastItemInView" in XAML handles new items.
+                // We just need to handle the initial load and channel switches.
+
+                // Monitor channel/server changes to scroll to bottom once
+                Handle.PropertyChanged += (s, args) =>
+                {
+                    if (args.PropertyName == nameof(MainViewModel.SelectedServer))
+                    {
+                        if (Handle.SelectedServer != null)
+                        {
+                            // We use a weak-like pattern or just ensure we don't double-subscribe 
+                            // though for simplicity we just scroll when the top level selection changes.
+                            scrollToBottom();
+                        }
                     }
                 };
+
+                // The sub-property change (SelectedChannel) is trickier to handle without leaks 
+                // but we can monitor it on the MainViewModel if we expose it or just handle it here.
+                // For now, let's just make sure we scroll when the ItemsSource changes.
+                lv.RegisterPropertyChangedCallback(ItemsControl.ItemsSourceProperty, (s, dp) =>
+                {
+                    scrollToBottom();
+                });
+
+                scrollToBottom();
             }
         }
 
@@ -148,6 +166,24 @@ namespace KonnectChatIRC
                 }
                 
                 FlyoutBase.ShowAttachedFlyout(fe);
+            }
+        }
+
+        private async void Nickname_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (Handle.SelectedServer == null) return;
+
+            NewNickTextBox.Text = Handle.SelectedServer.CurrentNick;
+            NickChangeDialog.XamlRoot = this.Content.XamlRoot;
+            
+            var result = await NickChangeDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var newNick = NewNickTextBox.Text.Trim();
+                if (!string.IsNullOrEmpty(newNick) && newNick != Handle.SelectedServer.CurrentNick)
+                {
+                    Handle.SelectedServer.ChangeNickCommand.Execute(newNick);
+                }
             }
         }
     }

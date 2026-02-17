@@ -13,37 +13,130 @@
         <Grid.Resources>
             <local:NullToVisibilityConverter x:Key="NullToVis" />
         </Grid.Resources>
-        <!-- Main Chat Interface -->
-        <Grid Visibility="{Binding SelectedServer, Converter={StaticResource NullToVis}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250" MinWidth="150"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200" MinWidth="150"/>
-            </Grid.ColumnDefinitions>
 
-            <!-- Sidebar -->
-            <Border Grid.Column="0" Background="{StaticResource SidebarBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="{Binding SelectedServer.ServerName}" Style="{StaticResource ProHeaderStyle}" Margin="16"/>
+        <!-- Server Sidebar (Multi-server) -->
+        <Border Grid.Column="0" Background="{StaticResource AppBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0" 
+                Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource InverseBoolToVis}}">
+            <Grid Width="68">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <ListView Grid.Row="1" ItemsSource="{Binding SelectedServer.Channels}" 
-                              SelectedItem="{Binding SelectedServer.SelectedChannel, Mode=TwoWay}"
-                              ItemTemplate="{StaticResource ProChannelTemplate}"
-                              SelectionMode="Single"/>
+                <!-- Sidebar Toggle (Collapse) -->
+                <Button Grid.Row="0" Command="{Binding ToggleSidebarCommand}" 
+                        HorizontalAlignment="Center" Margin="0,8"
+                        Background="Transparent" BorderThickness="0">
+                    <FontIcon Glyph="&#xE700;" FontSize="18"/>
+                </Button>
 
-                    <StackPanel Grid.Row="2" Margin="16" Spacing="8">
-                        <Button x:ConnectionId='16' Content="Discover Channels" HorizontalAlignment="Stretch" Margin="0,0,0,8"
-                                Command="{Binding SelectedServer.RefreshChannelListCommand}"                               />
-                        <Button Content="Disconnect" HorizontalAlignment="Stretch" Command="{Binding SelectedServer.DisconnectCommand}"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Spacing="12" Padding="8,8">
+                        <ListView x:ConnectionId='20' ItemsSource="{Binding Servers}"
+                                  SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
+                                  SelectionMode="Single"
+                                  Padding="0" Background="Transparent"
+                                  x:Name="ServerListView">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ToolTipService.ToolTip="{Binding ServerName}" Margin="0,4">
+                                        <Grid.ContextFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem Text="Remove Server" 
+                                                                Command="{Binding DataContext.RemoveServerCommand, ElementName=MainGrid}"
+                                                                CommandParameter="{Binding}">
+                                                    <MenuFlyoutItem.Icon>
+                                                        <FontIcon Glyph="&#xE74D;" />
+                                                    </MenuFlyoutItem.Icon>
+                                                </MenuFlyoutItem>
+                                            </MenuFlyout>
+                                        </Grid.ContextFlyout>
+                                        <Border Width="48" Height="48" CornerRadius="24"
+                                                Background="{StaticResource SidebarBackgroundBrush}"
+                                                BorderBrush="{StaticResource AccentBrush}"
+                                                BorderThickness="2">
+                                            <TextBlock Text="{Binding ServerInitials}" 
+                                                       FontWeight="Bold" FontSize="18"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="MinWidth" Value="0"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        
+                        <Button Command="{Binding AddServerCommand}" Width="48" Height="48" CornerRadius="24"
+                                HorizontalAlignment="Center" Background="{StaticResource SidebarBackgroundBrush}"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <FontIcon Glyph="&#xE710;" FontSize="20" Foreground="{StaticResource AccentBrush}"/>
+                        </Button>
                     </StackPanel>
-                </Grid>
-            </Border>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Main Workspace -->
+        <Grid Grid.Column="1">
+            <!-- Main Chat Interface -->
+            <Grid Visibility="{Binding SelectedServer, Converter={StaticResource NullToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" MinWidth="150"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200" MinWidth="150"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Sidebar (Channels) -->
+                <Border Grid.Column="0" Background="{StaticResource SidebarBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0">
+                            <!-- Sidebar Toggle (Expand) - Integrated into header -->
+                            <Button Command="{Binding ToggleSidebarCommand}" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                    Margin="12,12,0,-12"
+                                    Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToVis}}"
+                                    Background="Transparent" BorderThickness="0"
+                                    Padding="4">
+                                <FontIcon Glyph="&#xE700;" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
+                            </Button>
+
+                            <StackPanel Margin="16,24,16,16">
+                                <TextBlock Text="{Binding SelectedServer.ServerName}" Style="{StaticResource ProHeaderStyle}"/>
+                                <HyperlinkButton x:ConnectionId='19' Padding="0" Margin="0,4,0,0"                          ToolTipService.ToolTip="Change Nickname">
+                                    <TextBlock Text="{Binding SelectedServer.CurrentNick}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold" FontSize="14"/>
+                                </HyperlinkButton>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ListView Grid.Row="1" ItemsSource="{Binding SelectedServer.Channels}" 
+                                  SelectedItem="{Binding SelectedServer.SelectedChannel, Mode=TwoWay}"
+                                  ItemTemplate="{StaticResource ProChannelTemplate}"
+                                  SelectionMode="Single"/>
+
+                        <StackPanel Grid.Row="2" Margin="16" Spacing="8">
+                            <Button x:ConnectionId='18' Content="Discover Channels" HorizontalAlignment="Stretch" Margin="0,0,0,8"
+                                    Command="{Binding SelectedServer.RefreshChannelListCommand}"                               />
+                            <Button Content="Disconnect" HorizontalAlignment="Stretch" Command="{Binding SelectedServer.DisconnectCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
             <!-- Chat Area -->
             <Grid Grid.Column="1" Background="{StaticResource ChatBackgroundBrush}">
@@ -64,7 +157,7 @@
                 </Border>
 
                 <!-- Messages -->
-                <ListView x:ConnectionId='13' x:Name="ChatList" Grid.Row="1" ItemsSource="{Binding SelectedServer.SelectedChannel.Messages}" SelectionMode="None"                         >
+                <ListView x:ConnectionId='15' x:Name="ChatList" Grid.Row="1" ItemsSource="{Binding SelectedServer.SelectedChannel.Messages}" SelectionMode="None"                         >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,4,0,4">
@@ -74,9 +167,18 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 
-                                <TextBlock Text="{Binding FormattedTime}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" VerticalAlignment="Top" Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Sender}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                                <TextBlock Text="{Binding FormattedTime}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" VerticalAlignment="Top" Margin="0,0,8,0"
+                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Sender}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,0,8,0"
+                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
+                                
+                                <!-- Regular Message Content -->
+                                <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Top"
+                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
+
+                                <!-- System Message Content (Span across cols if system) -->
+                                <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Content}" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top"
+                                           Visibility="{Binding IsSystem, Converter={StaticResource BoolToVis}}"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -89,7 +191,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:ConnectionId='14' x:Name="ChatInput" PlaceholderText="Message #channel..."                             CornerRadius="4"/>
+                    <TextBox x:ConnectionId='16' x:Name="ChatInput" PlaceholderText="Message #channel..."                             CornerRadius="4"/>
                     <Button Grid.Column="1" Content="Send" Margin="8,0,0,0" 
                             Command="{Binding SelectedServer.SendCommand}" 
                             CommandParameter="{Binding Text, ElementName=ChatInput}"/>
@@ -107,7 +209,7 @@
                                     <ItemsControl ItemsSource="{Binding}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                            <Grid x:ConnectionId='10' Margin="12,2" Background="Transparent"                         >
+                                            <Grid x:ConnectionId='12' Margin="12,2" Background="Transparent"                         >
                                                 <FlyoutBase.AttachedFlyout>
                                                     <Flyout>
                                                         <StackPanel Width="220" Spacing="10">
@@ -136,7 +238,7 @@
                                                             
                                                             <MenuFlyoutSeparator/>
                                                             
-                                                            <Button x:ConnectionId='11' Content="WHOIS" HorizontalAlignment="Stretch" 
+                                                            <Button x:ConnectionId='13' Content="WHOIS" HorizontalAlignment="Stretch" 
                                                                     Command="{Binding DataContext.SelectedServer.WhoisUserCommand, ElementName=MainGrid}" 
                                                                     CommandParameter="{Binding}"                                />
                                                             
@@ -210,7 +312,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBox x:ConnectionId='6' x:Name="ChannelSearchBox" PlaceholderText="Search channels..." Margin="0,0,0,12" 
+                <TextBox x:ConnectionId='8' x:Name="ChannelSearchBox" PlaceholderText="Search channels..." Margin="0,0,0,12" 
                                                                    />
                 <ListView Grid.Row="1" ItemsSource="{Binding SelectedServer.AvailableChannels}">
                     <ListView.ItemTemplate>
@@ -229,7 +331,7 @@
                                     <TextBlock Text="{Binding UserCount}" HorizontalAlignment="Center" FontWeight="Bold"/>
                                     <TextBlock Text="users" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
                                 </StackPanel>
-                                <Button x:ConnectionId='8' Grid.Column="2" Content="Join" VerticalAlignment="Center" 
+                                <Button x:ConnectionId='10' Grid.Column="2" Content="Join" VerticalAlignment="Center" 
                                         Command="{Binding DataContext.SelectedServer.JoinChannelCommand, ElementName=MainGrid}"
                                         CommandParameter="{Binding Name}"                                  />
                             </Grid>
@@ -239,8 +341,20 @@
             </Grid>
         </ContentDialog>
 
+        <!-- Nickname Change Dialog -->
+        <ContentDialog x:ConnectionId='4' x:Name="NickChangeDialog"
+                       Title="Change Nickname"
+                       PrimaryButtonText="Change"
+                       CloseButtonText="Cancel"
+                       DefaultButton="Primary">
+            <StackPanel Spacing="12">
+                <TextBlock Text="Enter your new nickname:"/>
+                <TextBox x:ConnectionId='7' x:Name="NewNickTextBox" PlaceholderText="Nickname"/>
+            </StackPanel>
+        </ContentDialog>
+
         <!-- WHOIS Detail Dialog -->
-        <ContentDialog x:ConnectionId='4' x:Name="WhoisDetailDialog"
+        <ContentDialog x:ConnectionId='5' x:Name="WhoisDetailDialog"
                        Title="User Information"
                        PrimaryButtonText="Close"
                        RequestedTheme="Dark"
@@ -297,13 +411,14 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <HyperlinkButton x:ConnectionId='5' Content="{Binding}" Padding="4,2"                                 />
+                                <HyperlinkButton x:ConnectionId='6' Content="{Binding}" Padding="4,2"                                 />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
             </StackPanel>
         </ContentDialog>
+        </Grid>
     </Grid>
 </Window>
 
