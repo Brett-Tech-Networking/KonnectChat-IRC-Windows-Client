@@ -254,6 +254,74 @@ namespace KonnectChatIRC
             }
         }
 
+        private async void UploadImage_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".gif");
+
+            // For WinUI 3 on Desktop
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+            var file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                try
+                {
+                    UploadButton.IsEnabled = false;
+                    UploadInfoBar.IsOpen = true;
+                    UploadInfoBar.Severity = InfoBarSeverity.Informational;
+                    UploadInfoBar.Title = "Uploading...";
+                    UploadInfoBar.Message = $"Uploading {file.Name} to catbox.moe";
+
+                    // Upload the file
+                    var url = await Services.ImageUploadService.UploadImageAsync(file);
+                    
+                    if (url != null)
+                    {
+                        UploadInfoBar.Severity = InfoBarSeverity.Success;
+                        UploadInfoBar.Title = "Upload Successful";
+                        UploadInfoBar.Message = "Image link attached to text box.";
+
+                        // Copy URL to input
+                        if (string.IsNullOrWhiteSpace(ChatInput.Text))
+                        {
+                            ChatInput.Text = url;
+                        }
+                        else
+                        {
+                            ChatInput.Text += " " + url;
+                        }
+
+                        // Focus input so user can type more text
+                        ChatInput.Focus(FocusState.Programmatic);
+                        ChatInput.SelectionStart = ChatInput.Text.Length;
+                    }
+                    else
+                    {
+                        UploadInfoBar.Severity = InfoBarSeverity.Error;
+                        UploadInfoBar.Title = "Upload Failed";
+                        UploadInfoBar.Message = "Could not upload image to catbox.moe. Please try again.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UploadInfoBar.Severity = InfoBarSeverity.Error;
+                    UploadInfoBar.Title = "Upload Error";
+                    UploadInfoBar.Message = ex.Message;
+                }
+                finally
+                {
+                    UploadButton.IsEnabled = true;
+                }
+            }
+        }
+
         private void ChatList_Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is ListView lv)
@@ -385,6 +453,14 @@ namespace KonnectChatIRC
             NewBanTextBox.Text = "";
             ChannelKeyBox.Text = "";
             ChannelLimitBox.Value = double.NaN;
+
+            // Initialize topic editing
+            ModerationTopicTextBox.Text = channel.Topic ?? "";
+            var currentNick = Handle.SelectedServer.CurrentNick;
+            var currentUser = channel.Users.FirstOrDefault(u => u.Nickname.Equals(currentNick, StringComparison.OrdinalIgnoreCase));
+            bool isOp = currentUser != null && currentUser.IsOp;
+            ModerationTopicEditStack.Visibility = isOp ? Visibility.Visible : Visibility.Collapsed;
+            ModerationTopicStaticText.Visibility = isOp ? Visibility.Collapsed : Visibility.Visible;
             
             await ModerationDialog.ShowAsync();
         }
@@ -493,6 +569,17 @@ namespace KonnectChatIRC
             if (result == ContentDialogResult.Primary && TopicEditStack.Visibility == Visibility.Visible)
             {
                 var newTopic = TopicTextBox.Text.Trim();
+                Handle.SelectedServer.ChangeTopicCommand.Execute(newTopic);
+            }
+        }
+
+
+
+        private void UpdateModerationTopic_Click(object sender, RoutedEventArgs e)
+        {
+            if (Handle.SelectedServer?.SelectedChannel != null)
+            {
+                var newTopic = ModerationTopicTextBox.Text.Trim();
                 Handle.SelectedServer.ChangeTopicCommand.Execute(newTopic);
             }
         }

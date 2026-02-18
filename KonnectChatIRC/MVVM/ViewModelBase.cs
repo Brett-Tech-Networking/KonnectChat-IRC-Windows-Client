@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace KonnectChatIRC.MVVM
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public partial class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

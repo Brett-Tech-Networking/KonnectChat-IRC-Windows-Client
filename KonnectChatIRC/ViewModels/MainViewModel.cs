@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace KonnectChatIRC.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ViewModelBase
     {
         private ServerViewModel? _selectedServer;
         private string _connectAddress = "irc.konnectchatirc.net";
@@ -21,6 +21,7 @@ namespace KonnectChatIRC.ViewModels
         private IrcUser? _selectedWhoisUser;
         private bool _isSidebarCollapsed;
         private bool _isUserListCollapsed;
+        private bool _rememberMe;
         
         public string ConnectAddress { get => _connectAddress; set => SetProperty(ref _connectAddress, value); }
         public int ConnectPort { get => _connectPort; set => SetProperty(ref _connectPort, value); }
@@ -28,6 +29,7 @@ namespace KonnectChatIRC.ViewModels
         public string AutoJoinChannel { get => _autoJoinChannel; set => SetProperty(ref _autoJoinChannel, value); }
         public bool UseServerPassword { get => _useServerPassword; set => SetProperty(ref _useServerPassword, value); }
         public string ServerPassword { get => _serverPassword; set => SetProperty(ref _serverPassword, value); }
+        public bool RememberMe { get => _rememberMe; set => SetProperty(ref _rememberMe, value); }
 
         public IrcUser? SelectedWhoisUser
         {
@@ -112,10 +114,29 @@ namespace KonnectChatIRC.ViewModels
         {
             _savedConfigs = await SettingsService.LoadServersAsync();
             
-            if (Windows.Storage.ApplicationData.Current.LocalSettings.Values.TryGetValue("IsRainbowNicksEnabled", out object? val) && val is bool b)
+            try
             {
-                IsRainbowNicksEnabled = b;
+                if (Windows.Storage.ApplicationData.Current.LocalSettings.Values.TryGetValue("IsRainbowNicksEnabled", out object? val) && val is bool b)
+                {
+                    IsRainbowNicksEnabled = b;
+                }
+
+                if (Windows.Storage.ApplicationData.Current.LocalSettings.Values.TryGetValue("RememberMe", out object? rem) && rem is bool r)
+                {
+                    RememberMe = r;
+                    if (r)
+                    {
+                        var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                        if (settings.Values.TryGetValue("LastConnectAddress", out object? addr)) ConnectAddress = addr.ToString() ?? ConnectAddress;
+                        if (settings.Values.TryGetValue("LastConnectPort", out object? port) && port is int p) ConnectPort = p;
+                        if (settings.Values.TryGetValue("LastConnectNick", out object? nick)) ConnectNick = nick.ToString() ?? ConnectNick;
+                        if (settings.Values.TryGetValue("LastAutoJoinChannel", out object? chan)) AutoJoinChannel = chan.ToString() ?? AutoJoinChannel;
+                        if (settings.Values.TryGetValue("LastUseServerPassword", out object? usePass) && usePass is bool up) UseServerPassword = up;
+                        if (settings.Values.TryGetValue("LastServerPassword", out object? pass)) ServerPassword = pass.ToString() ?? ServerPassword;
+                    }
+                }
             }
+            catch { }
         }
 
         public async System.Threading.Tasks.Task SaveSettingsAsync()
@@ -184,6 +205,33 @@ namespace KonnectChatIRC.ViewModels
             serverVm.RequestSave += (s, e) => _ = SaveSettingsAsync();
             Servers.Add(serverVm);
             SelectedServer = serverVm;
+
+            // Save persistence if requested
+            try
+            {
+                var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                settings.Values["RememberMe"] = RememberMe;
+                if (RememberMe)
+                {
+                    settings.Values["LastConnectAddress"] = ConnectAddress;
+                    settings.Values["LastConnectPort"] = ConnectPort;
+                    settings.Values["LastConnectNick"] = ConnectNick;
+                    settings.Values["LastAutoJoinChannel"] = AutoJoinChannel;
+                    settings.Values["LastUseServerPassword"] = UseServerPassword;
+                    settings.Values["LastServerPassword"] = ServerPassword;
+                }
+                else
+                {
+                    settings.Values.Remove("LastConnectAddress");
+                    settings.Values.Remove("LastConnectPort");
+                    settings.Values.Remove("LastConnectNick");
+                    settings.Values.Remove("LastAutoJoinChannel");
+                    settings.Values.Remove("LastUseServerPassword");
+                    settings.Values.Remove("LastServerPassword");
+                }
+            }
+            catch { }
+
             _ = SaveSettingsAsync();
         }
 

@@ -7,37 +7,65 @@ namespace KonnectChatIRC.Models
     public class IrcUser : INotifyPropertyChanged
     {
         private string _nickname;
-        private string _prefix = "";
-
-        public string Nickname 
-        { 
-            get => _nickname; 
-            set { _nickname = value; OnPropertyChanged(); OnPropertyChanged(nameof(FullDisplayName)); }
+        private HashSet<char> _activePrefixes = new HashSet<char>();
+        
+        // Helper to determine highest rank prefix for display
+        public string HeaderPrefix
+        {
+            get
+            {
+                if (_activePrefixes.Contains('~')) return "~";
+                if (_activePrefixes.Contains('&')) return "&";
+                if (_activePrefixes.Contains('@')) return "@";
+                if (_activePrefixes.Contains('%')) return "%";
+                if (_activePrefixes.Contains('+')) return "+";
+                return "";
+            }
         }
 
         public string Prefix 
         { 
-            get => _prefix; 
+            get => HeaderPrefix;
             set 
             { 
-                _prefix = value; 
-                OnPropertyChanged(); 
-                OnPropertyChanged(nameof(IsOp));
-                OnPropertyChanged(nameof(IsVoice));
-                OnPropertyChanged(nameof(FullDisplayName));
-                OnPropertyChanged(nameof(Rank));
+                _activePrefixes.Clear();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    // If setting a raw string (e.g. from 353), it might contain multiple chars if server supports it, or just one
+                    foreach(char c in value) _activePrefixes.Add(c);
+                }
+                NotifyPrefixChanges();
             }
         }
         
+        public void AddPrefix(char p)
+        {
+            if (_activePrefixes.Add(p)) NotifyPrefixChanges();
+        }
+
+        public void RemovePrefix(char p)
+        {
+            if (_activePrefixes.Remove(p)) NotifyPrefixChanges();
+        }
+
+        private void NotifyPrefixChanges()
+        {
+            OnPropertyChanged(nameof(Prefix));
+            OnPropertyChanged(nameof(IsOp));
+            OnPropertyChanged(nameof(IsVoice));
+            OnPropertyChanged(nameof(FullDisplayName));
+            OnPropertyChanged(nameof(Rank));
+        }
+
         public int Rank
         {
             get
             {
-                if (Prefix.Contains("~")) return 0; // Owner
-                if (Prefix.Contains("&")) return 1; // Admin
-                if (Prefix.Contains("@")) return 2; // Operator
-                if (Prefix.Contains("%")) return 3; // HalfOp
-                if (Prefix.Contains("+")) return 4; // Voice
+                if (_activePrefixes.Contains('~')) return 0; // Owner
+                if (_activePrefixes.Contains('&')) return 1; // Admin
+                if (_activePrefixes.Contains('@')) return 2; // Operator
+                if (_activePrefixes.Contains('%')) return 3; // HalfOp
+                if (_activePrefixes.Contains('+')) return 4; // Voice
                 return 5; // Normal
             }
         }
@@ -55,9 +83,9 @@ namespace KonnectChatIRC.Models
              }
         }
         
-        public bool IsOp => Prefix.Contains("@") || Prefix.Contains("&") || Prefix.Contains("~");
+        public bool IsOp => _activePrefixes.Contains('@') || _activePrefixes.Contains('&') || _activePrefixes.Contains('~');
 
-        public bool IsVoice => Prefix.Contains("+");
+        public bool IsVoice => _activePrefixes.Contains('+');
 
         public string FullDisplayName => $"{Prefix}{Nickname}";
 
@@ -83,6 +111,8 @@ namespace KonnectChatIRC.Models
         private string _realname = "";
         private string _server = "";
         private string _connectingFrom = "";
+        private bool _isIrcOp = false;
+        private bool _isNetworkAdmin = false;
         private ObservableCollection<string> _channels = new ObservableCollection<string>();
 
         public string Hostname 
@@ -113,6 +143,18 @@ namespace KonnectChatIRC.Models
         {
             get => _connectingFrom;
             set { _connectingFrom = value; OnPropertyChanged(); }
+        }
+
+        public bool IsIrcOp
+        {
+            get => _isIrcOp;
+            set { _isIrcOp = value; OnPropertyChanged(); }
+        }
+
+        public bool IsNetworkAdmin
+        {
+            get => _isNetworkAdmin;
+            set { _isNetworkAdmin = value; OnPropertyChanged(); }
         }
 
         public ObservableCollection<string> Channels 

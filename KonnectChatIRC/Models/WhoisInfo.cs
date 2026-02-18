@@ -13,6 +13,7 @@ namespace KonnectChatIRC.Models
         public string ServerInfo { get; set; } = "";
         public List<string> Channels { get; set; } = new List<string>();
         public bool IsOperator { get; set; }
+        public bool IsNetworkAdmin { get; set; }
         public bool IsAway { get; set; }
         public string AwayMessage { get; set; } = "";
         public string ConnectingFrom { get; set; } = "";

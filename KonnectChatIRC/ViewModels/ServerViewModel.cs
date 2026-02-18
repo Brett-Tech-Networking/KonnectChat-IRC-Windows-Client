@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
 using KonnectChatIRC.Models;
 using KonnectChatIRC.Services;
 using KonnectChatIRC.MVVM;
 using Microsoft.UI.Dispatching;
+using System.Net;
 
 namespace KonnectChatIRC.ViewModels
 {
@@ -230,6 +232,8 @@ namespace KonnectChatIRC.ViewModels
                             user.Realname = info.Realname;
                             user.Server = info.Server;
                             user.ConnectingFrom = info.ConnectingFrom;
+                            user.IsIrcOp = info.IsOperator;
+                            user.IsNetworkAdmin = info.IsNetworkAdmin;
                             user.IsAway = idleAway;
                             user.AwayMessage = info.AwayMessage;
                             user.Channels.Clear();
@@ -514,36 +518,42 @@ namespace KonnectChatIRC.ViewModels
 
                             if (target != "Server")
                             {
-                                _ircService?.SendRawAsync($"PRIVMSG {target} :\x01ACTION {actionText}\x01");
-                                SelectedChannel.AddMessage(new ChatMessage
+                                var myPrefix = SelectedChannel.Users.FirstOrDefault(u => u.Nickname.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))?.Prefix ?? "";
+                                var msg = new ChatMessage
                                 {
                                     Sender = CurrentNick,
+                                    SenderPrefix = myPrefix,
                                     Content = actionText,
                                     Timestamp = DateTime.Now,
                                     IsIncoming = false,
                                     IsAction = true
-                                });
+                                };
+                                SetImageUrlIfFound(msg, actionText);
+                                SelectedChannel.AddMessage(msg);
                             }
                         }
                         else if (cmd == "/msg" && parts.Length > 2)
                         {
-                             string target = parts[1];
-                             string msg = string.Join(" ", parts.Skip(2));
+                            string target = parts[1];
+                            string msgText = string.Join(" ", parts.Skip(2));
                              
-                             ExecuteStartPrivateChat(target);
-                             _ircService?.SendRawAsync($"PRIVMSG {target} :{msg}");
+                            ExecuteStartPrivateChat(target);
+                            _ircService?.SendRawAsync($"PRIVMSG {target} :{msgText}");
                              
-                             // Echo to local PM window
-                             if (_channelLookup.TryGetValue(target, out var pmChan))
-                             {
-                                 pmChan.AddMessage(new ChatMessage
-                                 {
-                                     Sender = CurrentNick,
-                                     Content = msg,
-                                     Timestamp = DateTime.Now,
-                                     IsIncoming = false
-                                 });
-                             }
+                            // Echo to local PM window
+                            if (_channelLookup.TryGetValue(target, out var pmChan))
+                            {
+                                var pmMsg = new ChatMessage
+                                {
+                                    Sender = CurrentNick,
+                                    SenderPrefix = "", // PMs don't use prefixes
+                                    Content = msgText,
+                                    Timestamp = DateTime.Now,
+                                    IsIncoming = false
+                                };
+                                SetImageUrlIfFound(pmMsg, msgText);
+                                pmChan.AddMessage(pmMsg);
+                            }
                         }
                         else
                         {
@@ -555,13 +565,19 @@ namespace KonnectChatIRC.ViewModels
                         if (SelectedChannel.Name != "Server")
                         {
                             _ircService?.SendMessageAsync(SelectedChannel.Name, text);
-                            SelectedChannel.AddMessage(new ChatMessage 
+                            var myPrefix = SelectedChannel.Users.FirstOrDefault(u => u.Nickname.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))?.Prefix ?? "";
+                            var msg = new ChatMessage 
                             { 
                                 Sender = CurrentNick, 
+                                SenderPrefix = myPrefix,
                                 Content = text, 
                                 Timestamp = DateTime.Now, 
                                 IsIncoming = false 
-                            });
+                            };
+
+                            SetImageUrlIfFound(msg, text);
+
+                            SelectedChannel.AddMessage(msg);
                         }
                     }
                 }
@@ -578,7 +594,7 @@ namespace KonnectChatIRC.ViewModels
             if (e.Command == "PRIVMSG")
             {
                 var target = e.Parameters[0];
-                var content = e.Parameters[1];
+                var content = WebUtility.HtmlDecode(e.Parameters[1]);
                 var senderNick = GetNickFromPrefix(e.Prefix);
 
                 // If the target is our own nick, this is a private message to us.
@@ -614,7 +630,7 @@ namespace KonnectChatIRC.ViewModels
                         }
                     }
 
-                    channel.AddMessage(new ChatMessage
+                    var msg = new ChatMessage
                     {
                         Sender = senderNick,
                         SenderPrefix = prefix,
@@ -622,7 +638,11 @@ namespace KonnectChatIRC.ViewModels
                         Timestamp = DateTime.Now,
                         IsIncoming = true,
                         IsAction = isAction
-                    });
+                    };
+
+                    SetImageUrlIfFound(msg, content);
+
+                    channel.AddMessage(msg);
 
                     if (SelectedChannel != channel)
                     {
@@ -630,10 +650,40 @@ namespace KonnectChatIRC.ViewModels
                     }
                 }
             }
+            else if (e.Command == "TAGMSG")
+            {
+                // TAGMSG is similar to PRIVMSG but often carries metadata/typing info
+                // Some bridges use it for media info. For now, we mainly want to ensure 
+                // it's not strictly ignored if it contains content we can render.
+                if (e.Parameters.Length >= 2)
+                {
+                    var target = e.Parameters[0];
+                    var content = WebUtility.HtmlDecode(e.Parameters[1]);
+                    var senderNick = GetNickFromPrefix(e.Prefix);
+
+                    bool isPm = target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase);
+                    string channelName = isPm ? senderNick : target;
+
+                    var channel = GetOrCreateChannel(channelName);
+                    if (channel != null)
+                    {
+                        var msg = new ChatMessage
+                        {
+                            Sender = senderNick,
+                            Content = content,
+                            Timestamp = DateTime.Now,
+                            IsIncoming = true,
+                            IsSystem = false
+                        };
+                        SetImageUrlIfFound(msg, content);
+                        channel.AddMessage(msg);
+                    }
+                }
+            }
             else if (e.Command == "NOTICE")
             {
                 var target = e.Parameters[0];
-                var content = e.Parameters[1];
+                var content = WebUtility.HtmlDecode(e.Parameters[1]);
                 var senderNick = GetNickFromPrefix(e.Prefix);
 
                 // Route notices to channel if target is channel, otherwise to Server
@@ -661,14 +711,17 @@ namespace KonnectChatIRC.ViewModels
 
                 if (channel != null)
                 {
-                    channel.AddMessage(new ChatMessage 
+                    var msg = new ChatMessage 
                     { 
                         Sender = e.Prefix ?? "Notice", 
                         Content = content,
                         Timestamp = DateTime.Now,
                         IsIncoming = true,
                         IsSystem = true // Notices should usually be system-width
-                    });
+                    };
+                    
+                    SetImageUrlIfFound(msg, content);
+                    channel.AddMessage(msg);
                 }
             }
             else if (e.Command == "JOIN")
@@ -819,83 +872,120 @@ namespace KonnectChatIRC.ViewModels
                         {
                             // Handle user mode changes (Owner/Admin/OP/HalfOp/Voice)
                             // Modes: q(Owner), a(Admin), o(Op), h(HalfOp), v(Voice)
-                            if (e.Parameters.Length >= 3)
+                            // Standard implementation: iterate modes and consume args
+                            int argIndex = 2;
+                            bool adding = true;
+
+                            foreach (char c in modeStr)
                             {
-                                bool isUserMode = false;
-                                foreach(char c in modeStr)
+                                if (c == '+')
                                 {
-                                    if ("qaohv".Contains(c)) isUserMode = true;
+                                    adding = true; 
+                                    continue;
+                                }
+                                if (c == '-')
+                                {
+                                    adding = false;
+                                    continue;
                                 }
 
-                                if (isUserMode)
+                                if ("qaohv".Contains(c))
                                 {
-                                    var targetNick = e.Parameters[2];
-                                    var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
-                                    if (user != null)
+                                    if (argIndex < e.Parameters.Length)
                                     {
-                                        // Simple logic: Apply highest rank if multiple? 
-                                        // Or just apply the specific change. 
-                                        // Since we only store one prefix, we should try to determine the "best" one.
-                                        // A robust client tracks all modes per user. Here we just map the latest change or best guess.
+                                        var targetNick = e.Parameters[argIndex++];
+                                        var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
                                         
-                                        if (modeStr.Contains("+q")) user.Prefix = "~";
-                                        else if (modeStr.Contains("-q") && user.Prefix == "~") user.Prefix = "";
-                                        
-                                        else if (modeStr.Contains("+a")) user.Prefix = "&";
-                                        else if (modeStr.Contains("-a") && user.Prefix == "&") user.Prefix = "";
+                                        if (user != null)
+                                        {
+                                            // Update prefix based on highest rank logic or simple replacement
+                                            // Priority: ~ > & > @ > % > +
+                                            // If adding, set prefix. If removing, only clear if it matches current.
+                                            // NOTE: simplified logic for now. 
+                                            // Ideally we track all modes, but here we just update the specific one.
+                                            
+                                            if (c == 'q')
+                                            {
+                                                if (adding) user.AddPrefix('~');
+                                                else user.RemovePrefix('~');
+                                            }
+                                            else if (c == 'a')
+                                            {
+                                                if (adding) user.AddPrefix('&');
+                                                else user.RemovePrefix('&');
+                                            }
+                                            else if (c == 'o')
+                                            {
+                                                if (adding) user.AddPrefix('@');
+                                                else user.RemovePrefix('@');
+                                            }
+                                            else if (c == 'h')
+                                            {
+                                                if (adding) user.AddPrefix('%');
+                                                else user.RemovePrefix('%');
+                                            }
+                                            else if (c == 'v')
+                                            {
+                                                if (adding) user.AddPrefix('+');
+                                                else user.RemovePrefix('+');
+                                            }
+                                        }
 
-                                        else if (modeStr.Contains("+o")) user.Prefix = "@";
-                                        else if (modeStr.Contains("-o") && user.Prefix == "@") user.Prefix = "";
+                                        // Log the mode change
+                                        var setter = GetNickFromPrefix(e.Prefix);
+                                        string action = adding ? "gives" : "removes";
+                                        string modeName = c switch { 'q' => "Owner", 'a' => "Admin", 'o' => "Operator", 'h' => "Half-Op", 'v' => "Voice", _ => c.ToString() };
                                         
-                                        else if (modeStr.Contains("+h")) user.Prefix = "%";
-                                        else if (modeStr.Contains("-h") && user.Prefix == "%") user.Prefix = "";
-
-                                        else if (modeStr.Contains("+v")) user.Prefix = "+";
-                                        else if (modeStr.Contains("-v") && user.Prefix == "+") user.Prefix = "";
+                                        // Only log generic text update if complex mode, otherwise user list update handles visual
+                                        // Actually, let's keep the standard IRC log format
                                     }
-                                    
-                                    var setter = GetNickFromPrefix(e.Prefix);
-                                    channel.AddMessage(new ChatMessage 
-                                    { 
-                                        Sender = "", 
-                                        Content = $"* {setter} sets mode {modeStr} {targetNick}", 
-                                        Timestamp = DateTime.Now,
-                                        IsIncoming = true,
-                                        IsSystem = true
-                                    });
                                 }
-                                else
+                                else if (c == 'b')
                                 {
-                                    // Channel mode flag change
-                                    channel.UpdateModes(modeStr);
-
-                                    // Check if it's a ban change
-                                    if (modeStr.Contains("b") && e.Parameters.Length >= 3)
+                                    if (argIndex < e.Parameters.Length)
                                     {
-                                        var mask = e.Parameters[2];
+                                        var mask = e.Parameters[argIndex++];
                                         _dispatcherQueue.TryEnqueue(() => 
                                         {
-                                            if (modeStr.Contains("+"))
+                                            if (adding)
                                             {
                                                 if (!channel.BanList.Contains(mask)) channel.BanList.Add(mask);
                                             }
-                                            else if (modeStr.Contains("-"))
+                                            else
                                             {
                                                 channel.BanList.Remove(mask);
                                             }
                                         });
                                     }
-
-                                    channel.AddMessage(new ChatMessage 
-                                    { 
-                                        Sender = "", 
-                                        Content = $"* {GetNickFromPrefix(e.Prefix)} sets mode {modeStr} {(e.Parameters.Length >= 3 ? e.Parameters[2] : "")}", 
-                                        Timestamp = DateTime.Now,
-                                        IsIncoming = true,
-                                        IsSystem = true
-                                    });
                                 }
+                                else if ("kl".Contains(c))
+                                {
+                                    // limit (l) always takes arg on set, sometimes on unset? k always takes arg?
+                                    // standard: k always takes arg. l takes arg on set.
+                                    if (c == 'k')
+                                    {
+                                        if (argIndex < e.Parameters.Length) argIndex++;
+                                    }
+                                    if (c == 'l' && adding)
+                                    {
+                                        if (argIndex < e.Parameters.Length) argIndex++;
+                                    }
+                                }
+                                // Other modes might update channel modes
                             }
+
+                            // Update the generic channel modes string (flawed but sufficient for simple display)
+                            channel.UpdateModes(modeStr);
+
+                            // Add a system message summary
+                            channel.AddMessage(new ChatMessage 
+                            { 
+                                Sender = "", 
+                                Content = $"* {GetNickFromPrefix(e.Prefix)} sets mode {modeStr} {string.Join(" ", e.Parameters.Skip(2))}", 
+                                Timestamp = DateTime.Now,
+                                IsIncoming = true,
+                                IsSystem = true
+                            });
                         }
                     }
                 }
@@ -977,10 +1067,10 @@ namespace KonnectChatIRC.ViewModels
                             lock (_channelListLock) // Re-use lock or ensure thread safety? ObservableCollection typically UI thread.
                             {
                                 // Check if user exists to update prefix or add new
-                                var existingUser = channel.Users.FirstOrDefault(u => u.Nickname == cleanNick);
+                                var existingUser = channel.Users.FirstOrDefault(u => u.Nickname.Equals(cleanNick, StringComparison.OrdinalIgnoreCase));
                                 if (existingUser != null)
                                 {
-                                    if(string.IsNullOrEmpty(existingUser.Prefix)) existingUser.Prefix = prefix;
+                                    existingUser.Prefix = prefix;
                                 }
                                 else
                                 {
@@ -1088,6 +1178,12 @@ namespace KonnectChatIRC.ViewModels
                 return;
             }
 
+            // Log unhandled commands to Server tab for debugging
+            if (!string.IsNullOrEmpty(e.Command) && !int.TryParse(e.Command, out _))
+            {
+                AddSystemMessage($"[Debug] Unhandled Command: {e.Command} {string.Join(" ", e.Parameters)}");
+            }
+
             // Fallback: show unknown messages in the server tab
             Channels[0].AddMessage(new ChatMessage 
             { 
@@ -1129,6 +1225,44 @@ namespace KonnectChatIRC.ViewModels
                     else OtherAvailableChannels.Add(c);
                 }
             });
+        }
+
+        private void SetImageUrlIfFound(ChatMessage msg, string content)
+        {
+            if (string.IsNullOrWhiteSpace(content)) return;
+
+            // 1. Direct Image Link Regex (Handles common extensions including .webp, .svg)
+            var directMatch = Regex.Match(content, @"(https?://[^\s<>""'{}|\\^`[\]]+?\.(?:jpg|jpeg|png|gif|webp|svg)(?:\?[^\s<>""'{}|\\^`[\]]*?)?)", RegexOptions.IgnoreCase);
+            if (directMatch.Success)
+            {
+                msg.ImageUrl = directMatch.Value;
+                return;
+            }
+
+            // 2. Imgur Regex (Handles i.imgur.com/..., imgur.com/a/..., imgur.com/gallery/...)
+            var imgurMatch = Regex.Match(content, @"(https?://(?:i\.)?imgur\.com/(?:a/|gallery/)?[a-z0-9]+)", RegexOptions.IgnoreCase);
+            if (imgurMatch.Success)
+            {
+                var url = imgurMatch.Value;
+                // If it's a direct imgur link without extension, we can often just append .png to it
+                // but let's be safe and just use it as is for now as WinUI Image might handle it if it's i.imgur.com
+                if (!url.Contains(".") || url.EndsWith(".com")) return; // Skip base domain
+                
+                if (url.Contains("i.imgur.com"))
+                {
+                     msg.ImageUrl = url;
+                }
+                else if (url.Contains("/a/") || url.Contains("/gallery/"))
+                {
+                    // For albums/galleries, we can't easily get the direct image without an API call
+                    // but we can at least ensure the link is clickable (handled by Linkify).
+                }
+                else
+                {
+                    // Direct link to page, can often append .png to get preview
+                    msg.ImageUrl = url + ".png";
+                }
+            }
         }
 
         private string GetNickFromPrefix(string prefix)

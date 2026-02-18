@@ -8,6 +8,7 @@ namespace KonnectChatIRC.Models
     {
         public required string Sender { get; set; }
         public required string Content { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime Timestamp { get; set; }
         public bool IsIncoming { get; set; }
         public string? Color { get; set; } // For potential nick coloring

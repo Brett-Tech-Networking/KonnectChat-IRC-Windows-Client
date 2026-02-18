@@ -226,7 +226,7 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[37];
+            _typeNameTable = new string[45];
             _typeNameTable[0] = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
             _typeNameTable[1] = "Microsoft.UI.Xaml.ResourceDictionary";
             _typeNameTable[2] = "Object";
@@ -257,15 +257,23 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeNameTable[27] = "Microsoft.UI.Xaml.Controls.DataTemplateSelector";
             _typeNameTable[28] = "Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings";
             _typeNameTable[29] = "Microsoft.UI.Xaml.DependencyObject";
-            _typeNameTable[30] = "KonnectChatIRC.MainWindow";
-            _typeNameTable[31] = "Microsoft.UI.Xaml.Window";
-            _typeNameTable[32] = "KonnectChatIRC.ViewModels.MainViewModel";
-            _typeNameTable[33] = "KonnectChatIRC.MVVM.ViewModelBase";
-            _typeNameTable[34] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[35] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[36] = "Int32";
+            _typeNameTable[30] = "Microsoft.UI.Xaml.Controls.InfoBar";
+            _typeNameTable[31] = "Microsoft.UI.Xaml.Controls.Primitives.ButtonBase";
+            _typeNameTable[32] = "System.Windows.Input.ICommand";
+            _typeNameTable[33] = "Microsoft.UI.Xaml.Style";
+            _typeNameTable[34] = "Microsoft.UI.Xaml.Controls.IconSource";
+            _typeNameTable[35] = "Microsoft.UI.Xaml.Controls.InfoBarSeverity";
+            _typeNameTable[36] = "Microsoft.UI.Xaml.Controls.InfoBarTemplateSettings";
+            _typeNameTable[37] = "KonnectChatIRC.Helpers.Linkify";
+            _typeNameTable[38] = "KonnectChatIRC.MainWindow";
+            _typeNameTable[39] = "Microsoft.UI.Xaml.Window";
+            _typeNameTable[40] = "KonnectChatIRC.ViewModels.MainViewModel";
+            _typeNameTable[41] = "KonnectChatIRC.MVVM.ViewModelBase";
+            _typeNameTable[42] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[43] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[44] = "Int32";
 
-            _typeTable = new global::System.Type[37];
+            _typeTable = new global::System.Type[45];
             _typeTable[0] = typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources);
             _typeTable[1] = typeof(global::Microsoft.UI.Xaml.ResourceDictionary);
             _typeTable[2] = typeof(global::System.Object);
@@ -296,13 +304,21 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeTable[27] = typeof(global::Microsoft.UI.Xaml.Controls.DataTemplateSelector);
             _typeTable[28] = typeof(global::Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings);
             _typeTable[29] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
-            _typeTable[30] = typeof(global::KonnectChatIRC.MainWindow);
-            _typeTable[31] = typeof(global::Microsoft.UI.Xaml.Window);
-            _typeTable[32] = typeof(global::KonnectChatIRC.ViewModels.MainViewModel);
-            _typeTable[33] = typeof(global::KonnectChatIRC.MVVM.ViewModelBase);
-            _typeTable[34] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[35] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[36] = typeof(global::System.Int32);
+            _typeTable[30] = typeof(global::Microsoft.UI.Xaml.Controls.InfoBar);
+            _typeTable[31] = typeof(global::Microsoft.UI.Xaml.Controls.Primitives.ButtonBase);
+            _typeTable[32] = typeof(global::System.Windows.Input.ICommand);
+            _typeTable[33] = typeof(global::Microsoft.UI.Xaml.Style);
+            _typeTable[34] = typeof(global::Microsoft.UI.Xaml.Controls.IconSource);
+            _typeTable[35] = typeof(global::Microsoft.UI.Xaml.Controls.InfoBarSeverity);
+            _typeTable[36] = typeof(global::Microsoft.UI.Xaml.Controls.InfoBarTemplateSettings);
+            _typeTable[37] = typeof(global::KonnectChatIRC.Helpers.Linkify);
+            _typeTable[38] = typeof(global::KonnectChatIRC.MainWindow);
+            _typeTable[39] = typeof(global::Microsoft.UI.Xaml.Window);
+            _typeTable[40] = typeof(global::KonnectChatIRC.ViewModels.MainViewModel);
+            _typeTable[41] = typeof(global::KonnectChatIRC.MVVM.ViewModelBase);
+            _typeTable[42] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[43] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[44] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -347,10 +363,12 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private object Activate_10_BoolToGridLengthConverter() { return new global::KonnectChatIRC.Converters.BoolToGridLengthConverter(); }
         private object Activate_11_NumberBox() { return new global::Microsoft.UI.Xaml.Controls.NumberBox(); }
         private object Activate_24_Expander() { return new global::Microsoft.UI.Xaml.Controls.Expander(); }
-        private object Activate_30_MainWindow() { return new global::KonnectChatIRC.MainWindow(); }
-        private object Activate_32_MainViewModel() { return new global::KonnectChatIRC.ViewModels.MainViewModel(); }
-        private object Activate_33_ViewModelBase() { return new global::KonnectChatIRC.MVVM.ViewModelBase(); }
-        private object Activate_34_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_30_InfoBar() { return new global::Microsoft.UI.Xaml.Controls.InfoBar(); }
+        private object Activate_36_InfoBarTemplateSettings() { return new global::Microsoft.UI.Xaml.Controls.InfoBarTemplateSettings(); }
+        private object Activate_38_MainWindow() { return new global::KonnectChatIRC.MainWindow(); }
+        private object Activate_40_MainViewModel() { return new global::KonnectChatIRC.ViewModels.MainViewModel(); }
+        private object Activate_41_ViewModelBase() { return new global::KonnectChatIRC.MVVM.ViewModelBase(); }
+        private object Activate_42_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_XamlControlsResources() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources).TypeHandle);
         private void StaticInitializer_4_BoolToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.BoolToVisibilityConverter).TypeHandle);
         private void StaticInitializer_5_InitialsConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.InitialsConverter).TypeHandle);
@@ -368,11 +386,16 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private void StaticInitializer_24_Expander() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.Expander).TypeHandle);
         private void StaticInitializer_26_ExpandDirection() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection).TypeHandle);
         private void StaticInitializer_28_ExpanderTemplateSettings() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings).TypeHandle);
-        private void StaticInitializer_30_MainWindow() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MainWindow).TypeHandle);
-        private void StaticInitializer_32_MainViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.ViewModels.MainViewModel).TypeHandle);
-        private void StaticInitializer_33_ViewModelBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MVVM.ViewModelBase).TypeHandle);
-        private void StaticInitializer_34_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_35_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void StaticInitializer_30_InfoBar() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.InfoBar).TypeHandle);
+        private void StaticInitializer_32_ICommand() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Windows.Input.ICommand).TypeHandle);
+        private void StaticInitializer_35_InfoBarSeverity() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.InfoBarSeverity).TypeHandle);
+        private void StaticInitializer_36_InfoBarTemplateSettings() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.InfoBarTemplateSettings).TypeHandle);
+        private void StaticInitializer_37_Linkify() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Helpers.Linkify).TypeHandle);
+        private void StaticInitializer_38_MainWindow() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MainWindow).TypeHandle);
+        private void StaticInitializer_40_MainViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.ViewModels.MainViewModel).TypeHandle);
+        private void StaticInitializer_41_ViewModelBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MVVM.ViewModelBase).TypeHandle);
+        private void StaticInitializer_42_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_43_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
         private void MapAdd_0_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -380,7 +403,7 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newKey, newItem);
         }
-        private void VectorAdd_35_IList(object instance, object item)
+        private void VectorAdd_43_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -605,39 +628,105 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 30:   //  KonnectChatIRC.MainWindow
+            case 30:   //  Microsoft.UI.Xaml.Controls.InfoBar
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Control"));
+                userType.Activator = Activate_30_InfoBar;
+                userType.StaticInitializer = StaticInitializer_30_InfoBar;
+                userType.SetContentPropertyName("Microsoft.UI.Xaml.Controls.InfoBar.Content");
+                userType.AddMemberName("Content");
+                userType.AddMemberName("IsOpen");
+                userType.AddMemberName("IsClosable");
+                userType.AddMemberName("ActionButton");
+                userType.AddMemberName("CloseButtonCommand");
+                userType.AddMemberName("CloseButtonCommandParameter");
+                userType.AddMemberName("CloseButtonStyle");
+                userType.AddMemberName("ContentTemplate");
+                userType.AddMemberName("IconSource");
+                userType.AddMemberName("IsIconVisible");
+                userType.AddMemberName("Message");
+                userType.AddMemberName("Severity");
+                userType.AddMemberName("TemplateSettings");
+                userType.AddMemberName("Title");
+                xamlType = userType;
+                break;
+
+            case 31:   //  Microsoft.UI.Xaml.Controls.Primitives.ButtonBase
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 32:   //  System.Windows.Input.ICommand
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, null);
+                userType.StaticInitializer = StaticInitializer_32_ICommand;
+                userType.SetIsReturnTypeStub();
+                xamlType = userType;
+                break;
+
+            case 33:   //  Microsoft.UI.Xaml.Style
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 34:   //  Microsoft.UI.Xaml.Controls.IconSource
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 35:   //  Microsoft.UI.Xaml.Controls.InfoBarSeverity
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
+                userType.StaticInitializer = StaticInitializer_35_InfoBarSeverity;
+                userType.AddEnumValue("Informational", global::Microsoft.UI.Xaml.Controls.InfoBarSeverity.Informational);
+                userType.AddEnumValue("Success", global::Microsoft.UI.Xaml.Controls.InfoBarSeverity.Success);
+                userType.AddEnumValue("Warning", global::Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
+                userType.AddEnumValue("Error", global::Microsoft.UI.Xaml.Controls.InfoBarSeverity.Error);
+                xamlType = userType;
+                break;
+
+            case 36:   //  Microsoft.UI.Xaml.Controls.InfoBarTemplateSettings
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
+                userType.StaticInitializer = StaticInitializer_36_InfoBarTemplateSettings;
+                userType.SetIsReturnTypeStub();
+                xamlType = userType;
+                break;
+
+            case 37:   //  KonnectChatIRC.Helpers.Linkify
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                userType.StaticInitializer = StaticInitializer_37_Linkify;
+                userType.AddMemberName("Text");
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 38:   //  KonnectChatIRC.MainWindow
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.Activator = Activate_30_MainWindow;
-                userType.StaticInitializer = StaticInitializer_30_MainWindow;
+                userType.Activator = Activate_38_MainWindow;
+                userType.StaticInitializer = StaticInitializer_38_MainWindow;
                 userType.AddMemberName("Handle");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 31:   //  Microsoft.UI.Xaml.Window
+            case 39:   //  Microsoft.UI.Xaml.Window
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 32:   //  KonnectChatIRC.ViewModels.MainViewModel
+            case 40:   //  KonnectChatIRC.ViewModels.MainViewModel
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("KonnectChatIRC.MVVM.ViewModelBase"));
-                userType.StaticInitializer = StaticInitializer_32_MainViewModel;
+                userType.StaticInitializer = StaticInitializer_40_MainViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 33:   //  KonnectChatIRC.MVVM.ViewModelBase
+            case 41:   //  KonnectChatIRC.MVVM.ViewModelBase
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.Activator = Activate_33_ViewModelBase;
-                userType.StaticInitializer = StaticInitializer_33_ViewModelBase;
+                userType.Activator = Activate_41_ViewModelBase;
+                userType.StaticInitializer = StaticInitializer_41_ViewModelBase;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 34:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 42:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_34_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_34_TreeViewNode;
+                userType.Activator = Activate_42_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_42_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -649,15 +738,15 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 35:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 43:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_35_IList;
-                userType.CollectionAdd = VectorAdd_35_IList;
+                userType.StaticInitializer = StaticInitializer_43_IList;
+                userType.CollectionAdd = VectorAdd_43_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 36:   //  Int32
+            case 44:   //  Int32
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
@@ -984,57 +1073,200 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
             return that.TemplateSettings;
         }
-        private object get_27_MainWindow_Handle(object instance)
+        private object get_27_InfoBar_Content(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.Content;
+        }
+        private void set_27_InfoBar_Content(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.Content = (global::System.Object)Value;
+        }
+        private object get_28_InfoBar_IsOpen(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.IsOpen;
+        }
+        private void set_28_InfoBar_IsOpen(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.IsOpen = (global::System.Boolean)Value;
+        }
+        private object get_29_InfoBar_IsClosable(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.IsClosable;
+        }
+        private void set_29_InfoBar_IsClosable(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.IsClosable = (global::System.Boolean)Value;
+        }
+        private object get_30_InfoBar_ActionButton(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.ActionButton;
+        }
+        private void set_30_InfoBar_ActionButton(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.ActionButton = (global::Microsoft.UI.Xaml.Controls.Primitives.ButtonBase)Value;
+        }
+        private object get_31_InfoBar_CloseButtonCommand(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.CloseButtonCommand;
+        }
+        private void set_31_InfoBar_CloseButtonCommand(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.CloseButtonCommand = (global::System.Windows.Input.ICommand)Value;
+        }
+        private object get_32_InfoBar_CloseButtonCommandParameter(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.CloseButtonCommandParameter;
+        }
+        private void set_32_InfoBar_CloseButtonCommandParameter(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.CloseButtonCommandParameter = (global::System.Object)Value;
+        }
+        private object get_33_InfoBar_CloseButtonStyle(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.CloseButtonStyle;
+        }
+        private void set_33_InfoBar_CloseButtonStyle(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.CloseButtonStyle = (global::Microsoft.UI.Xaml.Style)Value;
+        }
+        private object get_34_InfoBar_ContentTemplate(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.ContentTemplate;
+        }
+        private void set_34_InfoBar_ContentTemplate(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.ContentTemplate = (global::Microsoft.UI.Xaml.DataTemplate)Value;
+        }
+        private object get_35_InfoBar_IconSource(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.IconSource;
+        }
+        private void set_35_InfoBar_IconSource(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.IconSource = (global::Microsoft.UI.Xaml.Controls.IconSource)Value;
+        }
+        private object get_36_InfoBar_IsIconVisible(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.IsIconVisible;
+        }
+        private void set_36_InfoBar_IsIconVisible(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.IsIconVisible = (global::System.Boolean)Value;
+        }
+        private object get_37_InfoBar_Message(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.Message;
+        }
+        private void set_37_InfoBar_Message(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.Message = (global::System.String)Value;
+        }
+        private object get_38_InfoBar_Severity(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.Severity;
+        }
+        private void set_38_InfoBar_Severity(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.Severity = (global::Microsoft.UI.Xaml.Controls.InfoBarSeverity)Value;
+        }
+        private object get_39_InfoBar_TemplateSettings(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.TemplateSettings;
+        }
+        private object get_40_InfoBar_Title(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            return that.Title;
+        }
+        private void set_40_InfoBar_Title(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.InfoBar)instance;
+            that.Title = (global::System.String)Value;
+        }
+        private object get_41_Linkify_Text(object instance)
+        {
+            return global::KonnectChatIRC.Helpers.Linkify.GetText((global::Microsoft.UI.Xaml.DependencyObject)instance);
+        }
+        private void set_41_Linkify_Text(object instance, object Value)
+        {
+            global::KonnectChatIRC.Helpers.Linkify.SetText((global::Microsoft.UI.Xaml.DependencyObject)instance, (global::System.String)Value);
+        }
+        private object get_42_MainWindow_Handle(object instance)
         {
             var that = (global::KonnectChatIRC.MainWindow)instance;
             return that.Handle;
         }
-        private object get_28_TreeViewNode_Children(object instance)
+        private object get_43_TreeViewNode_Children(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Children;
         }
-        private object get_29_TreeViewNode_Content(object instance)
+        private object get_44_TreeViewNode_Content(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Content;
         }
-        private void set_29_TreeViewNode_Content(object instance, object Value)
+        private void set_44_TreeViewNode_Content(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.Content = (global::System.Object)Value;
         }
-        private object get_30_TreeViewNode_Depth(object instance)
+        private object get_45_TreeViewNode_Depth(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Depth;
         }
-        private object get_31_TreeViewNode_HasChildren(object instance)
+        private object get_46_TreeViewNode_HasChildren(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.HasChildren;
         }
-        private object get_32_TreeViewNode_HasUnrealizedChildren(object instance)
+        private object get_47_TreeViewNode_HasUnrealizedChildren(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.HasUnrealizedChildren;
         }
-        private void set_32_TreeViewNode_HasUnrealizedChildren(object instance, object Value)
+        private void set_47_TreeViewNode_HasUnrealizedChildren(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.HasUnrealizedChildren = (global::System.Boolean)Value;
         }
-        private object get_33_TreeViewNode_IsExpanded(object instance)
+        private object get_48_TreeViewNode_IsExpanded(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.IsExpanded;
         }
-        private void set_33_TreeViewNode_IsExpanded(object instance, object Value)
+        private void set_48_TreeViewNode_IsExpanded(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.IsExpanded = (global::System.Boolean)Value;
         }
-        private object get_34_TreeViewNode_Parent(object instance)
+        private object get_49_TreeViewNode_Parent(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Parent;
@@ -1234,56 +1466,162 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlMember.Getter = get_26_Expander_TemplateSettings;
                 xamlMember.SetIsReadOnly();
                 break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.Content":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Content", "Object");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_27_InfoBar_Content;
+                xamlMember.Setter = set_27_InfoBar_Content;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.IsOpen":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsOpen", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_28_InfoBar_IsOpen;
+                xamlMember.Setter = set_28_InfoBar_IsOpen;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.IsClosable":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsClosable", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_29_InfoBar_IsClosable;
+                xamlMember.Setter = set_29_InfoBar_IsClosable;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.ActionButton":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "ActionButton", "Microsoft.UI.Xaml.Controls.Primitives.ButtonBase");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_30_InfoBar_ActionButton;
+                xamlMember.Setter = set_30_InfoBar_ActionButton;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.CloseButtonCommand":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "CloseButtonCommand", "System.Windows.Input.ICommand");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_31_InfoBar_CloseButtonCommand;
+                xamlMember.Setter = set_31_InfoBar_CloseButtonCommand;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.CloseButtonCommandParameter":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "CloseButtonCommandParameter", "Object");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_32_InfoBar_CloseButtonCommandParameter;
+                xamlMember.Setter = set_32_InfoBar_CloseButtonCommandParameter;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.CloseButtonStyle":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "CloseButtonStyle", "Microsoft.UI.Xaml.Style");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_33_InfoBar_CloseButtonStyle;
+                xamlMember.Setter = set_33_InfoBar_CloseButtonStyle;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.ContentTemplate":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "ContentTemplate", "Microsoft.UI.Xaml.DataTemplate");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_34_InfoBar_ContentTemplate;
+                xamlMember.Setter = set_34_InfoBar_ContentTemplate;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.IconSource":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IconSource", "Microsoft.UI.Xaml.Controls.IconSource");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_35_InfoBar_IconSource;
+                xamlMember.Setter = set_35_InfoBar_IconSource;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.IsIconVisible":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsIconVisible", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_36_InfoBar_IsIconVisible;
+                xamlMember.Setter = set_36_InfoBar_IsIconVisible;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.Message":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Message", "String");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_37_InfoBar_Message;
+                xamlMember.Setter = set_37_InfoBar_Message;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.Severity":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Severity", "Microsoft.UI.Xaml.Controls.InfoBarSeverity");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_38_InfoBar_Severity;
+                xamlMember.Setter = set_38_InfoBar_Severity;
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.TemplateSettings":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "TemplateSettings", "Microsoft.UI.Xaml.Controls.InfoBarTemplateSettings");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_39_InfoBar_TemplateSettings;
+                xamlMember.SetIsReadOnly();
+                break;
+            case "Microsoft.UI.Xaml.Controls.InfoBar.Title":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.InfoBar");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Title", "String");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_40_InfoBar_Title;
+                xamlMember.Setter = set_40_InfoBar_Title;
+                break;
+            case "KonnectChatIRC.Helpers.Linkify.Text":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("KonnectChatIRC.Helpers.Linkify");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Text", "String");
+                xamlMember.SetTargetTypeName("Microsoft.UI.Xaml.DependencyObject");
+                xamlMember.SetIsAttachable();
+                xamlMember.Getter = get_41_Linkify_Text;
+                xamlMember.Setter = set_41_Linkify_Text;
+                break;
             case "KonnectChatIRC.MainWindow.Handle":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("KonnectChatIRC.MainWindow");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Handle", "KonnectChatIRC.ViewModels.MainViewModel");
-                xamlMember.Getter = get_27_MainWindow_Handle;
+                xamlMember.Getter = get_42_MainWindow_Handle;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Children":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Children", "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>");
-                xamlMember.Getter = get_28_TreeViewNode_Children;
+                xamlMember.Getter = get_43_TreeViewNode_Children;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Content":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Content", "Object");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_29_TreeViewNode_Content;
-                xamlMember.Setter = set_29_TreeViewNode_Content;
+                xamlMember.Getter = get_44_TreeViewNode_Content;
+                xamlMember.Setter = set_44_TreeViewNode_Content;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Depth":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Depth", "Int32");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_30_TreeViewNode_Depth;
+                xamlMember.Getter = get_45_TreeViewNode_Depth;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.HasChildren":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HasChildren", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_31_TreeViewNode_HasChildren;
+                xamlMember.Getter = get_46_TreeViewNode_HasChildren;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.HasUnrealizedChildren":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HasUnrealizedChildren", "Boolean");
-                xamlMember.Getter = get_32_TreeViewNode_HasUnrealizedChildren;
-                xamlMember.Setter = set_32_TreeViewNode_HasUnrealizedChildren;
+                xamlMember.Getter = get_47_TreeViewNode_HasUnrealizedChildren;
+                xamlMember.Setter = set_47_TreeViewNode_HasUnrealizedChildren;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.IsExpanded":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsExpanded", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_33_TreeViewNode_IsExpanded;
-                xamlMember.Setter = set_33_TreeViewNode_IsExpanded;
+                xamlMember.Getter = get_48_TreeViewNode_IsExpanded;
+                xamlMember.Setter = set_48_TreeViewNode_IsExpanded;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Parent":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Parent", "Microsoft.UI.Xaml.Controls.TreeViewNode");
-                xamlMember.Getter = get_34_TreeViewNode_Parent;
+                xamlMember.Getter = get_49_TreeViewNode_Parent;
                 xamlMember.SetIsReadOnly();
                 break;
             }

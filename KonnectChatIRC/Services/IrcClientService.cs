@@ -12,13 +12,15 @@ namespace KonnectChatIRC.Services
     public class IrcMessageEventArgs : EventArgs
     {
         public string RawMessage { get; }
+        public string Tags { get; }
         public string Prefix { get; }
         public string Command { get; }
         public string[] Parameters { get; }
 
-        public IrcMessageEventArgs(string raw, string prefix, string command, string[] parameters)
+        public IrcMessageEventArgs(string raw, string tags, string prefix, string command, string[] parameters)
         {
             RawMessage = raw;
+            Tags = tags;
             Prefix = prefix;
             Command = command;
             Parameters = parameters;
@@ -132,12 +134,24 @@ namespace KonnectChatIRC.Services
             // Simple IRC Parser
             // Format: [:prefix] command [params] [:trailing]
             
+            string tags = "";
             string prefix = "";
             string command = "";
             var parameters = new List<string>();
             string trailing = "";
 
             string remaining = line;
+
+            // Extract Tags (IRCv3)
+            if (remaining.StartsWith("@"))
+            {
+                int tagsEnd = remaining.IndexOf(' ');
+                if (tagsEnd != -1)
+                {
+                    tags = remaining.Substring(1, tagsEnd - 1);
+                    remaining = remaining.Substring(tagsEnd + 1);
+                }
+            }
 
             if (remaining.StartsWith(":"))
             {
@@ -220,7 +234,7 @@ namespace KonnectChatIRC.Services
             // Dispatch event
             _dispatcherQueue.TryEnqueue(() => 
             {
-                MessageReceived?.Invoke(this, new IrcMessageEventArgs(line, prefix, command, parameters.ToArray()));
+                MessageReceived?.Invoke(this, new IrcMessageEventArgs(line, tags, prefix, command, parameters.ToArray()));
             });
         }
 
@@ -237,6 +251,11 @@ namespace KonnectChatIRC.Services
                     Hostname = parameters[3],
                     Realname = parameters[5]
                 };
+
+                // Check hostname for status indicators
+                string host = _currentWhois.Hostname.ToLower();
+                if (host.Contains("irc operator") || host.Contains("irc-operator")) _currentWhois.IsOperator = true;
+                if (host.Contains("netadmin") || host.Contains("network admin")) _currentWhois.IsNetworkAdmin = true;
             }
             // 312 RPL_WHOISSERVER: <nick> <server> :<server info>
             else if (command == "312" && _currentWhois != null && parameters.Count >= 3)
@@ -253,6 +272,11 @@ namespace KonnectChatIRC.Services
                     hostInfo = hostInfo.Substring("is connecting from ".Length);
                 }
                 _currentWhois.ConnectingFrom = hostInfo;
+
+                // Check connecting from host for status indicators
+                string lowerHost = hostInfo.ToLower();
+                if (lowerHost.Contains("irc operator") || lowerHost.Contains("irc-operator")) _currentWhois.IsOperator = true;
+                if (lowerHost.Contains("netadmin") || lowerHost.Contains("network admin")) _currentWhois.IsNetworkAdmin = true;
             }
             // 319 RPL_WHOISCHANNELS: <nick> :<channel> <channel> ...
             else if (command == "319" && _currentWhois != null && parameters.Count >= 3)
@@ -262,9 +286,14 @@ namespace KonnectChatIRC.Services
                 _currentWhois.Channels.AddRange(channels);
             }
             // 313 RPL_WHOISOPERATOR: <nick> :is an IRC operator
-            else if (command == "313" && _currentWhois != null)
+            else if (command == "313" && _currentWhois != null && parameters.Count >= 3)
             {
                 _currentWhois.IsOperator = true;
+                string msg = parameters[2].ToLower();
+                if (msg.Contains("admin") || msg.Contains("network"))
+                {
+                    _currentWhois.IsNetworkAdmin = true;
+                }
             }
             // 317 RPL_WHOISIDLE: <nick> <idle_seconds> <signon_unix> :seconds idle, signon time
             else if (command == "317" && _currentWhois != null && parameters.Count >= 4)

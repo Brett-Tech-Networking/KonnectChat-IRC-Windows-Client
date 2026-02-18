@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:KonnectChatIRC"
     xmlns:converters="using:KonnectChatIRC.Converters"
+    xmlns:helpers="using:KonnectChatIRC.Helpers"
     mc:Ignorable="d">
  
 
@@ -314,16 +315,18 @@
                                       Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}">
                                     
                                     <!-- Normal Sender Name -->
-                                    <TextBlock Text="{Binding Sender}" FontWeight="SemiBold"
+                                    <TextBlock FontWeight="SemiBold"
                                                Visibility="{Binding DataContext.IsRainbowNicksEnabled, ElementName=MainGrid, Converter={StaticResource InverseBoolToVis}}">
                                         <TextBlock.Foreground>
                                             <SolidColorBrush Color="{Binding SenderPrefix, Converter={StaticResource StatusToColorConverter}}"/>
                                         </TextBlock.Foreground>
+                                        <Run Text="{Binding SenderPrefix}"/><Run Text="{Binding Sender}"/><Run Text=":"/>
                                     </TextBlock>
 
                                     <!-- Rainbow Sender Name (Visible only when Rainbow Enabled) -->
-                                    <TextBlock Text="{Binding Sender}" FontWeight="Bold"
+                                    <TextBlock FontWeight="Bold"
                                                Visibility="{Binding DataContext.IsRainbowNicksEnabled, ElementName=MainGrid, Converter={StaticResource BoolToVis}}">
+                                        <Run Text="{Binding SenderPrefix}"/><Run Text="{Binding Sender}"/><Run Text=":"/>
                                         <TextBlock.Foreground>
                                             <LinearGradientBrush x:Name="RainbowBrush" StartPoint="0,0.5" EndPoint="1,0.5" SpreadMethod="Repeat" MappingMode="RelativeToBoundingBox">
                                                 <LinearGradientBrush.RelativeTransform>
@@ -353,14 +356,29 @@
                                     </TextBlock>
                                 </Grid>
                                 
-                                <!-- Regular Message Content -->
-                                <!-- Regular Message Content (Not System, Not Action) -->
-                                <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Top"
-                                           Visibility="{Binding IsRegularMessage, Converter={StaticResource BoolToVis}}"/>
+                                <!-- Message Content Stack -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Top">
+                                    <RichTextBlock HorizontalAlignment="Left" IsTextSelectionEnabled="True"
+                                                   helpers:Linkify.Text="{Binding Content}" 
+                                                   Foreground="{StaticResource TextPrimaryBrush}" 
+                                                   Visibility="{Binding IsRegularMessage, Converter={StaticResource BoolToVis}}"/>
 
-                                <!-- Action Message Content (Not System, Is Action) -->
-                                <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource AccentBrush}" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top"
-                                           Visibility="{Binding IsAction, Converter={StaticResource BoolToVis}}"/>
+                                    <RichTextBlock HorizontalAlignment="Left" IsTextSelectionEnabled="True"
+                                                   helpers:Linkify.Text="{Binding Content}" 
+                                                   Foreground="{StaticResource AccentBrush}" 
+                                                   FontStyle="Italic"
+                                                   Visibility="{Binding IsAction, Converter={StaticResource BoolToVis}}"/>
+
+                                    <!-- Image Rendering -->
+                                    <Border CornerRadius="8" Margin="0,8,0,0" HorizontalAlignment="Left"
+                                            Visibility="{Binding ImageUrl, Converter={StaticResource NullToVis}}">
+                                        <Image Source="{Binding ImageUrl}" MaxHeight="300" MaxWidth="500" Stretch="Uniform" HorizontalAlignment="Left">
+                                            <ToolTipService.ToolTip>
+                                                <TextBlock Text="{Binding ImageUrl}"/>
+                                            </ToolTipService.ToolTip>
+                                        </Image>
+                                    </Border>
+                                </StackPanel>
 
                                 <!-- System Message Content (Is System) -->
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Content}" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top"
@@ -381,25 +399,29 @@
                 </ListView>
                 
                 <!-- Input -->
-                <Grid Grid.Row="2" Margin="16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="ChatInput" PlaceholderText="Message #channel..." KeyDown="ChatInput_KeyDown" CornerRadius="4"/>
+                <StackPanel Grid.Row="2" Margin="16,0,16,16">
+                    <InfoBar x:Name="UploadInfoBar" IsOpen="False" Margin="0,0,0,8" IsClosable="True" />
                     
-                    <Button Grid.Column="1" Margin="8,0,0,0"
-                            Command="{Binding SelectedServer.SlapCommand}"
-                            ToolTipService.ToolTip="Slap Selected User"
-                            Background="Transparent" BorderThickness="0" Padding="8">
-                        <FontIcon Glyph="&#xE15B;" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
-                    </Button>
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="2" Content="Send" Margin="8,0,0,0" 
-                            Command="{Binding SelectedServer.SendCommand}" 
-                            CommandParameter="{Binding Text, ElementName=ChatInput}"/>
-                </Grid>
+                        <Button x:Name="UploadButton" Grid.Column="0" Click="UploadImage_Click" 
+                                ToolTipService.ToolTip="Upload Image"
+                                Background="Transparent" BorderThickness="0" Padding="8">
+                            <FontIcon Glyph="&#xEB9F;" FontSize="20" Foreground="{StaticResource AccentBrush}"/>
+                        </Button>
+
+                        <TextBox Grid.Column="1" x:Name="ChatInput" PlaceholderText="Message #channel..." KeyDown="ChatInput_KeyDown" CornerRadius="4"/>
+
+                        <Button Grid.Column="2" Content="Send" Margin="8,0,0,0" 
+                                Command="{Binding SelectedServer.SendCommand}" 
+                                CommandParameter="{Binding Text, ElementName=ChatInput}"/>
+                    </Grid>
+                </StackPanel>
             </Grid>
 
                 <!-- User List -->
@@ -649,7 +671,9 @@
                                              Visibility="{Binding UseServerPassword, Converter={StaticResource BoolToVis}}"/>
                             </StackPanel>
                         </Expander>
-                        
+
+                        <CheckBox Content="Remember Me" IsChecked="{Binding RememberMe, Mode=TwoWay}" Margin="0,-10,0,0"/>
+
                         <Button Content="Connect Now" HorizontalAlignment="Stretch" Padding="12"
                                 Background="{StaticResource AccentBrush}" Foreground="White" FontWeight="Bold" FontSize="16"
                                 Command="{Binding ConnectCommand}" CornerRadius="8"/>
@@ -851,6 +875,18 @@
                     <TextBlock Text="Connecting From:" Width="110" Foreground="{StaticResource TextSecondaryBrush}"/>
                     <TextBlock Grid.Column="1" Text="{Binding ConnectingFrom}" IsTextSelectionEnabled="True" TextWrapping="Wrap" FontWeight="SemiBold"/>
                 </Grid>
+
+                <!-- Status Labels -->
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Border Background="{StaticResource AccentBrush}" CornerRadius="4" Padding="8,4" 
+                            Visibility="{Binding IsIrcOp, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="is an IRC Operator" Foreground="White" FontSize="12" FontWeight="Bold"/>
+                    </Border>
+                    <Border Background="{StaticResource SuccessBrush}" CornerRadius="4" Padding="8,4" 
+                            Visibility="{Binding IsNetworkAdmin, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="is a Network Administrator" Foreground="White" FontSize="12" FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Channels:" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,4"/>
                     <ItemsControl ItemsSource="{Binding Channels}">
@@ -925,7 +961,14 @@
                 <StackPanel Spacing="4">
                     <TextBlock Text="Channel Topic:" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="12"/>
                     <Border Background="{StaticResource SidebarBackgroundBrush}" CornerRadius="4" Padding="12,8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}">
-                        <TextBlock Text="{Binding SelectedServer.SelectedChannel.Topic}" TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <StackPanel Spacing="8">
+                            <TextBlock x:Name="ModerationTopicStaticText" Text="{Binding SelectedServer.SelectedChannel.Topic}" TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}"/>
+                            
+                            <StackPanel x:Name="ModerationTopicEditStack" Spacing="8">
+                                <TextBox x:Name="ModerationTopicTextBox" PlaceholderText="Enter new topic..." TextWrapping="Wrap" AcceptsReturn="True" Height="60" FontSize="13"/>
+                                <Button Content="Update Topic" Click="UpdateModerationTopic_Click" HorizontalAlignment="Right" Style="{StaticResource AccentButtonStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
 
