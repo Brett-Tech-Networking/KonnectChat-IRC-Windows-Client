@@ -1323,5 +1323,11 @@ namespace KonnectChatIRC.ViewModels
             }
         }
 
+        public void RefreshTimestamps()
+        {
+            foreach (var channel in Channels) channel.RefreshTimestamps();
+            foreach (var channel in OtherChannels) channel.RefreshTimestamps();
+            foreach (var channel in PrivateMessages) channel.RefreshTimestamps();
+        }
     }
 }

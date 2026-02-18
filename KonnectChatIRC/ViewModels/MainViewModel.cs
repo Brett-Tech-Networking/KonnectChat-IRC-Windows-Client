@@ -72,7 +72,16 @@ namespace KonnectChatIRC.ViewModels
             ToggleUserListCommand = new RelayCommand(_ => IsUserListCollapsed = !IsUserListCollapsed);
             SettingsCommand = new RelayCommand(ExecuteOpenSettings);
             
+            AppSettings.SettingsChanged += RefreshTimestamps;
             _ = LoadSettingsAsync();
+        }
+
+        public void RefreshTimestamps()
+        {
+            foreach (var server in Servers)
+            {
+                server.RefreshTimestamps();
+            }
         }
 
         private bool _isRainbowNicksEnabled;

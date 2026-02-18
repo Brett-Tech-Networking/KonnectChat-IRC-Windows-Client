@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace KonnectChatIRC.Models
 {
-    public class ChatMessage
+    public class ChatMessage : INotifyPropertyChanged
     {
         public required string Sender { get; set; }
         public required string Content { get; set; }
@@ -14,6 +16,12 @@ namespace KonnectChatIRC.Models
         public bool IsRegularMessage => !IsSystem && !IsAction;
         public string SenderPrefix { get; set; } = "";
 
-        public string FormattedTime => Timestamp.ToString(Services.AppSettings.Instance.TimestampFormat);
+        public string FormattedTime => Timestamp.ToString(Services.AppSettings.TimestampFormat);
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        public void NotifyTimeChanged() => OnPropertyChanged(nameof(FormattedTime));
     }
 }

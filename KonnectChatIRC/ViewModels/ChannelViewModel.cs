@@ -165,6 +165,17 @@ namespace KonnectChatIRC.ViewModels
             });
         }
 
+        public void RefreshTimestamps()
+        {
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                foreach (var msg in Messages)
+                {
+                    msg.NotifyTimeChanged();
+                }
+            });
+        }
+
         public void AddUser(IrcUser user)
         {
             _dispatcherQueue.TryEnqueue(() => 

@@ -20,6 +20,7 @@ namespace KonnectChatIRC
         public MainWindow()
         {
             this.InitializeComponent();
+            Services.AppSettings.Load();
             Handle = new MainViewModel();
             if (this.Content is FrameworkElement fe)
             {
@@ -57,7 +58,7 @@ namespace KonnectChatIRC
             if (SettingsDialog != null)
             {
                 // Initialize timestamp toggle to current setting
-                TimestampSecondsToggle.IsOn = Services.AppSettings.Instance.ShowSeconds;
+                TimestampSecondsToggle.IsOn = Services.AppSettings.ShowSeconds;
                 SettingsDialog.XamlRoot = this.Content.XamlRoot;
                 await SettingsDialog.ShowAsync();
             }
@@ -67,7 +68,8 @@ namespace KonnectChatIRC
         {
             if (sender is Microsoft.UI.Xaml.Controls.ToggleSwitch toggle)
             {
-                Services.AppSettings.Instance.ShowSeconds = toggle.IsOn;
+                Services.AppSettings.ShowSeconds = toggle.IsOn;
+                Services.AppSettings.Save();
             }
         }
 
