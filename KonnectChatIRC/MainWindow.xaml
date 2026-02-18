@@ -339,10 +339,15 @@
                                 </Grid>
                                 
                                 <!-- Regular Message Content -->
+                                <!-- Regular Message Content (Not System, Not Action) -->
                                 <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Top"
-                                           Visibility="{Binding IsSystem, Converter={StaticResource InverseBoolToVis}}"/>
+                                           Visibility="{Binding IsRegularMessage, Converter={StaticResource BoolToVis}}"/>
 
-                                <!-- System Message Content (Span across cols if system) -->
+                                <!-- Action Message Content (Not System, Is Action) -->
+                                <TextBlock Grid.Column="2" Text="{Binding Content}" Foreground="{StaticResource AccentBrush}" FontStyle="Italic" TextWrapping="Wrap" VerticalAlignment="Top"
+                                           Visibility="{Binding IsAction, Converter={StaticResource BoolToVis}}"/>
+
+                                <!-- System Message Content (Is System) -->
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Content}" Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top"
                                            Visibility="{Binding IsSystem, Converter={StaticResource BoolToVis}}"/>
                             </Grid>
@@ -439,7 +444,18 @@
                                                         <FlyoutBase.AttachedFlyout>
                                                             <Flyout>
                                                                 <StackPanel Width="220" Spacing="10">
-                                                                    <TextBlock Text="{Binding Nickname}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                            <ColumnDefinition Width="Auto"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Text="{Binding Nickname}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center"/>
+                                                                        <Button Grid.Column="1" ToolTipService.ToolTip="Send Private Message"
+                                                                                Command="{Binding DataContext.SelectedServer.StartPrivateChatCommand, ElementName=MainGrid}" 
+                                                                                CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="4">
+                                                                            <FontIcon Glyph="&#xE8BD;" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
+                                                                        </Button>
+                                                                    </Grid>
                                                                     <StackPanel>
                                                                         <TextBlock Text="Host:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
                                                                         <TextBlock Text="{Binding Hostname}" IsTextSelectionEnabled="True" TextWrapping="Wrap"/>
@@ -468,7 +484,7 @@
                                                                             Command="{Binding DataContext.SelectedServer.WhoisUserCommand, ElementName=MainGrid}" 
                                                                             CommandParameter="{Binding}" Click="ShowAdvancedWhois_Click"/>
                                                                     
-                                                                    <Grid ColumnSpacing="8">
+                                                                    <Grid ColumnSpacing="8" Visibility="{Binding DataContext.SelectedServer.SelectedChannel.IsPrivate, ElementName=MainGrid, Converter={StaticResource InverseBoolToVis}}">
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="*"/>
                                                                             <ColumnDefinition Width="*"/>
@@ -481,15 +497,8 @@
                                                                                 CommandParameter="{Binding}"/>
                                                                     </Grid>
 
-                                                                    <MenuFlyoutSeparator/>
 
-                                                                    <Button HorizontalAlignment="Stretch" ToolTipService.ToolTip="Send Private Message"
-                                                                            Command="{Binding DataContext.SelectedServer.StartPrivateChatCommand, ElementName=MainGrid}" 
-                                                                            CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="8">
-                                                                        <FontIcon Glyph="&#xE8BD;" FontSize="20" Foreground="{StaticResource AccentBrush}"/>
-                                                                    </Button>
-
-                                                                    <Grid ColumnSpacing="8">
+                                                                    <Grid ColumnSpacing="8" Visibility="{Binding DataContext.SelectedServer.SelectedChannel.IsPrivate, ElementName=MainGrid, Converter={StaticResource InverseBoolToVis}}">
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="*"/>
                                                                             <ColumnDefinition Width="*"/>
@@ -798,19 +807,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                
-                <Grid ColumnSpacing="8" Margin="0,12,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Content="Op" HorizontalAlignment="Stretch" 
-                            Command="{Binding DataContext.SelectedServer.OpUserCommand, ElementName=MainGrid}" 
-                            CommandParameter="{Binding}"/>
-                    <Button Grid.Column="1" Content="Deop" HorizontalAlignment="Stretch" 
-                            Command="{Binding DataContext.SelectedServer.DeopUserCommand, ElementName=MainGrid}" 
-                            CommandParameter="{Binding}"/>
-                </Grid>
             </StackPanel>
         </ContentDialog>
 

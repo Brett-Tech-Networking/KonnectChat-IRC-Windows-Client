@@ -57,6 +57,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     
                     <Button Grid.Column="0"
@@ -76,7 +77,13 @@
                         <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Medium"/>
                     </StackPanel>
 
-                    <Button Grid.Column="2" 
+                    <!-- Unread Counter -->
+                    <Border Grid.Column="2" Background="{StaticResource AccentBrush}" CornerRadius="9" MinWidth="18" Height="18" Padding="4,0"
+                            Visibility="{Binding UnreadCount, Converter={StaticResource CountToVis}}" VerticalAlignment="Center" Margin="4,0,0,0">
+                        <TextBlock Text="{Binding UnreadCount}" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <Button Grid.Column="3" 
                             Command="{Binding DataContext.SelectedServer.PartChannelCommand, ElementName=MainGrid}"
                             CommandParameter="{Binding Name}"
                             Background="Transparent" BorderThickness="0" Padding="4"

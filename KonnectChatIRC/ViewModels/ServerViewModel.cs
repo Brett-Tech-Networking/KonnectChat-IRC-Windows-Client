@@ -305,7 +305,7 @@ namespace KonnectChatIRC.ViewModels
                 }
                 else if (param is IrcUser user)
                 {
-                    ExecuteStartPrivateChat(user.Nickname);
+                    ExecuteStartPrivateChat(user.Nickname, user.Hostname);
                 }
             });
 
@@ -360,6 +360,24 @@ namespace KonnectChatIRC.ViewModels
                         {
                             string msg = parts.Length > 1 ? text.Substring(6) : DefaultQuitMessage;
                             Disconnect(msg);
+                        }
+                        else if (cmd == "/me" && parts.Length > 1)
+                        {
+                            string actionText = string.Join(" ", parts.Skip(1));
+                            string target = SelectedChannel.Name;
+
+                            if (target != "Server")
+                            {
+                                _ircService?.SendRawAsync($"PRIVMSG {target} :\x01ACTION {actionText}\x01");
+                                SelectedChannel.AddMessage(new ChatMessage
+                                {
+                                    Sender = CurrentNick,
+                                    Content = actionText,
+                                    Timestamp = DateTime.Now,
+                                    IsIncoming = false,
+                                    IsAction = true
+                                });
+                            }
                         }
                         else if (cmd == "/msg" && parts.Length > 2)
                         {
@@ -424,7 +442,8 @@ namespace KonnectChatIRC.ViewModels
 
                 if (isPm)
                 {
-                    ExecuteStartPrivateChat(senderNick, select: false); 
+                    var senderHost = GetHostFromPrefix(e.Prefix);
+                    ExecuteStartPrivateChat(senderNick, senderHost, select: false); 
                     // ExecuteStartPrivateChat handles creating/adding to PrivateMessages collection
                 }
                 
@@ -433,6 +452,21 @@ namespace KonnectChatIRC.ViewModels
                 {
                     var senderUser = channel.Users.FirstOrDefault(u => u.Nickname.Equals(senderNick, StringComparison.OrdinalIgnoreCase));
                     string prefix = senderUser?.Prefix ?? "";
+                    
+                    bool isAction = false;
+                    if (content.StartsWith("\x01ACTION") && content.EndsWith("\x01"))
+                    {
+                        isAction = true;
+                        // Strip "\x01ACTION " (8 chars) and "\x01" (1 char)
+                        if (content.Length > 9)
+                        {
+                            content = content.Substring(8, content.Length - 9);
+                        }
+                        else
+                        {
+                            content = "";
+                        }
+                    }
 
                     channel.AddMessage(new ChatMessage
                     {
@@ -440,7 +474,8 @@ namespace KonnectChatIRC.ViewModels
                         SenderPrefix = prefix,
                         Content = content,
                         Timestamp = DateTime.Now,
-                        IsIncoming = true
+                        IsIncoming = true,
+                        IsAction = isAction
                     });
 
                     if (SelectedChannel != channel)
@@ -866,6 +901,13 @@ namespace KonnectChatIRC.ViewModels
             return idx != -1 ? prefix.Substring(0, idx) : prefix;
         }
 
+        private string? GetHostFromPrefix(string prefix)
+        {
+            if (string.IsNullOrEmpty(prefix)) return null;
+            var idx = prefix.IndexOf('@');
+            return idx != -1 ? prefix.Substring(idx + 1) : null;
+        }
+
         private ChannelViewModel? GetOrCreateChannel(string name)
         {
              if (string.IsNullOrEmpty(name)) return _channelLookup["Server"];
@@ -1089,29 +1131,66 @@ namespace KonnectChatIRC.ViewModels
             }
         }
 
-        private void ExecuteStartPrivateChat(string targetNick, bool select = true)
+        private void ExecuteStartPrivateChat(string targetNick, string? targetHostname = null, bool select = true)
         {
             if (string.Equals(targetNick, CurrentNick, StringComparison.OrdinalIgnoreCase)) return;
 
-            _dispatcherQueue.TryEnqueue(() =>
+            var pmKey = targetNick;
+            
+            // Create the PM channel and add to _channelLookup SYNCHRONOUSLY 
+            // so that GetOrCreateChannel can find it immediately on the IRC thread.
+            // _channelLookup is a ConcurrentDictionary, so this is thread-safe.
+            if (!_channelLookup.ContainsKey(pmKey))
             {
-                var pmKey = targetNick;
-                if (!_channelLookup.ContainsKey(pmKey))
+                var pmChannel = new ChannelViewModel(targetNick)
                 {
-                    var pmChannel = new ChannelViewModel(targetNick);
-                    // Add a dummy user for the target
-                    pmChannel.AddUser(new IrcUser(targetNick));
-                    pmChannel.AddUser(new IrcUser(CurrentNick)); // Add self
+                    IsPrivate = true,
+                    Topic = !string.IsNullOrEmpty(targetHostname) ? targetHostname : targetNick
+                };
 
-                    _channelLookup.TryAdd(pmKey, pmChannel);
-                    PrivateMessages.Add(pmChannel);
+                if (_channelLookup.TryAdd(pmKey, pmChannel))
+                {
+                    // Dispatch UI collection updates to the UI thread
+                    _dispatcherQueue.TryEnqueue(() =>
+                    {
+                        // Add default users
+                        pmChannel.AddUser(new IrcUser(targetNick) { Hostname = targetHostname });
+                        pmChannel.AddUser(new IrcUser(CurrentNick));
+                        PrivateMessages.Add(pmChannel);
+
+                        if (select)
+                        {
+                            SelectedChannel = pmChannel;
+                        }
+                    });
                 }
-                
+            }
+            else
+            {
+                // Update topic/hostname if we now have better data
+                var existing = _channelLookup[pmKey];
+                if (!string.IsNullOrEmpty(targetHostname))
+                {
+                    _dispatcherQueue.TryEnqueue(() =>
+                    {
+                        if (existing.Topic == targetNick || existing.Topic == "No Topic" || string.IsNullOrEmpty(existing.Topic))
+                        {
+                            existing.Topic = targetHostname;
+                        }
+                        var user = existing.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
+                        if (user != null) user.Hostname = targetHostname;
+                    });
+                }
+
                 if (select)
                 {
-                    SelectedChannel = _channelLookup[pmKey];
+                    _dispatcherQueue.TryEnqueue(() =>
+                    {
+                        SelectedChannel = _channelLookup[pmKey];
+                    });
                 }
-            });
+            }
         }
+
     }
 }

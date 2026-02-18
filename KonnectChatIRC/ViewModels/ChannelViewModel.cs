@@ -21,6 +21,13 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _isFavorite, value);
         }
 
+        private bool _isPrivate;
+        public bool IsPrivate
+        {
+            get => _isPrivate;
+            set => SetProperty(ref _isPrivate, value);
+        }
+
         public string UserSearchText
         {
             get => _userSearchText;
