@@ -1,1 +1,0 @@
-C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\KonnectChatIRC.csproj.AssemblyReference.cache

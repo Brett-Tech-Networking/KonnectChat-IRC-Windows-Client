@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace KonnectChatIRC.Models
@@ -15,5 +16,24 @@ namespace KonnectChatIRC.Models
         public bool IsAway { get; set; }
         public string AwayMessage { get; set; } = "";
         public string ConnectingFrom { get; set; } = "";
+
+        // Idle & connect time from RPL_WHOISIDLE (317)
+        public int IdleSeconds { get; set; }
+        public DateTime? SignonTime { get; set; }
+
+        public string IdleDisplay
+        {
+            get
+            {
+                if (IdleSeconds <= 0) return "Active";
+                var ts = TimeSpan.FromSeconds(IdleSeconds);
+                if (ts.TotalDays >= 1) return $"{(int)ts.TotalDays}d {ts.Hours}h {ts.Minutes}m";
+                if (ts.TotalHours >= 1) return $"{ts.Hours}h {ts.Minutes}m {ts.Seconds}s";
+                if (ts.TotalMinutes >= 1) return $"{ts.Minutes}m {ts.Seconds}s";
+                return $"{ts.Seconds}s";
+            }
+        }
+
+        public string SignonDisplay => SignonTime?.ToLocalTime().ToString("MMM d, yyyy h:mm tt") ?? "Unknown";
     }
 }

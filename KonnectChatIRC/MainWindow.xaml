@@ -160,9 +160,22 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
                                     <TextBlock Text="{Binding SelectedServer.ServerName}" Style="{StaticResource ProHeaderStyle}"/>
-                                    <HyperlinkButton Padding="0" Margin="0,4,0,0" Tapped="Nickname_Tapped" ToolTipService.ToolTip="Change Nickname">
-                                        <TextBlock Text="{Binding SelectedServer.CurrentNick}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold" FontSize="14"/>
-                                    </HyperlinkButton>
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                                        <!-- Self Status Indicator (clickable, separate from nick) -->
+                                        <Button Command="{Binding SelectedServer.ToggleAwayCommand}" 
+                                                Background="Transparent" BorderThickness="0" Padding="2"
+                                                VerticalAlignment="Center" MinWidth="0" MinHeight="0"
+                                                ToolTipService.ToolTip="Toggle Away Status">
+                                            <Ellipse Width="10" Height="10">
+                                                <Ellipse.Fill>
+                                                    <SolidColorBrush Color="{Binding SelectedServer.IsSelfOnline, Converter={StaticResource StatusToColorConverter}}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                        </Button>
+                                        <HyperlinkButton Padding="0" Tapped="Nickname_Tapped" ToolTipService.ToolTip="Change Nickname">
+                                            <TextBlock Text="{Binding SelectedServer.CurrentNick}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold" FontSize="14"/>
+                                        </HyperlinkButton>
+                                    </StackPanel>
                                 </StackPanel>
                                 <Button Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="4" VerticalAlignment="Top">
                                     <FontIcon Glyph="&#xE712;" FontSize="16" Foreground="{StaticResource TextSecondaryBrush}"/>
@@ -553,6 +566,15 @@
                            Background="{StaticResource SidebarBackgroundBrush}">
                 <StackPanel Width="400" Spacing="20">
                     <StackPanel Spacing="8">
+                        <TextBlock Text="Chat Timestamps" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                        <ToggleSwitch x:Name="TimestampSecondsToggle"
+                                      Header="Show seconds in timestamps"
+                                      OnContent="HH:mm:ss" OffContent="HH:mm"
+                                      Toggled="TimestampSecondsToggle_Toggled"/>
+                        <TextBlock Text="Toggle between HH:mm:ss and HH:mm timestamp format in chat messages."
+                                   FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
                         <TextBlock Text="Appearance" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
                         <ToggleSwitch Header="Rainbow Nicks" 
                                       OnContent="Enabled" OffContent="Disabled"
@@ -783,8 +805,24 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Server:" Width="100" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <TextBlock Text="Server:" Width="110" Foreground="{StaticResource TextSecondaryBrush}"/>
                     <TextBlock Grid.Column="1" Text="{Binding Server}" TextWrapping="Wrap"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Idle Time:" Width="110" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <TextBlock Grid.Column="1" Text="{Binding IdleDisplay}" Foreground="{StaticResource AccentLightBrush}" FontWeight="SemiBold"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Connected:" Width="110" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <TextBlock Grid.Column="1" Text="{Binding SignonDisplay}" FontWeight="SemiBold"/>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -851,5 +889,6 @@
                 <PasswordBox x:Name="OperPasswordBox" Header="Password" PlaceholderText="Enter oper password"/>
             </StackPanel>
         </ContentDialog>
+
     </Grid>
 </Window>

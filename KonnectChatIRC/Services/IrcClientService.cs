@@ -266,6 +266,24 @@ namespace KonnectChatIRC.Services
             {
                 _currentWhois.IsOperator = true;
             }
+            // 317 RPL_WHOISIDLE: <nick> <idle_seconds> <signon_unix> :seconds idle, signon time
+            else if (command == "317" && _currentWhois != null && parameters.Count >= 4)
+            {
+                if (int.TryParse(parameters[2], out int idleSecs))
+                {
+                    _currentWhois.IdleSeconds = idleSecs;
+                }
+                if (long.TryParse(parameters[3], out long signonUnix))
+                {
+                    _currentWhois.SignonTime = DateTimeOffset.FromUnixTimeSeconds(signonUnix).UtcDateTime;
+                }
+            }
+            // 301 RPL_AWAY (in WHOIS context): <nick> <target> :away message
+            else if (command == "301" && _currentWhois != null && parameters.Count >= 3)
+            {
+                _currentWhois.IsAway = true;
+                _currentWhois.AwayMessage = parameters[2];
+            }
             // 318 RPL_ENDOFWHOIS: <nick> :End of WHOIS list
             else if (command == "318" && _currentWhois != null)
             {

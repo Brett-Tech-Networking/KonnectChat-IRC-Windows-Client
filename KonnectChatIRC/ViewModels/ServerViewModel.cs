@@ -107,6 +107,16 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _isIrcOp, value); 
         }
 
+        private bool _isSelfAway;
+        public bool IsSelfAway
+        {
+            get => _isSelfAway;
+            set { if (SetProperty(ref _isSelfAway, value)) OnPropertyChanged(nameof(IsSelfOnline)); }
+        }
+
+        // Computed for StatusToColorConverter binding (true=green, false=amber)
+        public bool IsSelfOnline => !IsSelfAway;
+
         public ICommand ConnectCommand { get; }
         public ICommand DisconnectCommand { get; }
         public ICommand SendCommand { get; }
@@ -126,6 +136,7 @@ namespace KonnectChatIRC.ViewModels
         public ICommand ToggleFavoriteCommand { get; }
         public ICommand StartPrivateChatCommand { get; }
         public ICommand ClosePrivateChatCommand { get; }
+        public ICommand ToggleAwayCommand { get; }
 
         public event EventHandler<IrcUser>? RequestKillDialog;
         public event EventHandler<IrcUser>? RequestGlineDialog;
@@ -163,6 +174,8 @@ namespace KonnectChatIRC.ViewModels
             IdentCommand = new RelayCommand(_ => RequestIdent?.Invoke(this, EventArgs.Empty));
             OperCommand = new RelayCommand(_ => RequestOper?.Invoke(this, EventArgs.Empty));
             
+            ToggleAwayCommand = new RelayCommand(_ => ExecuteToggleAway());
+
             _ircService.MessageReceived += OnMessageReceived;
             
             _ircService.WelcomeReceived += (s, e) => 
@@ -193,6 +206,9 @@ namespace KonnectChatIRC.ViewModels
             {
                 _dispatcherQueue.TryEnqueue(() => 
                 {
+                    // Auto-away: idle > 5 minutes = away
+                    bool idleAway = info.IdleSeconds > 300 || info.IsAway;
+
                     foreach (var channel in Channels)
                     {
                         var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(info.Nickname, StringComparison.OrdinalIgnoreCase));
@@ -203,6 +219,8 @@ namespace KonnectChatIRC.ViewModels
                             user.Realname = info.Realname;
                             user.Server = info.Server;
                             user.ConnectingFrom = info.ConnectingFrom;
+                            user.IsAway = idleAway;
+                            user.AwayMessage = info.AwayMessage;
                             user.Channels.Clear();
                             foreach(var c in info.Channels) user.Channels.Add(c);
                         }
@@ -355,6 +373,50 @@ namespace KonnectChatIRC.ViewModels
                         if (cmd == "/join" && parts.Length > 1)
                         {
                             _ircService?.JoinChannelAsync(parts[1]);
+                        }
+                        else if (cmd == "/j" && parts.Length > 1)
+                        {
+                            // Quick: /j #channel → /join #channel
+                            _ircService?.JoinChannelAsync(parts[1]);
+                        }
+                        else if (cmd == "/k" && parts.Length > 1)
+                        {
+                            // Quick: /k user [reason] → KICK #channel user :reason
+                            if (SelectedChannel != null && SelectedChannel.Name.StartsWith("#"))
+                            {
+                                string kickNick = parts[1];
+                                string reason = parts.Length > 2 ? string.Join(" ", parts.Skip(2)) : "Kicked";
+                                _ircService?.SendRawAsync($"KICK {SelectedChannel.Name} {kickNick} :{reason}");
+                            }
+                        }
+                        else if (cmd == "/b" && parts.Length > 1)
+                        {
+                            // Quick: /b user → MODE #channel +b user!*@*
+                            if (SelectedChannel != null && SelectedChannel.Name.StartsWith("#"))
+                            {
+                                string banNick = parts[1];
+                                _ircService?.SendRawAsync($"MODE {SelectedChannel.Name} +b {banNick}!*@*");
+                            }
+                        }
+                        else if (cmd == "/p")
+                        {
+                            // Quick: /p → PART current channel and remove from list
+                            if (SelectedChannel != null && SelectedChannel.Name.StartsWith("#"))
+                            {
+                                var chanToPart = SelectedChannel;
+                                _ircService?.SendRawAsync($"PART {chanToPart.Name} :{DefaultQuitMessage}");
+                                _dispatcherQueue.TryEnqueue(() =>
+                                {
+                                    Channels.Remove(chanToPart);
+                                    OtherChannels.Remove(chanToPart);
+                                    FavoriteChannels.Remove(chanToPart);
+                                    _channelLookup.TryRemove(chanToPart.Name, out _);
+                                    if (SelectedChannel == chanToPart)
+                                    {
+                                        SelectedChannel = Channels.FirstOrDefault();
+                                    }
+                                });
+                            }
                         }
                         else if (cmd == "/quit")
                         {
@@ -877,12 +939,14 @@ namespace KonnectChatIRC.ViewModels
             }
             else if (e.Command == "305") // RPL_UNAWAY - we are no longer away
             {
+                IsSelfAway = false;
                 SetUserAwayStatus(CurrentNick, false, "");
                 return;
             }
             else if (e.Command == "306") // RPL_NOWAWAY - we are now away
             {
                 string awayMsg = e.Parameters.Length > 1 ? e.Parameters[1] : "Away";
+                IsSelfAway = true;
                 SetUserAwayStatus(CurrentNick, true, awayMsg);
                 return;
             }
@@ -959,6 +1023,20 @@ namespace KonnectChatIRC.ViewModels
                     }
                 }
             });
+        }
+
+        private void ExecuteToggleAway()
+        {
+            if (IsSelfAway)
+            {
+                // Clear away - send AWAY with no message
+                _ircService?.SendRawAsync("AWAY");
+            }
+            else
+            {
+                // Set away
+                _ircService?.SendRawAsync("AWAY :Away");
+            }
         }
 
         private ChannelViewModel? GetOrCreateChannel(string name)

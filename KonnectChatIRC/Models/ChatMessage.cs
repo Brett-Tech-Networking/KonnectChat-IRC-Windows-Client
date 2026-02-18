@@ -14,6 +14,6 @@ namespace KonnectChatIRC.Models
         public bool IsRegularMessage => !IsSystem && !IsAction;
         public string SenderPrefix { get; set; } = "";
 
-        public string FormattedTime => Timestamp.ToString("HH:mm:ss");
+        public string FormattedTime => Timestamp.ToString(Services.AppSettings.Instance.TimestampFormat);
     }
 }

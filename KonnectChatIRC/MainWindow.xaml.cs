@@ -56,8 +56,18 @@ namespace KonnectChatIRC
         {
             if (SettingsDialog != null)
             {
+                // Initialize timestamp toggle to current setting
+                TimestampSecondsToggle.IsOn = Services.AppSettings.Instance.ShowSeconds;
                 SettingsDialog.XamlRoot = this.Content.XamlRoot;
                 await SettingsDialog.ShowAsync();
+            }
+        }
+
+        private void TimestampSecondsToggle_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            if (sender is Microsoft.UI.Xaml.Controls.ToggleSwitch toggle)
+            {
+                Services.AppSettings.Instance.ShowSeconds = toggle.IsOn;
             }
         }
 

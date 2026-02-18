@@ -1,4 +1,4 @@
-C:\Users\Brett\source\repos\KonnectChatIRC\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.csproj.AssemblyReference.cache
+D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.csproj.AssemblyReference.cache
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\LockScreenLogo.scale-200.png
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\SplashScreen.scale-200.png
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\Square150x150Logo.scale-200.png
@@ -331,7 +331,6 @@ D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Microsoft.UI.pri
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Microsoft.UI.Xaml.Controls.pri
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Microsoft.WindowsAppRuntime.pri
-D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\KonnectChatIRC.csproj.AssemblyReference.cache
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\App.g.i.cs
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\App.g.cs
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\MainWindow.g.i.cs
