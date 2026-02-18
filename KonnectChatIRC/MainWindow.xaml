@@ -196,6 +196,7 @@
                                           SelectedItem="{Binding SelectedServer.SelectedChannel}"
                                           ItemTemplate="{StaticResource ProChannelTemplate}"
                                           SelectionMode="Single"
+                                          CanReorderItems="True" AllowDrop="True"
                                           ScrollViewer.VerticalScrollMode="Disabled"
                                           SelectionChanged="OtherChannelsList_SelectionChanged"/>
 
@@ -206,6 +207,7 @@
                                           ItemsSource="{Binding SelectedServer.PrivateMessages}" 
                                           SelectedItem="{Binding SelectedServer.SelectedChannel}"
                                           SelectionMode="Single"
+                                          CanReorderItems="True" AllowDrop="True"
                                           ScrollViewer.VerticalScrollMode="Disabled"
                                           SelectionChanged="PrivateMessagesList_SelectionChanged"
                                           Visibility="{Binding SelectedServer.PrivateMessages.Count, Converter={StaticResource CountToVis}}">

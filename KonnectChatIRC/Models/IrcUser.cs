@@ -61,12 +61,22 @@ namespace KonnectChatIRC.Models
 
         public string FullDisplayName => $"{Prefix}{Nickname}";
 
-        private bool _isOnline = true;
-        public bool IsOnline
+        private bool _isAway = false;
+        public bool IsAway
         {
-            get => _isOnline;
-            set { _isOnline = value; OnPropertyChanged(); }
+            get => _isAway;
+            set { _isAway = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsOnline)); }
         }
+
+        private string _awayMessage = "";
+        public string AwayMessage
+        {
+            get => _awayMessage;
+            set { _awayMessage = value; OnPropertyChanged(); }
+        }
+
+        // Computed: user is online when not away
+        public bool IsOnline => !IsAway;
 
         private string _hostname = "";
         private string _username = "";

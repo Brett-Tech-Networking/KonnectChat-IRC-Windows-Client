@@ -11,7 +11,7 @@ namespace KonnectChatIRC.Converters
         {
             if (value is bool isOnline)
             {
-                return isOnline ? Colors.LimeGreen : Colors.Crimson;
+                return isOnline ? Colors.LimeGreen : Color.FromArgb(255, 255, 165, 0); // Online: Green, Away: Amber
             }
 
             if (value is string prefix)

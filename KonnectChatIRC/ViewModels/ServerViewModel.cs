@@ -850,6 +850,42 @@ namespace KonnectChatIRC.ViewModels
                 RefreshFilteredAvailableChannels();
                 return; // Don't show in chat log
             }
+            // --- AWAY Status Handling ---
+            else if (e.Command == "AWAY")
+            {
+                // :nick!user@host AWAY :away message  (user set away)
+                // :nick!user@host AWAY                (user returned from away)
+                var nick = GetNickFromPrefix(e.Prefix);
+                if (!string.IsNullOrEmpty(nick))
+                {
+                    bool isAway = e.Parameters.Length > 0 && !string.IsNullOrEmpty(e.Parameters[0]);
+                    string awayMsg = isAway ? e.Parameters[0] : "";
+                    SetUserAwayStatus(nick, isAway, awayMsg);
+                }
+                return;
+            }
+            else if (e.Command == "301") // RPL_AWAY - user is away
+            {
+                // :server 301 mynick targetNick :away message
+                if (e.Parameters.Length >= 3)
+                {
+                    var targetNick = e.Parameters[1];
+                    var awayMsg = e.Parameters[2];
+                    SetUserAwayStatus(targetNick, true, awayMsg);
+                }
+                return;
+            }
+            else if (e.Command == "305") // RPL_UNAWAY - we are no longer away
+            {
+                SetUserAwayStatus(CurrentNick, false, "");
+                return;
+            }
+            else if (e.Command == "306") // RPL_NOWAWAY - we are now away
+            {
+                string awayMsg = e.Parameters.Length > 1 ? e.Parameters[1] : "Away";
+                SetUserAwayStatus(CurrentNick, true, awayMsg);
+                return;
+            }
 
             // Fallback: show unknown messages in the server tab
             Channels[0].AddMessage(new ChatMessage 
@@ -906,6 +942,23 @@ namespace KonnectChatIRC.ViewModels
             if (string.IsNullOrEmpty(prefix)) return null;
             var idx = prefix.IndexOf('@');
             return idx != -1 ? prefix.Substring(idx + 1) : null;
+        }
+
+        private void SetUserAwayStatus(string nick, bool isAway, string awayMessage)
+        {
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                // Update user across all channels they appear in
+                foreach (var channel in Channels)
+                {
+                    var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(nick, StringComparison.OrdinalIgnoreCase));
+                    if (user != null)
+                    {
+                        user.IsAway = isAway;
+                        user.AwayMessage = awayMessage;
+                    }
+                }
+            });
         }
 
         private ChannelViewModel? GetOrCreateChannel(string name)
