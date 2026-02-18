@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace KonnectChatIRC.Models
@@ -8,6 +9,12 @@ namespace KonnectChatIRC.Models
     {
         private string _nickname;
         private HashSet<char> _activePrefixes = new HashSet<char>();
+
+        public string Nickname 
+        { 
+            get => _nickname; 
+            set { _nickname = value; OnPropertyChanged(); OnPropertyChanged(nameof(FullDisplayName)); }
+        }
         
         // Helper to determine highest rank prefix for display
         public string HeaderPrefix

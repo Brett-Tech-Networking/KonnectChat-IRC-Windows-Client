@@ -109,6 +109,13 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _isIrcOp, value); 
         }
 
+        private bool _isPrivateMessagingDisabled;
+        public bool IsPrivateMessagingDisabled
+        {
+            get => _isPrivateMessagingDisabled;
+            set => SetProperty(ref _isPrivateMessagingDisabled, value);
+        }
+
         private bool _isSelfAway;
         public bool IsSelfAway
         {
@@ -518,7 +525,8 @@ namespace KonnectChatIRC.ViewModels
 
                             if (target != "Server")
                             {
-                                var myPrefix = SelectedChannel.Users.FirstOrDefault(u => u.Nickname.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))?.Prefix ?? "";
+                                var user = SelectedChannel.Users.FirstOrDefault(u => u.Nickname.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase));
+                                var myPrefix = user?.Prefix ?? "";
                                 var msg = new ChatMessage
                                 {
                                     Sender = CurrentNick,
@@ -565,7 +573,8 @@ namespace KonnectChatIRC.ViewModels
                         if (SelectedChannel.Name != "Server")
                         {
                             _ircService?.SendMessageAsync(SelectedChannel.Name, text);
-                            var myPrefix = SelectedChannel.Users.FirstOrDefault(u => u.Nickname.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase))?.Prefix ?? "";
+                            var user = SelectedChannel.Users.FirstOrDefault(u => u.Nickname.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase));
+                            var myPrefix = user?.Prefix ?? "";
                             var msg = new ChatMessage 
                             { 
                                 Sender = CurrentNick, 
@@ -604,6 +613,13 @@ namespace KonnectChatIRC.ViewModels
 
                 if (isPm)
                 {
+                    if (IsPrivateMessagingDisabled)
+                    {
+                        // Auto-reply and drop
+                        _ircService?.SendMessageAsync(senderNick, "This user has Private Messaging Disabled, You're message will NOT be seen. Please try again later.");
+                        return;
+                    }
+
                     var senderHost = GetHostFromPrefix(e.Prefix);
                     ExecuteStartPrivateChat(senderNick, senderHost, select: false); 
                     // ExecuteStartPrivateChat handles creating/adding to PrivateMessages collection
@@ -870,29 +886,31 @@ namespace KonnectChatIRC.ViewModels
 
                         if (channel != null)
                         {
-                            // Handle user mode changes (Owner/Admin/OP/HalfOp/Voice)
-                            // Modes: q(Owner), a(Admin), o(Op), h(HalfOp), v(Voice)
-                            // Standard implementation: iterate modes and consume args
-                            int argIndex = 2;
-                            bool adding = true;
-
-                            foreach (char c in modeStr)
+                            _dispatcherQueue.TryEnqueue(() =>
                             {
-                                if (c == '+')
-                                {
-                                    adding = true; 
-                                    continue;
-                                }
-                                if (c == '-')
-                                {
-                                    adding = false;
-                                    continue;
-                                }
+                                // Handle user mode changes (Owner/Admin/OP/HalfOp/Voice)
+                                // Modes: q(Owner), a(Admin), o(Op), h(HalfOp), v(Voice)
+                                // Standard implementation: iterate modes and consume args
+                                int argIndex = 2;
+                                bool adding = true;
 
-                                if ("qaohv".Contains(c))
+                                foreach (char c in modeStr)
                                 {
-                                    if (argIndex < e.Parameters.Length)
+                                    if (c == '+')
                                     {
+                                        adding = true; 
+                                        continue;
+                                    }
+                                    if (c == '-')
+                                    {
+                                        adding = false;
+                                        continue;
+                                    }
+
+                                    if ("qaohv".Contains(c))
+                                    {
+                                        if (argIndex < e.Parameters.Length)
+                                        {
                                         var targetNick = e.Parameters[argIndex++];
                                         var user = channel.Users.FirstOrDefault(u => u.Nickname.Equals(targetNick, StringComparison.OrdinalIgnoreCase));
                                         
@@ -929,6 +947,10 @@ namespace KonnectChatIRC.ViewModels
                                                 if (adding) user.AddPrefix('+');
                                                 else user.RemovePrefix('+');
                                             }
+                                        }
+                                        else
+                                        {
+                                            // Debug log removed
                                         }
 
                                         // Log the mode change
@@ -973,6 +995,7 @@ namespace KonnectChatIRC.ViewModels
                                 }
                                 // Other modes might update channel modes
                             }
+                            });
 
                             // Update the generic channel modes string (flawed but sufficient for simple display)
                             channel.UpdateModes(modeStr);

@@ -184,6 +184,8 @@
                                         <MenuFlyout>
                                             <MenuFlyoutItem Text="Identify Nick" Command="{Binding SelectedServer.IdentCommand}"/>
                                             <MenuFlyoutItem Text="Operator Login" Command="{Binding SelectedServer.OperCommand}"/>
+                                            <MenuFlyoutSeparator/>
+                                            <ToggleMenuFlyoutItem Text="No PM" IsChecked="{Binding SelectedServer.IsPrivateMessagingDisabled, Mode=TwoWay}"/>
                                         </MenuFlyout>
                                     </Button.Flyout>
                                 </Button>
