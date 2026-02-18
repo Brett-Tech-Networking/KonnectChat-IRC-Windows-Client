@@ -120,6 +120,7 @@ namespace KonnectChatIRC
                     _currentServer.RequestGlineDialog -= Server_RequestGlineDialog;
                     _currentServer.RequestIdent -= Server_RequestIdent;
                     _currentServer.RequestOper -= Server_RequestOper;
+                    _currentServer.RequestModerationDialog -= Server_RequestModerationDialog;
                 }
 
                 _currentServer = Handle.SelectedServer;
@@ -130,6 +131,7 @@ namespace KonnectChatIRC
                     _currentServer.RequestGlineDialog += Server_RequestGlineDialog;
                     _currentServer.RequestIdent += Server_RequestIdent;
                     _currentServer.RequestOper += Server_RequestOper;
+                    _currentServer.RequestModerationDialog += Server_RequestModerationDialog;
                 }
             }
         }
@@ -361,11 +363,114 @@ namespace KonnectChatIRC
                         if (mainVM.SelectedServer != null)
                         {
                             mainVM.SelectedServer.WhoisUserCommand.Execute(user);
+                            
+                            if (mainVM.SelectedServer.SelectedChannel != null)
+                            {
+                                mainVM.SelectedServer.SelectedChannel.SelectedUser = user;
+                            }
                         }
                     }
                 }
                 
                 FlyoutBase.ShowAttachedFlyout(fe);
+            }
+        }
+
+        private async void Server_RequestModerationDialog(object? sender, ChannelViewModel channel)
+        {
+            if (ModerationDialog == null) return;
+            
+            ModerationDialog.XamlRoot = this.Content.XamlRoot;
+            ModerationDialog.Title = $"Moderation: {channel.Name}";
+            NewBanTextBox.Text = "";
+            ChannelKeyBox.Text = "";
+            ChannelLimitBox.Value = double.NaN;
+            
+            await ModerationDialog.ShowAsync();
+        }
+
+        private void Mode_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.Tag is string modeChar)
+            {
+                if (Handle.SelectedServer?.SelectedChannel != null)
+                {
+                    var channel = Handle.SelectedServer.SelectedChannel;
+                    bool enable = cb.IsChecked ?? false;
+                    Handle.SelectedServer.ToggleChannelModeCommand.Execute(new Tuple<ChannelViewModel, string, bool>(channel, modeChar, enable));
+                }
+            }
+        }
+
+        private void AddBan_Click(object sender, RoutedEventArgs e)
+        {
+            ExecuteAddBan();
+        }
+
+        private void NewBanTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                ExecuteAddBan();
+            }
+        }
+
+        private void ExecuteAddBan()
+        {
+            string mask = NewBanTextBox.Text.Trim();
+            if (string.IsNullOrEmpty(mask)) return;
+
+            if (Handle.SelectedServer?.SelectedChannel != null)
+            {
+                Handle.SelectedServer.AddBanCommand.Execute(new Tuple<ChannelViewModel, string>(Handle.SelectedServer.SelectedChannel, mask));
+                NewBanTextBox.Text = "";
+            }
+        }
+
+        private void RemoveBan_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is string mask)
+            {
+                if (Handle.SelectedServer?.SelectedChannel != null)
+                {
+                    Handle.SelectedServer.RemoveBanCommand.Execute(new Tuple<ChannelViewModel, string>(Handle.SelectedServer.SelectedChannel, mask));
+                }
+            }
+        }
+
+        private void ChannelKeyBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                if (Handle.SelectedServer?.SelectedChannel != null)
+                {
+                    var channel = Handle.SelectedServer.SelectedChannel;
+                    var key = ChannelKeyBox.Text.Trim();
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        Handle.SelectedServer?.ToggleChannelModeCommand.Execute(new Tuple<ChannelViewModel, string, bool>(channel, "k", false));
+                    }
+                    else
+                    {
+                        Handle.SelectedServer?.SendCommand.Execute($"/mode {channel.Name} +k {key}");
+                    }
+                }
+            }
+        }
+
+        private void ChannelLimitBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            if (Handle.SelectedServer?.SelectedChannel != null)
+            {
+                var channel = Handle.SelectedServer.SelectedChannel;
+                if (double.IsNaN(args.NewValue))
+                {
+                    Handle.SelectedServer?.ToggleChannelModeCommand.Execute(new Tuple<ChannelViewModel, string, bool>(channel, "l", false));
+                }
+                else
+                {
+                    Handle.SelectedServer?.SendCommand.Execute($"/mode {channel.Name} +l {(int)args.NewValue}");
+                }
             }
         }
 

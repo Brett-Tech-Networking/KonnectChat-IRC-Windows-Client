@@ -238,25 +238,25 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeNameTable[8] = "KonnectChatIRC.Converters.CollectionVisibilityConverter";
             _typeNameTable[9] = "KonnectChatIRC.Converters.NullToVisibilityConverter";
             _typeNameTable[10] = "KonnectChatIRC.Converters.BoolToGridLengthConverter";
-            _typeNameTable[11] = "Microsoft.UI.Xaml.Controls.Expander";
-            _typeNameTable[12] = "Microsoft.UI.Xaml.Controls.ContentControl";
-            _typeNameTable[13] = "Microsoft.UI.Xaml.Controls.ExpandDirection";
-            _typeNameTable[14] = "System.Enum";
-            _typeNameTable[15] = "System.ValueType";
-            _typeNameTable[16] = "Microsoft.UI.Xaml.DataTemplate";
-            _typeNameTable[17] = "Microsoft.UI.Xaml.Controls.DataTemplateSelector";
-            _typeNameTable[18] = "Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings";
-            _typeNameTable[19] = "Microsoft.UI.Xaml.DependencyObject";
-            _typeNameTable[20] = "Microsoft.UI.Xaml.Controls.NumberBox";
-            _typeNameTable[21] = "Microsoft.UI.Xaml.Controls.Control";
-            _typeNameTable[22] = "Double";
-            _typeNameTable[23] = "Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode";
-            _typeNameTable[24] = "Windows.Globalization.NumberFormatting.INumberFormatter2";
-            _typeNameTable[25] = "String";
-            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase";
-            _typeNameTable[27] = "Microsoft.UI.Xaml.Media.SolidColorBrush";
-            _typeNameTable[28] = "Microsoft.UI.Xaml.TextReadingOrder";
-            _typeNameTable[29] = "Microsoft.UI.Xaml.Controls.NumberBoxValidationMode";
+            _typeNameTable[11] = "Microsoft.UI.Xaml.Controls.NumberBox";
+            _typeNameTable[12] = "Microsoft.UI.Xaml.Controls.Control";
+            _typeNameTable[13] = "Double";
+            _typeNameTable[14] = "Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode";
+            _typeNameTable[15] = "System.Enum";
+            _typeNameTable[16] = "System.ValueType";
+            _typeNameTable[17] = "String";
+            _typeNameTable[18] = "Microsoft.UI.Xaml.DataTemplate";
+            _typeNameTable[19] = "Windows.Globalization.NumberFormatting.INumberFormatter2";
+            _typeNameTable[20] = "Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase";
+            _typeNameTable[21] = "Microsoft.UI.Xaml.Media.SolidColorBrush";
+            _typeNameTable[22] = "Microsoft.UI.Xaml.TextReadingOrder";
+            _typeNameTable[23] = "Microsoft.UI.Xaml.Controls.NumberBoxValidationMode";
+            _typeNameTable[24] = "Microsoft.UI.Xaml.Controls.Expander";
+            _typeNameTable[25] = "Microsoft.UI.Xaml.Controls.ContentControl";
+            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.ExpandDirection";
+            _typeNameTable[27] = "Microsoft.UI.Xaml.Controls.DataTemplateSelector";
+            _typeNameTable[28] = "Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings";
+            _typeNameTable[29] = "Microsoft.UI.Xaml.DependencyObject";
             _typeNameTable[30] = "KonnectChatIRC.MainWindow";
             _typeNameTable[31] = "Microsoft.UI.Xaml.Window";
             _typeNameTable[32] = "KonnectChatIRC.ViewModels.MainViewModel";
@@ -277,25 +277,25 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeTable[8] = typeof(global::KonnectChatIRC.Converters.CollectionVisibilityConverter);
             _typeTable[9] = typeof(global::KonnectChatIRC.Converters.NullToVisibilityConverter);
             _typeTable[10] = typeof(global::KonnectChatIRC.Converters.BoolToGridLengthConverter);
-            _typeTable[11] = typeof(global::Microsoft.UI.Xaml.Controls.Expander);
-            _typeTable[12] = typeof(global::Microsoft.UI.Xaml.Controls.ContentControl);
-            _typeTable[13] = typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection);
-            _typeTable[14] = typeof(global::System.Enum);
-            _typeTable[15] = typeof(global::System.ValueType);
-            _typeTable[16] = typeof(global::Microsoft.UI.Xaml.DataTemplate);
-            _typeTable[17] = typeof(global::Microsoft.UI.Xaml.Controls.DataTemplateSelector);
-            _typeTable[18] = typeof(global::Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings);
-            _typeTable[19] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
-            _typeTable[20] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBox);
-            _typeTable[21] = typeof(global::Microsoft.UI.Xaml.Controls.Control);
-            _typeTable[22] = typeof(global::System.Double);
-            _typeTable[23] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode);
-            _typeTable[24] = typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2);
-            _typeTable[25] = typeof(global::System.String);
-            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase);
-            _typeTable[27] = typeof(global::Microsoft.UI.Xaml.Media.SolidColorBrush);
-            _typeTable[28] = typeof(global::Microsoft.UI.Xaml.TextReadingOrder);
-            _typeTable[29] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode);
+            _typeTable[11] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBox);
+            _typeTable[12] = typeof(global::Microsoft.UI.Xaml.Controls.Control);
+            _typeTable[13] = typeof(global::System.Double);
+            _typeTable[14] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode);
+            _typeTable[15] = typeof(global::System.Enum);
+            _typeTable[16] = typeof(global::System.ValueType);
+            _typeTable[17] = typeof(global::System.String);
+            _typeTable[18] = typeof(global::Microsoft.UI.Xaml.DataTemplate);
+            _typeTable[19] = typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2);
+            _typeTable[20] = typeof(global::Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase);
+            _typeTable[21] = typeof(global::Microsoft.UI.Xaml.Media.SolidColorBrush);
+            _typeTable[22] = typeof(global::Microsoft.UI.Xaml.TextReadingOrder);
+            _typeTable[23] = typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode);
+            _typeTable[24] = typeof(global::Microsoft.UI.Xaml.Controls.Expander);
+            _typeTable[25] = typeof(global::Microsoft.UI.Xaml.Controls.ContentControl);
+            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection);
+            _typeTable[27] = typeof(global::Microsoft.UI.Xaml.Controls.DataTemplateSelector);
+            _typeTable[28] = typeof(global::Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings);
+            _typeTable[29] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
             _typeTable[30] = typeof(global::KonnectChatIRC.MainWindow);
             _typeTable[31] = typeof(global::Microsoft.UI.Xaml.Window);
             _typeTable[32] = typeof(global::KonnectChatIRC.ViewModels.MainViewModel);
@@ -345,8 +345,8 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private object Activate_8_CollectionVisibilityConverter() { return new global::KonnectChatIRC.Converters.CollectionVisibilityConverter(); }
         private object Activate_9_NullToVisibilityConverter() { return new global::KonnectChatIRC.Converters.NullToVisibilityConverter(); }
         private object Activate_10_BoolToGridLengthConverter() { return new global::KonnectChatIRC.Converters.BoolToGridLengthConverter(); }
-        private object Activate_11_Expander() { return new global::Microsoft.UI.Xaml.Controls.Expander(); }
-        private object Activate_20_NumberBox() { return new global::Microsoft.UI.Xaml.Controls.NumberBox(); }
+        private object Activate_11_NumberBox() { return new global::Microsoft.UI.Xaml.Controls.NumberBox(); }
+        private object Activate_24_Expander() { return new global::Microsoft.UI.Xaml.Controls.Expander(); }
         private object Activate_30_MainWindow() { return new global::KonnectChatIRC.MainWindow(); }
         private object Activate_32_MainViewModel() { return new global::KonnectChatIRC.ViewModels.MainViewModel(); }
         private object Activate_33_ViewModelBase() { return new global::KonnectChatIRC.MVVM.ViewModelBase(); }
@@ -359,15 +359,15 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private void StaticInitializer_8_CollectionVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.CollectionVisibilityConverter).TypeHandle);
         private void StaticInitializer_9_NullToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.NullToVisibilityConverter).TypeHandle);
         private void StaticInitializer_10_BoolToGridLengthConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.BoolToGridLengthConverter).TypeHandle);
-        private void StaticInitializer_11_Expander() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.Expander).TypeHandle);
-        private void StaticInitializer_13_ExpandDirection() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection).TypeHandle);
-        private void StaticInitializer_14_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
-        private void StaticInitializer_15_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
-        private void StaticInitializer_18_ExpanderTemplateSettings() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings).TypeHandle);
-        private void StaticInitializer_20_NumberBox() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBox).TypeHandle);
-        private void StaticInitializer_23_NumberBoxSpinButtonPlacementMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode).TypeHandle);
-        private void StaticInitializer_24_INumberFormatter2() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2).TypeHandle);
-        private void StaticInitializer_29_NumberBoxValidationMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode).TypeHandle);
+        private void StaticInitializer_11_NumberBox() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBox).TypeHandle);
+        private void StaticInitializer_14_NumberBoxSpinButtonPlacementMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode).TypeHandle);
+        private void StaticInitializer_15_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
+        private void StaticInitializer_16_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
+        private void StaticInitializer_19_INumberFormatter2() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Windows.Globalization.NumberFormatting.INumberFormatter2).TypeHandle);
+        private void StaticInitializer_23_NumberBoxValidationMode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode).TypeHandle);
+        private void StaticInitializer_24_Expander() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.Expander).TypeHandle);
+        private void StaticInitializer_26_ExpandDirection() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection).TypeHandle);
+        private void StaticInitializer_28_ExpanderTemplateSettings() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings).TypeHandle);
         private void StaticInitializer_30_MainWindow() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MainWindow).TypeHandle);
         private void StaticInitializer_32_MainViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.ViewModels.MainViewModel).TypeHandle);
         private void StaticInitializer_33_ViewModelBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.MVVM.ViewModelBase).TypeHandle);
@@ -475,71 +475,16 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 11:   //  Microsoft.UI.Xaml.Controls.Expander
-                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ContentControl"));
-                userType.Activator = Activate_11_Expander;
-                userType.StaticInitializer = StaticInitializer_11_Expander;
-                userType.AddMemberName("Header");
-                userType.AddMemberName("ExpandDirection");
-                userType.AddMemberName("HeaderTemplate");
-                userType.AddMemberName("HeaderTemplateSelector");
-                userType.AddMemberName("IsExpanded");
-                userType.AddMemberName("TemplateSettings");
-                xamlType = userType;
-                break;
-
-            case 12:   //  Microsoft.UI.Xaml.Controls.ContentControl
-                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 13:   //  Microsoft.UI.Xaml.Controls.ExpandDirection
-                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
-                userType.StaticInitializer = StaticInitializer_13_ExpandDirection;
-                userType.AddEnumValue("Down", global::Microsoft.UI.Xaml.Controls.ExpandDirection.Down);
-                userType.AddEnumValue("Up", global::Microsoft.UI.Xaml.Controls.ExpandDirection.Up);
-                xamlType = userType;
-                break;
-
-            case 14:   //  System.Enum
-                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
-                userType.StaticInitializer = StaticInitializer_14_Enum;
-                xamlType = userType;
-                break;
-
-            case 15:   //  System.ValueType
-                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_15_ValueType;
-                xamlType = userType;
-                break;
-
-            case 16:   //  Microsoft.UI.Xaml.DataTemplate
-                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 17:   //  Microsoft.UI.Xaml.Controls.DataTemplateSelector
-                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 18:   //  Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings
-                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.StaticInitializer = StaticInitializer_18_ExpanderTemplateSettings;
-                userType.SetIsReturnTypeStub();
-                xamlType = userType;
-                break;
-
-            case 19:   //  Microsoft.UI.Xaml.DependencyObject
-                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 20:   //  Microsoft.UI.Xaml.Controls.NumberBox
+            case 11:   //  Microsoft.UI.Xaml.Controls.NumberBox
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Control"));
-                userType.Activator = Activate_20_NumberBox;
-                userType.StaticInitializer = StaticInitializer_20_NumberBox;
+                userType.Activator = Activate_11_NumberBox;
+                userType.StaticInitializer = StaticInitializer_11_NumberBox;
                 userType.AddMemberName("Header");
                 userType.AddMemberName("Value");
                 userType.AddMemberName("SmallChange");
                 userType.AddMemberName("LargeChange");
                 userType.AddMemberName("SpinButtonPlacementMode");
+                userType.AddMemberName("PlaceholderText");
                 userType.AddMemberName("AcceptsExpression");
                 userType.AddMemberName("Description");
                 userType.AddMemberName("HeaderTemplate");
@@ -547,7 +492,6 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 userType.AddMemberName("Maximum");
                 userType.AddMemberName("Minimum");
                 userType.AddMemberName("NumberFormatter");
-                userType.AddMemberName("PlaceholderText");
                 userType.AddMemberName("PreventKeyboardDisplayOnProgrammaticFocus");
                 userType.AddMemberName("SelectionFlyout");
                 userType.AddMemberName("SelectionHighlightColor");
@@ -557,52 +501,108 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 21:   //  Microsoft.UI.Xaml.Controls.Control
+            case 12:   //  Microsoft.UI.Xaml.Controls.Control
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 22:   //  Double
+            case 13:   //  Double
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 23:   //  Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode
+            case 14:   //  Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
-                userType.StaticInitializer = StaticInitializer_23_NumberBoxSpinButtonPlacementMode;
+                userType.StaticInitializer = StaticInitializer_14_NumberBoxSpinButtonPlacementMode;
                 userType.AddEnumValue("Hidden", global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode.Hidden);
                 userType.AddEnumValue("Compact", global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode.Compact);
                 userType.AddEnumValue("Inline", global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode.Inline);
                 xamlType = userType;
                 break;
 
-            case 24:   //  Windows.Globalization.NumberFormatting.INumberFormatter2
+            case 15:   //  System.Enum
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
+                userType.StaticInitializer = StaticInitializer_15_Enum;
+                xamlType = userType;
+                break;
+
+            case 16:   //  System.ValueType
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                userType.StaticInitializer = StaticInitializer_16_ValueType;
+                xamlType = userType;
+                break;
+
+            case 17:   //  String
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 18:   //  Microsoft.UI.Xaml.DataTemplate
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 19:   //  Windows.Globalization.NumberFormatting.INumberFormatter2
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_24_INumberFormatter2;
+                userType.StaticInitializer = StaticInitializer_19_INumberFormatter2;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 25:   //  String
+            case 20:   //  Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 26:   //  Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase
+            case 21:   //  Microsoft.UI.Xaml.Media.SolidColorBrush
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 27:   //  Microsoft.UI.Xaml.Media.SolidColorBrush
+            case 22:   //  Microsoft.UI.Xaml.TextReadingOrder
                 xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 28:   //  Microsoft.UI.Xaml.TextReadingOrder
-                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 29:   //  Microsoft.UI.Xaml.Controls.NumberBoxValidationMode
+            case 23:   //  Microsoft.UI.Xaml.Controls.NumberBoxValidationMode
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
-                userType.StaticInitializer = StaticInitializer_29_NumberBoxValidationMode;
+                userType.StaticInitializer = StaticInitializer_23_NumberBoxValidationMode;
                 userType.AddEnumValue("InvalidInputOverwritten", global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode.InvalidInputOverwritten);
                 userType.AddEnumValue("Disabled", global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode.Disabled);
                 xamlType = userType;
+                break;
+
+            case 24:   //  Microsoft.UI.Xaml.Controls.Expander
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ContentControl"));
+                userType.Activator = Activate_24_Expander;
+                userType.StaticInitializer = StaticInitializer_24_Expander;
+                userType.AddMemberName("Header");
+                userType.AddMemberName("ExpandDirection");
+                userType.AddMemberName("HeaderTemplate");
+                userType.AddMemberName("HeaderTemplateSelector");
+                userType.AddMemberName("IsExpanded");
+                userType.AddMemberName("TemplateSettings");
+                xamlType = userType;
+                break;
+
+            case 25:   //  Microsoft.UI.Xaml.Controls.ContentControl
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 26:   //  Microsoft.UI.Xaml.Controls.ExpandDirection
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
+                userType.StaticInitializer = StaticInitializer_26_ExpandDirection;
+                userType.AddEnumValue("Down", global::Microsoft.UI.Xaml.Controls.ExpandDirection.Down);
+                userType.AddEnumValue("Up", global::Microsoft.UI.Xaml.Controls.ExpandDirection.Up);
+                xamlType = userType;
+                break;
+
+            case 27:   //  Microsoft.UI.Xaml.Controls.DataTemplateSelector
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 28:   //  Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings
+                userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
+                userType.StaticInitializer = StaticInitializer_28_ExpanderTemplateSettings;
+                userType.SetIsReturnTypeStub();
+                xamlType = userType;
+                break;
+
+            case 29:   //  Microsoft.UI.Xaml.DependencyObject
+                xamlType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
             case 30:   //  KonnectChatIRC.MainWindow
@@ -739,250 +739,250 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             var that = (global::KonnectChatIRC.Converters.BoolToVisibilityConverter)instance;
             that.IsInverted = (global::System.Boolean)Value;
         }
-        private object get_2_Expander_Header(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            return that.Header;
-        }
-        private void set_2_Expander_Header(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            that.Header = (global::System.Object)Value;
-        }
-        private object get_3_Expander_ExpandDirection(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            return that.ExpandDirection;
-        }
-        private void set_3_Expander_ExpandDirection(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            that.ExpandDirection = (global::Microsoft.UI.Xaml.Controls.ExpandDirection)Value;
-        }
-        private object get_4_Expander_HeaderTemplate(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            return that.HeaderTemplate;
-        }
-        private void set_4_Expander_HeaderTemplate(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            that.HeaderTemplate = (global::Microsoft.UI.Xaml.DataTemplate)Value;
-        }
-        private object get_5_Expander_HeaderTemplateSelector(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            return that.HeaderTemplateSelector;
-        }
-        private void set_5_Expander_HeaderTemplateSelector(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            that.HeaderTemplateSelector = (global::Microsoft.UI.Xaml.Controls.DataTemplateSelector)Value;
-        }
-        private object get_6_Expander_IsExpanded(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            return that.IsExpanded;
-        }
-        private void set_6_Expander_IsExpanded(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            that.IsExpanded = (global::System.Boolean)Value;
-        }
-        private object get_7_Expander_TemplateSettings(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
-            return that.TemplateSettings;
-        }
-        private object get_8_NumberBox_Header(object instance)
+        private object get_2_NumberBox_Header(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.Header;
         }
-        private void set_8_NumberBox_Header(object instance, object Value)
+        private void set_2_NumberBox_Header(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.Header = (global::System.Object)Value;
         }
-        private object get_9_NumberBox_Value(object instance)
+        private object get_3_NumberBox_Value(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.Value;
         }
-        private void set_9_NumberBox_Value(object instance, object Value)
+        private void set_3_NumberBox_Value(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.Value = (global::System.Double)Value;
         }
-        private object get_10_NumberBox_SmallChange(object instance)
+        private object get_4_NumberBox_SmallChange(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.SmallChange;
         }
-        private void set_10_NumberBox_SmallChange(object instance, object Value)
+        private void set_4_NumberBox_SmallChange(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.SmallChange = (global::System.Double)Value;
         }
-        private object get_11_NumberBox_LargeChange(object instance)
+        private object get_5_NumberBox_LargeChange(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.LargeChange;
         }
-        private void set_11_NumberBox_LargeChange(object instance, object Value)
+        private void set_5_NumberBox_LargeChange(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.LargeChange = (global::System.Double)Value;
         }
-        private object get_12_NumberBox_SpinButtonPlacementMode(object instance)
+        private object get_6_NumberBox_SpinButtonPlacementMode(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.SpinButtonPlacementMode;
         }
-        private void set_12_NumberBox_SpinButtonPlacementMode(object instance, object Value)
+        private void set_6_NumberBox_SpinButtonPlacementMode(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.SpinButtonPlacementMode = (global::Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode)Value;
         }
-        private object get_13_NumberBox_AcceptsExpression(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.AcceptsExpression;
-        }
-        private void set_13_NumberBox_AcceptsExpression(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.AcceptsExpression = (global::System.Boolean)Value;
-        }
-        private object get_14_NumberBox_Description(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.Description;
-        }
-        private void set_14_NumberBox_Description(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.Description = (global::System.Object)Value;
-        }
-        private object get_15_NumberBox_HeaderTemplate(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.HeaderTemplate;
-        }
-        private void set_15_NumberBox_HeaderTemplate(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.HeaderTemplate = (global::Microsoft.UI.Xaml.DataTemplate)Value;
-        }
-        private object get_16_NumberBox_IsWrapEnabled(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.IsWrapEnabled;
-        }
-        private void set_16_NumberBox_IsWrapEnabled(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.IsWrapEnabled = (global::System.Boolean)Value;
-        }
-        private object get_17_NumberBox_Maximum(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.Maximum;
-        }
-        private void set_17_NumberBox_Maximum(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.Maximum = (global::System.Double)Value;
-        }
-        private object get_18_NumberBox_Minimum(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.Minimum;
-        }
-        private void set_18_NumberBox_Minimum(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.Minimum = (global::System.Double)Value;
-        }
-        private object get_19_NumberBox_NumberFormatter(object instance)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            return that.NumberFormatter;
-        }
-        private void set_19_NumberBox_NumberFormatter(object instance, object Value)
-        {
-            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
-            that.NumberFormatter = (global::Windows.Globalization.NumberFormatting.INumberFormatter2)Value;
-        }
-        private object get_20_NumberBox_PlaceholderText(object instance)
+        private object get_7_NumberBox_PlaceholderText(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.PlaceholderText;
         }
-        private void set_20_NumberBox_PlaceholderText(object instance, object Value)
+        private void set_7_NumberBox_PlaceholderText(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.PlaceholderText = (global::System.String)Value;
         }
-        private object get_21_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus(object instance)
+        private object get_8_NumberBox_AcceptsExpression(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.AcceptsExpression;
+        }
+        private void set_8_NumberBox_AcceptsExpression(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.AcceptsExpression = (global::System.Boolean)Value;
+        }
+        private object get_9_NumberBox_Description(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.Description;
+        }
+        private void set_9_NumberBox_Description(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.Description = (global::System.Object)Value;
+        }
+        private object get_10_NumberBox_HeaderTemplate(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.HeaderTemplate;
+        }
+        private void set_10_NumberBox_HeaderTemplate(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.HeaderTemplate = (global::Microsoft.UI.Xaml.DataTemplate)Value;
+        }
+        private object get_11_NumberBox_IsWrapEnabled(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.IsWrapEnabled;
+        }
+        private void set_11_NumberBox_IsWrapEnabled(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.IsWrapEnabled = (global::System.Boolean)Value;
+        }
+        private object get_12_NumberBox_Maximum(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.Maximum;
+        }
+        private void set_12_NumberBox_Maximum(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.Maximum = (global::System.Double)Value;
+        }
+        private object get_13_NumberBox_Minimum(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.Minimum;
+        }
+        private void set_13_NumberBox_Minimum(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.Minimum = (global::System.Double)Value;
+        }
+        private object get_14_NumberBox_NumberFormatter(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            return that.NumberFormatter;
+        }
+        private void set_14_NumberBox_NumberFormatter(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
+            that.NumberFormatter = (global::Windows.Globalization.NumberFormatting.INumberFormatter2)Value;
+        }
+        private object get_15_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.PreventKeyboardDisplayOnProgrammaticFocus;
         }
-        private void set_21_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus(object instance, object Value)
+        private void set_15_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.PreventKeyboardDisplayOnProgrammaticFocus = (global::System.Boolean)Value;
         }
-        private object get_22_NumberBox_SelectionFlyout(object instance)
+        private object get_16_NumberBox_SelectionFlyout(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.SelectionFlyout;
         }
-        private void set_22_NumberBox_SelectionFlyout(object instance, object Value)
+        private void set_16_NumberBox_SelectionFlyout(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.SelectionFlyout = (global::Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase)Value;
         }
-        private object get_23_NumberBox_SelectionHighlightColor(object instance)
+        private object get_17_NumberBox_SelectionHighlightColor(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.SelectionHighlightColor;
         }
-        private void set_23_NumberBox_SelectionHighlightColor(object instance, object Value)
+        private void set_17_NumberBox_SelectionHighlightColor(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.SelectionHighlightColor = (global::Microsoft.UI.Xaml.Media.SolidColorBrush)Value;
         }
-        private object get_24_NumberBox_Text(object instance)
+        private object get_18_NumberBox_Text(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.Text;
         }
-        private void set_24_NumberBox_Text(object instance, object Value)
+        private void set_18_NumberBox_Text(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.Text = (global::System.String)Value;
         }
-        private object get_25_NumberBox_TextReadingOrder(object instance)
+        private object get_19_NumberBox_TextReadingOrder(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.TextReadingOrder;
         }
-        private void set_25_NumberBox_TextReadingOrder(object instance, object Value)
+        private void set_19_NumberBox_TextReadingOrder(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.TextReadingOrder = (global::Microsoft.UI.Xaml.TextReadingOrder)Value;
         }
-        private object get_26_NumberBox_ValidationMode(object instance)
+        private object get_20_NumberBox_ValidationMode(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             return that.ValidationMode;
         }
-        private void set_26_NumberBox_ValidationMode(object instance, object Value)
+        private void set_20_NumberBox_ValidationMode(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.NumberBox)instance;
             that.ValidationMode = (global::Microsoft.UI.Xaml.Controls.NumberBoxValidationMode)Value;
+        }
+        private object get_21_Expander_Header(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            return that.Header;
+        }
+        private void set_21_Expander_Header(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            that.Header = (global::System.Object)Value;
+        }
+        private object get_22_Expander_ExpandDirection(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            return that.ExpandDirection;
+        }
+        private void set_22_Expander_ExpandDirection(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            that.ExpandDirection = (global::Microsoft.UI.Xaml.Controls.ExpandDirection)Value;
+        }
+        private object get_23_Expander_HeaderTemplate(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            return that.HeaderTemplate;
+        }
+        private void set_23_Expander_HeaderTemplate(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            that.HeaderTemplate = (global::Microsoft.UI.Xaml.DataTemplate)Value;
+        }
+        private object get_24_Expander_HeaderTemplateSelector(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            return that.HeaderTemplateSelector;
+        }
+        private void set_24_Expander_HeaderTemplateSelector(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            that.HeaderTemplateSelector = (global::Microsoft.UI.Xaml.Controls.DataTemplateSelector)Value;
+        }
+        private object get_25_Expander_IsExpanded(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            return that.IsExpanded;
+        }
+        private void set_25_Expander_IsExpanded(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            that.IsExpanded = (global::System.Boolean)Value;
+        }
+        private object get_26_Expander_TemplateSettings(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.Expander)instance;
+            return that.TemplateSettings;
         }
         private object get_27_MainWindow_Handle(object instance)
         {
@@ -1060,179 +1060,179 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlMember.Getter = get_1_BoolToVisibilityConverter_IsInverted;
                 xamlMember.Setter = set_1_BoolToVisibilityConverter_IsInverted;
                 break;
-            case "Microsoft.UI.Xaml.Controls.Expander.Header":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Header", "Object");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_2_Expander_Header;
-                xamlMember.Setter = set_2_Expander_Header;
-                break;
-            case "Microsoft.UI.Xaml.Controls.Expander.ExpandDirection":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "ExpandDirection", "Microsoft.UI.Xaml.Controls.ExpandDirection");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_3_Expander_ExpandDirection;
-                xamlMember.Setter = set_3_Expander_ExpandDirection;
-                break;
-            case "Microsoft.UI.Xaml.Controls.Expander.HeaderTemplate":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HeaderTemplate", "Microsoft.UI.Xaml.DataTemplate");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_4_Expander_HeaderTemplate;
-                xamlMember.Setter = set_4_Expander_HeaderTemplate;
-                break;
-            case "Microsoft.UI.Xaml.Controls.Expander.HeaderTemplateSelector":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HeaderTemplateSelector", "Microsoft.UI.Xaml.Controls.DataTemplateSelector");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_5_Expander_HeaderTemplateSelector;
-                xamlMember.Setter = set_5_Expander_HeaderTemplateSelector;
-                break;
-            case "Microsoft.UI.Xaml.Controls.Expander.IsExpanded":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsExpanded", "Boolean");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_6_Expander_IsExpanded;
-                xamlMember.Setter = set_6_Expander_IsExpanded;
-                break;
-            case "Microsoft.UI.Xaml.Controls.Expander.TemplateSettings":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "TemplateSettings", "Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings");
-                xamlMember.Getter = get_7_Expander_TemplateSettings;
-                xamlMember.SetIsReadOnly();
-                break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.Header":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Header", "Object");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_8_NumberBox_Header;
-                xamlMember.Setter = set_8_NumberBox_Header;
+                xamlMember.Getter = get_2_NumberBox_Header;
+                xamlMember.Setter = set_2_NumberBox_Header;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.Value":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Value", "Double");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_9_NumberBox_Value;
-                xamlMember.Setter = set_9_NumberBox_Value;
+                xamlMember.Getter = get_3_NumberBox_Value;
+                xamlMember.Setter = set_3_NumberBox_Value;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.SmallChange":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "SmallChange", "Double");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_10_NumberBox_SmallChange;
-                xamlMember.Setter = set_10_NumberBox_SmallChange;
+                xamlMember.Getter = get_4_NumberBox_SmallChange;
+                xamlMember.Setter = set_4_NumberBox_SmallChange;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.LargeChange":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "LargeChange", "Double");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_11_NumberBox_LargeChange;
-                xamlMember.Setter = set_11_NumberBox_LargeChange;
+                xamlMember.Getter = get_5_NumberBox_LargeChange;
+                xamlMember.Setter = set_5_NumberBox_LargeChange;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.SpinButtonPlacementMode":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "SpinButtonPlacementMode", "Microsoft.UI.Xaml.Controls.NumberBoxSpinButtonPlacementMode");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_12_NumberBox_SpinButtonPlacementMode;
-                xamlMember.Setter = set_12_NumberBox_SpinButtonPlacementMode;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.AcceptsExpression":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "AcceptsExpression", "Boolean");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_13_NumberBox_AcceptsExpression;
-                xamlMember.Setter = set_13_NumberBox_AcceptsExpression;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.Description":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Description", "Object");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_14_NumberBox_Description;
-                xamlMember.Setter = set_14_NumberBox_Description;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.HeaderTemplate":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HeaderTemplate", "Microsoft.UI.Xaml.DataTemplate");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_15_NumberBox_HeaderTemplate;
-                xamlMember.Setter = set_15_NumberBox_HeaderTemplate;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.IsWrapEnabled":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsWrapEnabled", "Boolean");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_16_NumberBox_IsWrapEnabled;
-                xamlMember.Setter = set_16_NumberBox_IsWrapEnabled;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.Maximum":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Maximum", "Double");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_17_NumberBox_Maximum;
-                xamlMember.Setter = set_17_NumberBox_Maximum;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.Minimum":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Minimum", "Double");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_18_NumberBox_Minimum;
-                xamlMember.Setter = set_18_NumberBox_Minimum;
-                break;
-            case "Microsoft.UI.Xaml.Controls.NumberBox.NumberFormatter":
-                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
-                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "NumberFormatter", "Windows.Globalization.NumberFormatting.INumberFormatter2");
-                xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_19_NumberBox_NumberFormatter;
-                xamlMember.Setter = set_19_NumberBox_NumberFormatter;
+                xamlMember.Getter = get_6_NumberBox_SpinButtonPlacementMode;
+                xamlMember.Setter = set_6_NumberBox_SpinButtonPlacementMode;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.PlaceholderText":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "PlaceholderText", "String");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_20_NumberBox_PlaceholderText;
-                xamlMember.Setter = set_20_NumberBox_PlaceholderText;
+                xamlMember.Getter = get_7_NumberBox_PlaceholderText;
+                xamlMember.Setter = set_7_NumberBox_PlaceholderText;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.AcceptsExpression":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "AcceptsExpression", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_8_NumberBox_AcceptsExpression;
+                xamlMember.Setter = set_8_NumberBox_AcceptsExpression;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.Description":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Description", "Object");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_9_NumberBox_Description;
+                xamlMember.Setter = set_9_NumberBox_Description;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.HeaderTemplate":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HeaderTemplate", "Microsoft.UI.Xaml.DataTemplate");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_10_NumberBox_HeaderTemplate;
+                xamlMember.Setter = set_10_NumberBox_HeaderTemplate;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.IsWrapEnabled":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsWrapEnabled", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_11_NumberBox_IsWrapEnabled;
+                xamlMember.Setter = set_11_NumberBox_IsWrapEnabled;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.Maximum":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Maximum", "Double");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_12_NumberBox_Maximum;
+                xamlMember.Setter = set_12_NumberBox_Maximum;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.Minimum":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Minimum", "Double");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_13_NumberBox_Minimum;
+                xamlMember.Setter = set_13_NumberBox_Minimum;
+                break;
+            case "Microsoft.UI.Xaml.Controls.NumberBox.NumberFormatter":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "NumberFormatter", "Windows.Globalization.NumberFormatting.INumberFormatter2");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_14_NumberBox_NumberFormatter;
+                xamlMember.Setter = set_14_NumberBox_NumberFormatter;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.PreventKeyboardDisplayOnProgrammaticFocus":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "PreventKeyboardDisplayOnProgrammaticFocus", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_21_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus;
-                xamlMember.Setter = set_21_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus;
+                xamlMember.Getter = get_15_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus;
+                xamlMember.Setter = set_15_NumberBox_PreventKeyboardDisplayOnProgrammaticFocus;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.SelectionFlyout":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "SelectionFlyout", "Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_22_NumberBox_SelectionFlyout;
-                xamlMember.Setter = set_22_NumberBox_SelectionFlyout;
+                xamlMember.Getter = get_16_NumberBox_SelectionFlyout;
+                xamlMember.Setter = set_16_NumberBox_SelectionFlyout;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.SelectionHighlightColor":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "SelectionHighlightColor", "Microsoft.UI.Xaml.Media.SolidColorBrush");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_23_NumberBox_SelectionHighlightColor;
-                xamlMember.Setter = set_23_NumberBox_SelectionHighlightColor;
+                xamlMember.Getter = get_17_NumberBox_SelectionHighlightColor;
+                xamlMember.Setter = set_17_NumberBox_SelectionHighlightColor;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.Text":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Text", "String");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_24_NumberBox_Text;
-                xamlMember.Setter = set_24_NumberBox_Text;
+                xamlMember.Getter = get_18_NumberBox_Text;
+                xamlMember.Setter = set_18_NumberBox_Text;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.TextReadingOrder":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "TextReadingOrder", "Microsoft.UI.Xaml.TextReadingOrder");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_25_NumberBox_TextReadingOrder;
-                xamlMember.Setter = set_25_NumberBox_TextReadingOrder;
+                xamlMember.Getter = get_19_NumberBox_TextReadingOrder;
+                xamlMember.Setter = set_19_NumberBox_TextReadingOrder;
                 break;
             case "Microsoft.UI.Xaml.Controls.NumberBox.ValidationMode":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.NumberBox");
                 xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "ValidationMode", "Microsoft.UI.Xaml.Controls.NumberBoxValidationMode");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_26_NumberBox_ValidationMode;
-                xamlMember.Setter = set_26_NumberBox_ValidationMode;
+                xamlMember.Getter = get_20_NumberBox_ValidationMode;
+                xamlMember.Setter = set_20_NumberBox_ValidationMode;
+                break;
+            case "Microsoft.UI.Xaml.Controls.Expander.Header":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "Header", "Object");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_21_Expander_Header;
+                xamlMember.Setter = set_21_Expander_Header;
+                break;
+            case "Microsoft.UI.Xaml.Controls.Expander.ExpandDirection":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "ExpandDirection", "Microsoft.UI.Xaml.Controls.ExpandDirection");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_22_Expander_ExpandDirection;
+                xamlMember.Setter = set_22_Expander_ExpandDirection;
+                break;
+            case "Microsoft.UI.Xaml.Controls.Expander.HeaderTemplate":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HeaderTemplate", "Microsoft.UI.Xaml.DataTemplate");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_23_Expander_HeaderTemplate;
+                xamlMember.Setter = set_23_Expander_HeaderTemplate;
+                break;
+            case "Microsoft.UI.Xaml.Controls.Expander.HeaderTemplateSelector":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "HeaderTemplateSelector", "Microsoft.UI.Xaml.Controls.DataTemplateSelector");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_24_Expander_HeaderTemplateSelector;
+                xamlMember.Setter = set_24_Expander_HeaderTemplateSelector;
+                break;
+            case "Microsoft.UI.Xaml.Controls.Expander.IsExpanded":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "IsExpanded", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_25_Expander_IsExpanded;
+                xamlMember.Setter = set_25_Expander_IsExpanded;
+                break;
+            case "Microsoft.UI.Xaml.Controls.Expander.TemplateSettings":
+                userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Expander");
+                xamlMember = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlMember(this, "TemplateSettings", "Microsoft.UI.Xaml.Controls.ExpanderTemplateSettings");
+                xamlMember.Getter = get_26_Expander_TemplateSettings;
+                xamlMember.SetIsReadOnly();
                 break;
             case "KonnectChatIRC.MainWindow.Handle":
                 userType = (global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType)GetXamlTypeByName("KonnectChatIRC.MainWindow");

@@ -11,9 +11,73 @@ namespace KonnectChatIRC.ViewModels
     {
         private string _name;
         private string _topic = "No Topic";
+        private string _modes = string.Empty;
         private bool _isFavorite;
+        private IrcUser? _selectedUser;
         private string _userSearchText = string.Empty;
         private readonly DispatcherQueue _dispatcherQueue;
+
+        public string Modes
+        {
+            get => _modes;
+            set => SetProperty(ref _modes, value);
+        }
+
+        public ObservableCollection<string> BanList { get; } = new ObservableCollection<string>();
+
+        // Mode flags for UI binding
+        public bool IsInviteOnly => Modes.Contains('i');
+        public bool IsModerated => Modes.Contains('m');
+        public bool IsNoExternal => Modes.Contains('n');
+        public bool IsTopicProtected => Modes.Contains('t');
+        public bool IsSecret => Modes.Contains('s');
+        public bool IsPrivateMode => Modes.Contains('p');
+
+        public void NotifyModesChanged()
+        {
+            OnPropertyChanged(nameof(IsInviteOnly));
+            OnPropertyChanged(nameof(IsModerated));
+            OnPropertyChanged(nameof(IsNoExternal));
+            OnPropertyChanged(nameof(IsTopicProtected));
+            OnPropertyChanged(nameof(IsSecret));
+            OnPropertyChanged(nameof(IsPrivateMode));
+        }
+
+        public void UpdateModes(string modeStr)
+        {
+            if (string.IsNullOrEmpty(modeStr)) return;
+
+            _dispatcherQueue.TryEnqueue(() => 
+            {
+                bool add = true;
+                foreach (char c in modeStr)
+                {
+                    if (c == '+') add = true;
+                    else if (c == '-') add = false;
+                    else
+                    {
+                        // Some modes have parameters (k, l, etc.). 
+                        // For simple flags, we just add/remove them.
+                        // For now we only track the flags in boolean properties.
+                        if (add)
+                        {
+                            if (!Modes.Contains(c)) Modes += c;
+                        }
+                        else
+                        {
+                            Modes = Modes.Replace(c.ToString(), "");
+                        }
+                    }
+                }
+                NotifyModesChanged();
+            });
+        }
+
+        public IrcUser? SelectedUser
+        {
+            get => _selectedUser;
+            set => SetProperty(ref _selectedUser, value);
+        }
 
         public bool IsFavorite
         {

@@ -385,9 +385,18 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="ChatInput" PlaceholderText="Message #channel..." KeyDown="ChatInput_KeyDown" CornerRadius="4"/>
-                    <Button Grid.Column="1" Content="Send" Margin="8,0,0,0" 
+                    
+                    <Button Grid.Column="1" Margin="8,0,0,0"
+                            Command="{Binding SelectedServer.SlapCommand}"
+                            ToolTipService.ToolTip="Slap Selected User"
+                            Background="Transparent" BorderThickness="0" Padding="8">
+                        <FontIcon Glyph="&#xE15B;" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
+                    </Button>
+
+                    <Button Grid.Column="2" Content="Send" Margin="8,0,0,0" 
                             Command="{Binding SelectedServer.SendCommand}" 
                             CommandParameter="{Binding Text, ElementName=ChatInput}"/>
                 </Grid>
@@ -463,9 +472,17 @@
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="*"/>
                                                                             <ColumnDefinition Width="Auto"/>
+                                                                            <ColumnDefinition Width="Auto"/>
                                                                         </Grid.ColumnDefinitions>
                                                                         <TextBlock Text="{Binding Nickname}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center"/>
-                                                                        <Button Grid.Column="1" ToolTipService.ToolTip="Send Private Message"
+                                                                        
+                                                                        <Button Grid.Column="1" ToolTipService.ToolTip="Slap User"
+                                                                                Command="{Binding DataContext.SelectedServer.SlapCommand, ElementName=MainGrid}" 
+                                                                                CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Margin="0,0,4,0">
+                                                                            <Image Source="ms-appx:///Assets/slap.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Button>
+
+                                                                        <Button Grid.Column="2" ToolTipService.ToolTip="Send Private Message"
                                                                                 Command="{Binding DataContext.SelectedServer.StartPrivateChatCommand, ElementName=MainGrid}" 
                                                                                 CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="4">
                                                                             <FontIcon Glyph="&#xE8BD;" FontSize="18" Foreground="{StaticResource AccentBrush}"/>
@@ -590,55 +607,55 @@
                 <!-- Subtle Backdrop -->
                 <Border Background="Black" Opacity="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                 
-                <!-- Login Card (The 'square background') -->
                 <Border Background="{StaticResource SidebarBackgroundBrush}" 
                         Opacity="0.95"
                         CornerRadius="16" 
-                        Width="420"
-                        MaxHeight="600"
+                        Width="520"
                         VerticalAlignment="Center" 
                         HorizontalAlignment="Center"
-                        Padding="40"
+                        Padding="35,30"
                         BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1"
                         Shadow="{StaticResource SharedShadow}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Spacing="24">
-                            <StackPanel Spacing="8">
-                                <Image Source="ms-appx:///konnectchat2.png" MaxHeight="140" HorizontalAlignment="Center"/>
-                                <TextBlock Text="KonnectChat IRC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource AccentBrush}"/>
-                                <TextBlock Text="Connect to a server to get started" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            
-                            <Grid ColumnSpacing="12">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox Header="Server Address" Text="{Binding ConnectAddress, Mode=TwoWay}" PlaceholderText="irc.libera.chat"/>
-                                <NumberBox Grid.Column="1" Header="Port" Value="{Binding ConnectPort, Mode=TwoWay}" Width="100" SmallChange="1" LargeChange="10" SpinButtonPlacementMode="Compact"/>
-                            </Grid>
-                            
-                            <TextBox Header="Nickname" Text="{Binding ConnectNick, Mode=TwoWay}" PlaceholderText="KonnectUser"/>
-                            
-                            <Expander Header="Advanced Options" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                                <StackPanel Spacing="16">
-                                    <TextBox Header="Auto-Join Channel" Text="{Binding AutoJoinChannel, Mode=TwoWay}" PlaceholderText="#konnect-chat"/>
-                                    <StackPanel Spacing="8">
-                                        <CheckBox Content="Use Server Password" IsChecked="{Binding UseServerPassword, Mode=TwoWay}"/>
-                                        <PasswordBox Header="Password" Password="{Binding ServerPassword, Mode=TwoWay}" 
-                                                     Visibility="{Binding UseServerPassword, Converter={StaticResource BoolToVis}}"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Expander>
-                            
-                            <Button Content="Connect Now" HorizontalAlignment="Stretch" Padding="12"
-                                    Background="{StaticResource AccentBrush}" Foreground="White" FontWeight="Bold" FontSize="16"
-                                    Command="{Binding ConnectCommand}" CornerRadius="8"/>
-                            
-                            <TextBlock Text="Tip: You can save multiple servers in the sidebar." FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                    <StackPanel Spacing="20">
+                        <StackPanel Spacing="6">
+                            <Image Source="ms-appx:///konnectchat2.png" MaxHeight="120" HorizontalAlignment="Center"/>
+                            <TextBlock Text="KonnectChat IRC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource AccentBrush}"/>
+                            <TextBlock Text="Connect to a server to get started" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
                         </StackPanel>
-                    </ScrollViewer>
+                        
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Header="Server Address" Text="{Binding ConnectAddress, Mode=TwoWay}" PlaceholderText="irc.libera.chat" HorizontalAlignment="Stretch"/>
+                            <NumberBox Grid.Column="1" Header="Port" Value="{Binding ConnectPort, Mode=TwoWay}" Width="100" SmallChange="1" LargeChange="10" SpinButtonPlacementMode="Compact"/>
+                        </Grid>
+                        
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Header="Nickname" Text="{Binding ConnectNick, Mode=TwoWay}" PlaceholderText="KonnectUser" HorizontalAlignment="Stretch"/>
+                            <TextBox Grid.Column="1" Header="Auto-Join" Text="{Binding AutoJoinChannel, Mode=TwoWay}" PlaceholderText="#konnect-chat" HorizontalAlignment="Stretch"/>
+                        </Grid>
+                        
+                        <Expander Header="Advanced Options" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <StackPanel Spacing="12">
+                                <CheckBox Content="Use Server Password" IsChecked="{Binding UseServerPassword, Mode=TwoWay}"/>
+                                <PasswordBox Header="Password" Password="{Binding ServerPassword, Mode=TwoWay}" 
+                                             Visibility="{Binding UseServerPassword, Converter={StaticResource BoolToVis}}"/>
+                            </StackPanel>
+                        </Expander>
+                        
+                        <Button Content="Connect Now" HorizontalAlignment="Stretch" Padding="12"
+                                Background="{StaticResource AccentBrush}" Foreground="White" FontWeight="Bold" FontSize="16"
+                                Command="{Binding ConnectCommand}" CornerRadius="8"/>
+                        
+                        <TextBlock Text="Tip: You can save multiple servers in the sidebar." FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Grid>
@@ -750,6 +767,7 @@
 
         <!-- Nickname Change Dialog -->
         <ContentDialog x:Name="NickChangeDialog"
+                       Grid.Column="1"
                        Title="Change Nickname"
                        PrimaryButtonText="Change"
                        CloseButtonText="Cancel"
@@ -762,6 +780,7 @@
 
         <!-- WHOIS Detail Dialog -->
         <ContentDialog x:Name="WhoisDetailDialog"
+                       Grid.Column="1"
                        Title="User Information"
                        PrimaryButtonText="Close"
                        RequestedTheme="Dark"
@@ -852,6 +871,7 @@
 
         <!-- Topic View/Edit Dialog -->
         <ContentDialog x:Name="TopicEditDialog"
+                       Grid.Column="1"
                        Title="Channel Topic"
                        PrimaryButtonText="Update Topic"
                        CloseButtonText="Close"
@@ -869,6 +889,7 @@
 
         <!-- Ident Dialog -->
         <ContentDialog x:Name="IdentDialog"
+                       Grid.Column="1"
                        Title="Identify to NickServ"
                        PrimaryButtonText="Identify"
                        CloseButtonText="Cancel"
@@ -880,6 +901,7 @@
 
         <!-- Oper Dialog -->
         <ContentDialog x:Name="OperDialog"
+                       Grid.Column="1"
                        Title="Operator Login"
                        PrimaryButtonText="Login"
                        CloseButtonText="Cancel"
@@ -887,6 +909,113 @@
             <StackPanel Spacing="12" Width="300">
                 <TextBox x:Name="OperNickBox" Header="Nickname" PlaceholderText="Enter oper nickname"/>
                 <PasswordBox x:Name="OperPasswordBox" Header="Password" PlaceholderText="Enter oper password"/>
+            </StackPanel>
+        </ContentDialog>
+
+        <!-- Moderation Dialog -->
+        <ContentDialog x:Name="ModerationDialog"
+                       Grid.Column="1"
+                       Title="Channel Moderation"
+                       CloseButtonText="Close"
+                       MinWidth="600"
+                       MaxWidth="700">
+            <StackPanel Width="520" Spacing="14" Padding="0,10,20,10" HorizontalAlignment="Stretch">
+                
+                <!-- Topic Section -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Channel Topic:" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="12"/>
+                    <Border Background="{StaticResource SidebarBackgroundBrush}" CornerRadius="4" Padding="12,8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}">
+                        <TextBlock Text="{Binding SelectedServer.SelectedChannel.Topic}" TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Bans Section -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Banned Masks:" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="12"/>
+                    <ListView ItemsSource="{Binding SelectedServer.SelectedChannel.BanList}" SelectionMode="Single" x:Name="BanListView" Height="140"
+                              Background="{StaticResource SidebarBackgroundBrush}" CornerRadius="4" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}"
+                              HorizontalAlignment="Stretch">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="8,1" HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding}" VerticalAlignment="Center" FontSize="13" TextTrimming="CharacterEllipsis"/>
+                                    <Button Grid.Column="1" Click="RemoveBan_Click" Background="Transparent" BorderThickness="0" Padding="4" HorizontalAlignment="Right">
+                                        <FontIcon Glyph="&#xE107;" FontSize="14" Foreground="DarkRed"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="MinHeight" Value="32"/>
+                                <Setter Property="Padding" Value="0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <Grid ColumnSpacing="8" Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="NewBanTextBox" PlaceholderText="nick!user@host" KeyDown="NewBanTextBox_KeyDown"/>
+                        <Button Grid.Column="1" Content="Add Ban" Click="AddBan_Click" Style="{StaticResource AccentButtonStyle}"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Modes Section -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Channel Modes:" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="12"/>
+                    <Grid ColumnSpacing="20" RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox Content="Invite Only (+i)" IsChecked="{Binding SelectedServer.SelectedChannel.IsInviteOnly, Mode=OneWay}" 
+                                  Tapped="Mode_Tapped" Tag="i" Grid.Row="0" Grid.Column="0" Margin="0"/>
+                        <CheckBox Content="Moderated (+m)" IsChecked="{Binding SelectedServer.SelectedChannel.IsModerated, Mode=OneWay}" 
+                                  Tapped="Mode_Tapped" Tag="m" Grid.Row="1" Grid.Column="0" Margin="0"/>
+                        <CheckBox Content="No External (+n)" IsChecked="{Binding SelectedServer.SelectedChannel.IsNoExternal, Mode=OneWay}" 
+                                  Tapped="Mode_Tapped" Tag="n" Grid.Row="2" Grid.Column="0" Margin="0"/>
+
+                        <CheckBox Content="Topic Protection (+t)" IsChecked="{Binding SelectedServer.SelectedChannel.IsTopicProtected, Mode=OneWay}" 
+                                  Tapped="Mode_Tapped" Tag="t" Grid.Row="0" Grid.Column="1" Margin="0"/>
+                        <CheckBox Content="Secret (+s)" IsChecked="{Binding SelectedServer.SelectedChannel.IsSecret, Mode=OneWay}" 
+                                  Tapped="Mode_Tapped" Tag="s" Grid.Row="1" Grid.Column="1" Margin="0"/>
+                        <CheckBox Content="Private (+p)" IsChecked="{Binding SelectedServer.SelectedChannel.IsPrivateMode, Mode=OneWay}" 
+                                  Tapped="Mode_Tapped" Tag="p" Grid.Row="2" Grid.Column="1" Margin="0"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Settings (Key/Limit) Section -->
+                <Grid ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Password (+k):" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBox x:Name="ChannelKeyBox" PlaceholderText="Optional key" HorizontalAlignment="Stretch" KeyDown="ChannelKeyBox_KeyDown"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Spacing="4">
+                        <TextBlock Text="User Limit (+l):" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                        <NumberBox x:Name="ChannelLimitBox" PlaceholderText="No limit" SmallChange="1" LargeChange="10" 
+                                   HorizontalAlignment="Stretch" ValueChanged="ChannelLimitBox_ValueChanged"/>
+                    </StackPanel>
+                </Grid>
+
             </StackPanel>
         </ContentDialog>
 

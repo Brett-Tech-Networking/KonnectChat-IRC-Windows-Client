@@ -15,7 +15,7 @@ namespace KonnectChatIRC.ViewModels
     {
         private IrcClientService? _ircService;
         private string _serverName;
-        private ChannelViewModel _selectedChannel;
+        private ChannelViewModel? _selectedChannel;
         private readonly DispatcherQueue _dispatcherQueue;
         private string _address;
         private int _port;
@@ -133,11 +133,17 @@ namespace KonnectChatIRC.ViewModels
         public ICommand ChangeNickCommand { get; }
         public ICommand PartChannelCommand { get; }
         public ICommand ChangeTopicCommand { get; }
+        public ICommand ToggleChannelModeCommand { get; }
+        public ICommand AddBanCommand { get; }
+        public ICommand RemoveBanCommand { get; }
+        public ICommand OpenModerationCommand { get; }
+        public ICommand SlapCommand { get; }
         public ICommand ToggleFavoriteCommand { get; }
         public ICommand StartPrivateChatCommand { get; }
         public ICommand ClosePrivateChatCommand { get; }
         public ICommand ToggleAwayCommand { get; }
 
+        public event EventHandler<ChannelViewModel>? RequestModerationDialog;
         public event EventHandler<IrcUser>? RequestKillDialog;
         public event EventHandler<IrcUser>? RequestGlineDialog;
         public event EventHandler? RequestIdent;
@@ -163,7 +169,7 @@ namespace KonnectChatIRC.ViewModels
             SendCommand = new RelayCommand(ExecuteSendCommand);
             RemoveServerCommand = new RelayCommand(_ => ExecuteRemoveServer());
             RefreshChannelListCommand = new RelayCommand(_ => ExecuteRefreshChannelList());
-            JoinChannelCommand = new RelayCommand(param => ExecuteJoinChannel(param as string));
+            JoinChannelCommand = new RelayCommand(param => { if(param is string s) ExecuteJoinChannel(s); });
             WhoisUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteWhoisUser(u); });
             KickUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteKickUser(u); });
             BanUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteBanUser(u); });
@@ -174,6 +180,11 @@ namespace KonnectChatIRC.ViewModels
             IdentCommand = new RelayCommand(_ => RequestIdent?.Invoke(this, EventArgs.Empty));
             OperCommand = new RelayCommand(_ => RequestOper?.Invoke(this, EventArgs.Empty));
             
+            ToggleChannelModeCommand = new RelayCommand(param => { if(param is Tuple<ChannelViewModel, string, bool> t) ExecuteToggleMode(t.Item1, t.Item2, t.Item3); });
+            AddBanCommand = new RelayCommand(param => { if(param is Tuple<ChannelViewModel, string> t) ExecuteAddBan(t.Item1, t.Item2); });
+            RemoveBanCommand = new RelayCommand(param => { if(param is Tuple<ChannelViewModel, string> t) ExecuteRemoveBan(t.Item1, t.Item2); });
+            OpenModerationCommand = new RelayCommand(param => { if(param is ChannelViewModel c) ExecuteOpenModeration(c); });
+            SlapCommand = new RelayCommand(_ => ExecuteSlap());
             ToggleAwayCommand = new RelayCommand(_ => ExecuteToggleAway());
 
             _ircService.MessageReceived += OnMessageReceived;
@@ -358,6 +369,79 @@ namespace KonnectChatIRC.ViewModels
             // The password is stored in _password and used in WelcomeReceived
             await _ircService.ConnectAsync(_address, _port, _currentNick, _realname, null);
             }
+        }
+
+        private void ExecuteSlap()
+        {
+            if (SelectedChannel == null || SelectedChannel.Name == "Server") return;
+
+            var slaps = new[]
+            {
+                "slaps {0} with a large trout",
+                "slaps {0} with a waffle iron",
+                "slaps {0} around a bit with a large trout",
+                "slaps {0} with a wet noodle",
+                "slaps {0} with a rubber chicken",
+                "slaps {0} with a velvet glove",
+                "slaps {0} with a heavy book",
+                "slaps {0} with a slice of pizza",
+                "slaps {0} with a giant marshmallow",
+                "slaps {0} with a feather",
+                "launches a grand piano at {0}",
+                "thwacks {0} with a 1,000,000 volt taser",
+                "slaps {0} into next Tuesday",
+                "drops an anvil on {0}'s head",
+                "blasts {0} with a high-pressure fire hose",
+                "slaps {0} with a moldy piece of cheese",
+                "summons a meteor to crash into {0}",
+                "slaps {0} with a rusty bucket",
+                "yeets {0} into the sun",
+                "slaps {0} with a frozen mackerel",
+                "whacks {0} with a customized ban hammer",
+                "slaps {0} with a bag of wet socks",
+                "pokes {0} with a sharp stick",
+                "slaps {0} with a soggy sandwich",
+                "unleashes a hoard of angry squirrels on {0}",
+                "slaps {0} with a literal ton of bricks",
+                "smacks {0} with a giant rotating fan",
+                "slaps {0} with the force of a thousand suns",
+                "delivers a spinning backfist to {0}",
+                "slaps {0} with a 404 error"
+            };
+
+            var random = new Random();
+            var slapTemplate = slaps[random.Next(slaps.Length)];
+            
+            // Try to find a user to slap. If one is selected in User List, use them.
+            // Otherwise, if it's a PM, use the PM partner.
+            // Otherwise, just use 'everyone' or a placeholder if we can't find anyone?
+            // The prompt says "SelectedUser".
+            
+            string targetUser = "everyone";
+            
+            if (SelectedChannel.SelectedUser != null)
+            {
+                targetUser = SelectedChannel.SelectedUser.Nickname;
+            }
+            else if (SelectedChannel.IsPrivate)
+            {
+                targetUser = SelectedChannel.Name;
+            }
+            
+            // TODO: If we want to slap a user from the user list, we need to know which one is selected.
+            // For now, let's send it.
+            
+            string actionText = string.Format(slapTemplate, targetUser);
+            _ircService?.SendRawAsync($"PRIVMSG {SelectedChannel.Name} :\x01ACTION {actionText}\x01");
+            
+            SelectedChannel.AddMessage(new ChatMessage
+            {
+                Sender = CurrentNick,
+                Content = actionText,
+                Timestamp = DateTime.Now,
+                IsIncoming = false,
+                IsAction = true
+            });
         }
 
         private void ExecuteSendCommand(object? parameter)
@@ -782,11 +866,30 @@ namespace KonnectChatIRC.ViewModels
                                 }
                                 else
                                 {
-                                    // Channel mode
+                                    // Channel mode flag change
+                                    channel.UpdateModes(modeStr);
+
+                                    // Check if it's a ban change
+                                    if (modeStr.Contains("b") && e.Parameters.Length >= 3)
+                                    {
+                                        var mask = e.Parameters[2];
+                                        _dispatcherQueue.TryEnqueue(() => 
+                                        {
+                                            if (modeStr.Contains("+"))
+                                            {
+                                                if (!channel.BanList.Contains(mask)) channel.BanList.Add(mask);
+                                            }
+                                            else if (modeStr.Contains("-"))
+                                            {
+                                                channel.BanList.Remove(mask);
+                                            }
+                                        });
+                                    }
+
                                     channel.AddMessage(new ChatMessage 
                                     { 
                                         Sender = "", 
-                                        Content = $"* {GetNickFromPrefix(e.Prefix)} sets mode {modeStr} {e.Parameters[2]}", 
+                                        Content = $"* {GetNickFromPrefix(e.Prefix)} sets mode {modeStr} {(e.Parameters.Length >= 3 ? e.Parameters[2] : "")}", 
                                         Timestamp = DateTime.Now,
                                         IsIncoming = true,
                                         IsSystem = true
@@ -898,6 +1001,40 @@ namespace KonnectChatIRC.ViewModels
                     if (channel != null)
                     {
                         _dispatcherQueue.TryEnqueue(() => channel.Topic = topic);
+                    }
+                }
+            }
+            else if (e.Command == "324") // RPL_CHANNELMODEIS
+            {
+                if (e.Parameters.Length >= 3)
+                {
+                    var channelName = e.Parameters[1];
+                    var modeStr = e.Parameters[2];
+                    var channel = GetOrCreateChannel(channelName);
+                    if (channel != null)
+                    {
+                        _dispatcherQueue.TryEnqueue(() => 
+                        {
+                            channel.Modes = modeStr;
+                            channel.NotifyModesChanged();
+                        });
+                    }
+                }
+            }
+            else if (e.Command == "367") // RPL_BANLIST
+            {
+                if (e.Parameters.Length >= 3)
+                {
+                    var channelName = e.Parameters[1];
+                    var mask = e.Parameters[2];
+                    var channel = GetOrCreateChannel(channelName);
+                    if (channel != null)
+                    {
+                        _dispatcherQueue.TryEnqueue(() => 
+                        {
+                            if (!channel.BanList.Contains(mask))
+                                channel.BanList.Add(mask);
+                        });
                     }
                 }
             }
@@ -1285,7 +1422,7 @@ namespace KonnectChatIRC.ViewModels
                     _dispatcherQueue.TryEnqueue(() =>
                     {
                         // Add default users
-                        pmChannel.AddUser(new IrcUser(targetNick) { Hostname = targetHostname });
+                        pmChannel.AddUser(new IrcUser(targetNick) { Hostname = targetHostname ?? "" });
                         pmChannel.AddUser(new IrcUser(CurrentNick));
                         PrivateMessages.Add(pmChannel);
 
@@ -1321,6 +1458,37 @@ namespace KonnectChatIRC.ViewModels
                     });
                 }
             }
+        }
+
+        private void ExecuteOpenModeration(ChannelViewModel channel)
+        {
+            _dispatcherQueue.TryEnqueue(() => 
+            {
+                channel.BanList.Clear();
+                RequestModerationDialog?.Invoke(this, channel);
+            });
+
+            // Fetch modes and ban list
+            _ircService?.SendRawAsync($"MODE {channel.Name}");    // Channel modes
+            _ircService?.SendRawAsync($"MODE {channel.Name} +b"); // Ban list
+        }
+
+        private void ExecuteToggleMode(ChannelViewModel channel, string mode, bool enable)
+        {
+            string op = enable ? "+" : "-";
+            _ircService?.SendRawAsync($"MODE {channel.Name} {op}{mode}");
+        }
+
+        private void ExecuteAddBan(ChannelViewModel channel, string mask)
+        {
+            if (string.IsNullOrWhiteSpace(mask)) return;
+            _ircService?.SendRawAsync($"MODE {channel.Name} +b {mask}");
+        }
+
+        private void ExecuteRemoveBan(ChannelViewModel channel, string mask)
+        {
+            if (string.IsNullOrWhiteSpace(mask)) return;
+            _ircService?.SendRawAsync($"MODE {channel.Name} -b {mask}");
         }
 
         public void RefreshTimestamps()

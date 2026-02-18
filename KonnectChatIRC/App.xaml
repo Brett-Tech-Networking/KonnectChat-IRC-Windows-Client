@@ -58,6 +58,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     
                     <Button Grid.Column="0"
@@ -84,6 +85,15 @@
                     </Border>
 
                     <Button Grid.Column="3" 
+                            Command="{Binding DataContext.SelectedServer.OpenModerationCommand, ElementName=MainGrid}"
+                            CommandParameter="{Binding}"
+                            Background="Transparent" BorderThickness="0" Padding="4"
+                            VerticalAlignment="Center" HorizontalAlignment="Right"
+                            ToolTipService.ToolTip="Channel Moderation">
+                        <FontIcon Glyph="&#xE12B;" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </Button>
+
+                    <Button Grid.Column="4" 
                             Command="{Binding DataContext.SelectedServer.PartChannelCommand, ElementName=MainGrid}"
                             CommandParameter="{Binding Name}"
                             Background="Transparent" BorderThickness="0" Padding="4"
