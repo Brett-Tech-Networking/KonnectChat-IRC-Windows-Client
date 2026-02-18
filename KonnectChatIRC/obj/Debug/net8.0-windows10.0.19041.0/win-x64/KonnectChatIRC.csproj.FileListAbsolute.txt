@@ -370,3 +370,4 @@ D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\qualifiers.txt
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\qualifiers.txt.intermediate
 D:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\obj\Debug\net8.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
+d:\Documents\GitHub\KonnectChat-IRC-Windows-Client\KonnectChatIRC\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\slap.png

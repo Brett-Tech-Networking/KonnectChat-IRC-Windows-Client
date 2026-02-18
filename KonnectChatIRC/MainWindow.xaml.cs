@@ -640,5 +640,26 @@ namespace KonnectChatIRC
                 OtherChannelsList.SelectedItem = null;
             }
         }
+
+        private void SenderName_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (sender is FrameworkElement fe && fe.DataContext is ChatMessage message)
+            {
+                if (Handle.SelectedServer?.SelectedChannel != null)
+                {
+                    // 1. Ensure User List is visible
+                    if (Handle.IsUserListCollapsed)
+                    {
+                        Handle.IsUserListCollapsed = false;
+                    }
+
+                    // 2. Set the search text to the sender's name to filter the list
+                    Handle.SelectedServer.SelectedChannel.UserSearchText = message.Sender;
+                    
+                    // Optional: Try to find and select the user in the list/groups? 
+                    // Filtering (Setting UserSearchText) usually suffices for the user to see the person.
+                }
+            }
+        }
     }
 }

@@ -318,6 +318,7 @@
                                     
                                     <!-- Normal Sender Name -->
                                     <TextBlock FontWeight="SemiBold"
+                                               Tapped="SenderName_Tapped"
                                                Visibility="{Binding DataContext.IsRainbowNicksEnabled, ElementName=MainGrid, Converter={StaticResource InverseBoolToVis}}">
                                         <TextBlock.Foreground>
                                             <SolidColorBrush Color="{Binding SenderPrefix, Converter={StaticResource StatusToColorConverter}}"/>
@@ -327,6 +328,7 @@
 
                                     <!-- Rainbow Sender Name (Visible only when Rainbow Enabled) -->
                                     <TextBlock FontWeight="Bold"
+                                               Tapped="SenderName_Tapped"
                                                Visibility="{Binding DataContext.IsRainbowNicksEnabled, ElementName=MainGrid, Converter={StaticResource BoolToVis}}">
                                         <Run Text="{Binding SenderPrefix}"/><Run Text="{Binding Sender}"/><Run Text=":"/>
                                         <TextBlock.Foreground>
