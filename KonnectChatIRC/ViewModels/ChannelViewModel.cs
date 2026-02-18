@@ -45,6 +45,13 @@ namespace KonnectChatIRC.ViewModels
             set => SetProperty(ref _topic, value);
         }
 
+        private int _unreadCount;
+        public int UnreadCount
+        {
+            get => _unreadCount;
+            set => SetProperty(ref _unreadCount, value);
+        }
+
         public ObservableCollection<ChatMessage> Messages { get; } = new ObservableCollection<ChatMessage>();
         public ObservableCollection<IrcUser> Users { get; } = new ObservableCollection<IrcUser>();
         public ObservableCollection<UserGroup> GroupedUsers { get; } = new ObservableCollection<UserGroup>();

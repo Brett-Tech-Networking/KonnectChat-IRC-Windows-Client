@@ -81,12 +81,22 @@ namespace KonnectChatIRC.ViewModels
 
         public ObservableCollection<ChannelViewModel> Channels { get; } = new ObservableCollection<ChannelViewModel>();
         public ObservableCollection<ChannelViewModel> FavoriteChannels { get; } = new ObservableCollection<ChannelViewModel>();
+        public ObservableCollection<ChannelViewModel> PrivateMessages { get; } = new ObservableCollection<ChannelViewModel>();
         public ObservableCollection<ChannelViewModel> OtherChannels { get; } = new ObservableCollection<ChannelViewModel>();
 
-        public ChannelViewModel SelectedChannel
+        public ChannelViewModel? SelectedChannel
         {
             get => _selectedChannel;
-            set => SetProperty(ref _selectedChannel, value);
+            set
+            {
+                if (SetProperty(ref _selectedChannel, value))
+                {
+                    if (_selectedChannel != null)
+                    {
+                        _selectedChannel.UnreadCount = 0;
+                    }
+                }
+            }
         }
 
         private bool _isIrcOp;
@@ -114,6 +124,8 @@ namespace KonnectChatIRC.ViewModels
         public ICommand PartChannelCommand { get; }
         public ICommand ChangeTopicCommand { get; }
         public ICommand ToggleFavoriteCommand { get; }
+        public ICommand StartPrivateChatCommand { get; }
+        public ICommand ClosePrivateChatCommand { get; }
 
         public event EventHandler<IrcUser>? RequestKillDialog;
         public event EventHandler<IrcUser>? RequestGlineDialog;
@@ -141,14 +153,13 @@ namespace KonnectChatIRC.ViewModels
             RemoveServerCommand = new RelayCommand(_ => ExecuteRemoveServer());
             RefreshChannelListCommand = new RelayCommand(_ => ExecuteRefreshChannelList());
             JoinChannelCommand = new RelayCommand(param => ExecuteJoinChannel(param as string));
-            WhoisUserCommand = new RelayCommand(param => ExecuteWhoisUser(param as IrcUser));
-            KickUserCommand = new RelayCommand(param => ExecuteKickUser(param as IrcUser));
-            BanUserCommand = new RelayCommand(param => ExecuteBanUser(param as IrcUser));
-            KillUserCommand = new RelayCommand(param => ExecuteKillUser(param as IrcUser));
-            GlineUserCommand = new RelayCommand(param => ExecuteGlineUser(param as IrcUser));
-            OpUserCommand = new RelayCommand(param => ExecuteOpUser(param as IrcUser));
-            OpUserCommand = new RelayCommand(param => ExecuteOpUser(param as IrcUser));
-            DeopUserCommand = new RelayCommand(param => ExecuteDeopUser(param as IrcUser));
+            WhoisUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteWhoisUser(u); });
+            KickUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteKickUser(u); });
+            BanUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteBanUser(u); });
+            KillUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteKillUser(u); });
+            GlineUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteGlineUser(u); });
+            OpUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteOpUser(u); });
+            DeopUserCommand = new RelayCommand(param => { if(param is IrcUser u) ExecuteDeopUser(u); });
             IdentCommand = new RelayCommand(_ => RequestIdent?.Invoke(this, EventArgs.Empty));
             OperCommand = new RelayCommand(_ => RequestOper?.Invoke(this, EventArgs.Empty));
             
@@ -254,18 +265,19 @@ namespace KonnectChatIRC.ViewModels
                         isSetToFavorite = info.IsFavorite;
                         
                         // If this channel is already joined, sync its ViewModel
-                        if (_channelLookup.TryGetValue(channelName, out var joinedChan))
+                        if (_channelLookup.TryGetValue(channelName, out var chanVm))
                         {
-                            joinedChan.IsFavorite = isSetToFavorite;
+                            chanVm.IsFavorite = isSetToFavorite;
+                            // Move it
                             if (isSetToFavorite)
                             {
-                                if (OtherChannels.Contains(joinedChan)) OtherChannels.Remove(joinedChan);
-                                if (!FavoriteChannels.Contains(joinedChan)) FavoriteChannels.Add(joinedChan);
+                                if (OtherChannels.Contains(chanVm)) OtherChannels.Remove(chanVm);
+                                if (!FavoriteChannels.Contains(chanVm)) FavoriteChannels.Add(chanVm);
                             }
                             else
                             {
-                                if (FavoriteChannels.Contains(joinedChan)) FavoriteChannels.Remove(joinedChan);
-                                if (!OtherChannels.Contains(joinedChan)) OtherChannels.Add(joinedChan);
+                                if (FavoriteChannels.Contains(chanVm)) FavoriteChannels.Remove(chanVm);
+                                if (!OtherChannels.Contains(chanVm)) OtherChannels.Add(chanVm);
                             }
                         }
                     }
@@ -283,6 +295,37 @@ namespace KonnectChatIRC.ViewModels
                         RequestSave?.Invoke(this, EventArgs.Empty);
                     }
                 });
+            });
+
+            StartPrivateChatCommand = new RelayCommand(param =>
+            {
+                if (param is string nick && !string.IsNullOrWhiteSpace(nick))
+                {
+                    ExecuteStartPrivateChat(nick);
+                }
+                else if (param is IrcUser user)
+                {
+                    ExecuteStartPrivateChat(user.Nickname);
+                }
+            });
+
+            ClosePrivateChatCommand = new RelayCommand(param =>
+            {
+                if (param is ChannelViewModel pm)
+                {
+                    _dispatcherQueue.TryEnqueue(() =>
+                    {
+                        if (PrivateMessages.Contains(pm))
+                        {
+                            PrivateMessages.Remove(pm);
+                            _channelLookup.TryRemove(pm.Name, out _);
+                            if (SelectedChannel == pm)
+                            {
+                                SelectedChannel = Channels.FirstOrDefault();
+                            }
+                        }
+                    });
+                }
             });
 
             // Start connection
@@ -317,6 +360,26 @@ namespace KonnectChatIRC.ViewModels
                         {
                             string msg = parts.Length > 1 ? text.Substring(6) : DefaultQuitMessage;
                             Disconnect(msg);
+                        }
+                        else if (cmd == "/msg" && parts.Length > 2)
+                        {
+                             string target = parts[1];
+                             string msg = string.Join(" ", parts.Skip(2));
+                             
+                             ExecuteStartPrivateChat(target);
+                             _ircService?.SendRawAsync($"PRIVMSG {target} :{msg}");
+                             
+                             // Echo to local PM window
+                             if (_channelLookup.TryGetValue(target, out var pmChan))
+                             {
+                                 pmChan.AddMessage(new ChatMessage
+                                 {
+                                     Sender = CurrentNick,
+                                     Content = msg,
+                                     Timestamp = DateTime.Now,
+                                     IsIncoming = false
+                                 });
+                             }
                         }
                         else
                         {
@@ -355,25 +418,35 @@ namespace KonnectChatIRC.ViewModels
                 var senderNick = GetNickFromPrefix(e.Prefix);
 
                 // If the target is our own nick, this is a private message to us.
-                // The "channel" tab should be named after the sender, not us.
-                string channelName = target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase) 
-                    ? senderNick 
-                    : target;
+                // The "channel" tab should be named after the sender.
+                bool isPm = target.Equals(CurrentNick, StringComparison.OrdinalIgnoreCase);
+                string channelName = isPm ? senderNick : target;
+
+                if (isPm)
+                {
+                    ExecuteStartPrivateChat(senderNick, select: false); 
+                    // ExecuteStartPrivateChat handles creating/adding to PrivateMessages collection
+                }
                 
-                var channel = GetOrCreateChannel(channelName);
+                var channel = GetOrCreateChannel(channelName); // This will return the PM channel if it exists
                 if (channel != null)
                 {
                     var senderUser = channel.Users.FirstOrDefault(u => u.Nickname.Equals(senderNick, StringComparison.OrdinalIgnoreCase));
                     string prefix = senderUser?.Prefix ?? "";
 
-                    channel.AddMessage(new ChatMessage 
-                    { 
-                        Sender = senderNick, 
+                    channel.AddMessage(new ChatMessage
+                    {
+                        Sender = senderNick,
                         SenderPrefix = prefix,
                         Content = content,
                         Timestamp = DateTime.Now,
                         IsIncoming = true
                     });
+
+                    if (SelectedChannel != channel)
+                    {
+                        channel.UnreadCount++;
+                    }
                 }
             }
             else if (e.Command == "NOTICE")
@@ -1014,6 +1087,31 @@ namespace KonnectChatIRC.ViewModels
                 // /oper nick password
                 _ = _ircService?.SendRawAsync($"OPER {nick} {password}");
             }
+        }
+
+        private void ExecuteStartPrivateChat(string targetNick, bool select = true)
+        {
+            if (string.Equals(targetNick, CurrentNick, StringComparison.OrdinalIgnoreCase)) return;
+
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                var pmKey = targetNick;
+                if (!_channelLookup.ContainsKey(pmKey))
+                {
+                    var pmChannel = new ChannelViewModel(targetNick);
+                    // Add a dummy user for the target
+                    pmChannel.AddUser(new IrcUser(targetNick));
+                    pmChannel.AddUser(new IrcUser(CurrentNick)); // Add self
+
+                    _channelLookup.TryAdd(pmKey, pmChannel);
+                    PrivateMessages.Add(pmChannel);
+                }
+                
+                if (select)
+                {
+                    SelectedChannel = _channelLookup[pmKey];
+                }
+            });
         }
     }
 }

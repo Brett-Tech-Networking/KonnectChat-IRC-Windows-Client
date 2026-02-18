@@ -407,6 +407,7 @@ namespace KonnectChatIRC
                     Handle.SelectedServer.SelectedChannel = selected;
                 }
                 OtherChannelsList.SelectedItem = null;
+                PrivateMessagesList.SelectedItem = null;
             }
         }
 
@@ -419,6 +420,20 @@ namespace KonnectChatIRC
                     Handle.SelectedServer.SelectedChannel = selected;
                 }
                 FavoriteChannelsList.SelectedItem = null;
+                PrivateMessagesList.SelectedItem = null;
+            }
+        }
+
+        private void PrivateMessagesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PrivateMessagesList.SelectedItem is ChannelViewModel selected)
+            {
+                if (Handle.SelectedServer != null)
+                {
+                    Handle.SelectedServer.SelectedChannel = selected;
+                }
+                FavoriteChannelsList.SelectedItem = null;
+                OtherChannelsList.SelectedItem = null;
             }
         }
     }

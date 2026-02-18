@@ -19,6 +19,7 @@
             <converters:InitialsConverter x:Key="InitialsConverter" />
             <converters:NotServerWindowConverter x:Key="NotServerWindowConverter" />
             <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
+            <converters:CollectionVisibilityConverter x:Key="CountToVis" />
             <!-- <converters:UserListToggleConverter x:Key="UserListToggleConverter" /> -->
 
 

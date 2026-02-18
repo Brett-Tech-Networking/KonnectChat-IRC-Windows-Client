@@ -235,9 +235,9 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeNameTable[5] = "KonnectChatIRC.Converters.InitialsConverter";
             _typeNameTable[6] = "KonnectChatIRC.Converters.NotServerWindowConverter";
             _typeNameTable[7] = "KonnectChatIRC.Converters.StatusToColorConverter";
-            _typeNameTable[8] = "KonnectChatIRC.Converters.NullToVisibilityConverter";
-            _typeNameTable[9] = "KonnectChatIRC.Converters.BoolToGridLengthConverter";
-            _typeNameTable[10] = "KonnectChatIRC.Converters.CollectionVisibilityConverter";
+            _typeNameTable[8] = "KonnectChatIRC.Converters.CollectionVisibilityConverter";
+            _typeNameTable[9] = "KonnectChatIRC.Converters.NullToVisibilityConverter";
+            _typeNameTable[10] = "KonnectChatIRC.Converters.BoolToGridLengthConverter";
             _typeNameTable[11] = "Microsoft.UI.Xaml.Controls.Expander";
             _typeNameTable[12] = "Microsoft.UI.Xaml.Controls.ContentControl";
             _typeNameTable[13] = "Microsoft.UI.Xaml.Controls.ExpandDirection";
@@ -274,9 +274,9 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
             _typeTable[5] = typeof(global::KonnectChatIRC.Converters.InitialsConverter);
             _typeTable[6] = typeof(global::KonnectChatIRC.Converters.NotServerWindowConverter);
             _typeTable[7] = typeof(global::KonnectChatIRC.Converters.StatusToColorConverter);
-            _typeTable[8] = typeof(global::KonnectChatIRC.Converters.NullToVisibilityConverter);
-            _typeTable[9] = typeof(global::KonnectChatIRC.Converters.BoolToGridLengthConverter);
-            _typeTable[10] = typeof(global::KonnectChatIRC.Converters.CollectionVisibilityConverter);
+            _typeTable[8] = typeof(global::KonnectChatIRC.Converters.CollectionVisibilityConverter);
+            _typeTable[9] = typeof(global::KonnectChatIRC.Converters.NullToVisibilityConverter);
+            _typeTable[10] = typeof(global::KonnectChatIRC.Converters.BoolToGridLengthConverter);
             _typeTable[11] = typeof(global::Microsoft.UI.Xaml.Controls.Expander);
             _typeTable[12] = typeof(global::Microsoft.UI.Xaml.Controls.ContentControl);
             _typeTable[13] = typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection);
@@ -342,9 +342,9 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private object Activate_5_InitialsConverter() { return new global::KonnectChatIRC.Converters.InitialsConverter(); }
         private object Activate_6_NotServerWindowConverter() { return new global::KonnectChatIRC.Converters.NotServerWindowConverter(); }
         private object Activate_7_StatusToColorConverter() { return new global::KonnectChatIRC.Converters.StatusToColorConverter(); }
-        private object Activate_8_NullToVisibilityConverter() { return new global::KonnectChatIRC.Converters.NullToVisibilityConverter(); }
-        private object Activate_9_BoolToGridLengthConverter() { return new global::KonnectChatIRC.Converters.BoolToGridLengthConverter(); }
-        private object Activate_10_CollectionVisibilityConverter() { return new global::KonnectChatIRC.Converters.CollectionVisibilityConverter(); }
+        private object Activate_8_CollectionVisibilityConverter() { return new global::KonnectChatIRC.Converters.CollectionVisibilityConverter(); }
+        private object Activate_9_NullToVisibilityConverter() { return new global::KonnectChatIRC.Converters.NullToVisibilityConverter(); }
+        private object Activate_10_BoolToGridLengthConverter() { return new global::KonnectChatIRC.Converters.BoolToGridLengthConverter(); }
         private object Activate_11_Expander() { return new global::Microsoft.UI.Xaml.Controls.Expander(); }
         private object Activate_20_NumberBox() { return new global::Microsoft.UI.Xaml.Controls.NumberBox(); }
         private object Activate_30_MainWindow() { return new global::KonnectChatIRC.MainWindow(); }
@@ -356,9 +356,9 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
         private void StaticInitializer_5_InitialsConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.InitialsConverter).TypeHandle);
         private void StaticInitializer_6_NotServerWindowConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.NotServerWindowConverter).TypeHandle);
         private void StaticInitializer_7_StatusToColorConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.StatusToColorConverter).TypeHandle);
-        private void StaticInitializer_8_NullToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.NullToVisibilityConverter).TypeHandle);
-        private void StaticInitializer_9_BoolToGridLengthConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.BoolToGridLengthConverter).TypeHandle);
-        private void StaticInitializer_10_CollectionVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.CollectionVisibilityConverter).TypeHandle);
+        private void StaticInitializer_8_CollectionVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.CollectionVisibilityConverter).TypeHandle);
+        private void StaticInitializer_9_NullToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.NullToVisibilityConverter).TypeHandle);
+        private void StaticInitializer_10_BoolToGridLengthConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KonnectChatIRC.Converters.BoolToGridLengthConverter).TypeHandle);
         private void StaticInitializer_11_Expander() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.Expander).TypeHandle);
         private void StaticInitializer_13_ExpandDirection() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.ExpandDirection).TypeHandle);
         private void StaticInitializer_14_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
@@ -451,26 +451,26 @@ namespace KonnectChatIRC.KonnectChatIRC_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 8:   //  KonnectChatIRC.Converters.NullToVisibilityConverter
+            case 8:   //  KonnectChatIRC.Converters.CollectionVisibilityConverter
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.Activator = Activate_8_NullToVisibilityConverter;
-                userType.StaticInitializer = StaticInitializer_8_NullToVisibilityConverter;
+                userType.Activator = Activate_8_CollectionVisibilityConverter;
+                userType.StaticInitializer = StaticInitializer_8_CollectionVisibilityConverter;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 9:   //  KonnectChatIRC.Converters.BoolToGridLengthConverter
+            case 9:   //  KonnectChatIRC.Converters.NullToVisibilityConverter
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.Activator = Activate_9_BoolToGridLengthConverter;
-                userType.StaticInitializer = StaticInitializer_9_BoolToGridLengthConverter;
+                userType.Activator = Activate_9_NullToVisibilityConverter;
+                userType.StaticInitializer = StaticInitializer_9_NullToVisibilityConverter;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 10:   //  KonnectChatIRC.Converters.CollectionVisibilityConverter
+            case 10:   //  KonnectChatIRC.Converters.BoolToGridLengthConverter
                 userType = new global::KonnectChatIRC.KonnectChatIRC_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.Activator = Activate_10_CollectionVisibilityConverter;
-                userType.StaticInitializer = StaticInitializer_10_CollectionVisibilityConverter;
+                userType.Activator = Activate_10_BoolToGridLengthConverter;
+                userType.StaticInitializer = StaticInitializer_10_BoolToGridLengthConverter;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
