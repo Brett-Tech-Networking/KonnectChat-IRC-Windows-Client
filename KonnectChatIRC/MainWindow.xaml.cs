@@ -106,6 +106,8 @@ namespace KonnectChatIRC
                 {
                     _currentServer.RequestKillDialog -= Server_RequestKillDialog;
                     _currentServer.RequestGlineDialog -= Server_RequestGlineDialog;
+                    _currentServer.RequestIdent -= Server_RequestIdent;
+                    _currentServer.RequestOper -= Server_RequestOper;
                 }
 
                 _currentServer = Handle.SelectedServer;
@@ -114,6 +116,8 @@ namespace KonnectChatIRC
                 {
                     _currentServer.RequestKillDialog += Server_RequestKillDialog;
                     _currentServer.RequestGlineDialog += Server_RequestGlineDialog;
+                    _currentServer.RequestIdent += Server_RequestIdent;
+                    _currentServer.RequestOper += Server_RequestOper;
                 }
             }
         }
@@ -192,6 +196,35 @@ namespace KonnectChatIRC
                 if (string.IsNullOrWhiteSpace(reason)) reason = "No reason given";
 
                 _currentServer?.PerformGline(user, mask, duration, reason);
+            }
+        }
+
+        private async void Server_RequestIdent(object? sender, EventArgs e)
+        {
+            if (IdentDialog == null) return;
+            
+            IdentDialog.XamlRoot = this.Content.XamlRoot;
+            IdentPasswordBox.Password = "";
+            
+            var result = await IdentDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                _currentServer?.PerformIdent(IdentPasswordBox.Password);
+            }
+        }
+
+        private async void Server_RequestOper(object? sender, EventArgs e)
+        {
+            if (OperDialog == null) return;
+            
+            OperDialog.XamlRoot = this.Content.XamlRoot;
+            OperNickBox.Text = _currentServer?.CurrentNick ?? "";
+            OperPasswordBox.Password = "";
+            
+            var result = await OperDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                _currentServer?.PerformOper(OperNickBox.Text, OperPasswordBox.Password);
             }
         }
 

@@ -108,6 +108,8 @@ namespace KonnectChatIRC.ViewModels
         public ICommand BanUserCommand { get; }
         public ICommand KillUserCommand { get; }
         public ICommand GlineUserCommand { get; }
+        public ICommand OpUserCommand { get; }
+        public ICommand DeopUserCommand { get; }
         public ICommand ChangeNickCommand { get; }
         public ICommand PartChannelCommand { get; }
         public ICommand ChangeTopicCommand { get; }
@@ -115,6 +117,10 @@ namespace KonnectChatIRC.ViewModels
 
         public event EventHandler<IrcUser>? RequestKillDialog;
         public event EventHandler<IrcUser>? RequestGlineDialog;
+        public event EventHandler? RequestIdent;
+        public event EventHandler? RequestOper;
+
+        private const string DefaultQuitMessage = "KonnectChat IRC Desktop Client https://www.bretttechcoding.com/Projects/windows-apps/konnectchatirc";
 
         public ServerViewModel(string serverName, string address, int port, string nick, string realname, string? password, string? autoJoinChannel)
         {
@@ -140,11 +146,22 @@ namespace KonnectChatIRC.ViewModels
             BanUserCommand = new RelayCommand(param => ExecuteBanUser(param as IrcUser));
             KillUserCommand = new RelayCommand(param => ExecuteKillUser(param as IrcUser));
             GlineUserCommand = new RelayCommand(param => ExecuteGlineUser(param as IrcUser));
+            OpUserCommand = new RelayCommand(param => ExecuteOpUser(param as IrcUser));
+            OpUserCommand = new RelayCommand(param => ExecuteOpUser(param as IrcUser));
+            DeopUserCommand = new RelayCommand(param => ExecuteDeopUser(param as IrcUser));
+            IdentCommand = new RelayCommand(_ => RequestIdent?.Invoke(this, EventArgs.Empty));
+            OperCommand = new RelayCommand(_ => RequestOper?.Invoke(this, EventArgs.Empty));
             
             _ircService.MessageReceived += OnMessageReceived;
             
             _ircService.WelcomeReceived += (s, e) => 
             {
+                // NickServ Identify if password is set
+                if (!string.IsNullOrEmpty(_password))
+                {
+                    _ = _ircService.SendRawAsync($"PRIVMSG NickServ :ID {_password}");
+                }
+
                 if (!string.IsNullOrEmpty(autoJoinChannel))
                 {
                     var channelToJoin = autoJoinChannel.StartsWith("#") ? autoJoinChannel : "#" + autoJoinChannel;
@@ -196,7 +213,7 @@ namespace KonnectChatIRC.ViewModels
             // SendCommand already initialized above
             // DisconnectCommand already initialized above
             ChangeNickCommand = new RelayCommand(nick => _ircService?.SendRawAsync($"NICK {nick}"));
-            PartChannelCommand = new RelayCommand(chan => _ircService?.SendRawAsync($"PART {chan}"));
+            PartChannelCommand = new RelayCommand(chan => _ircService?.SendRawAsync($"PART {chan} :{DefaultQuitMessage}"));
             ChangeTopicCommand = new RelayCommand(topicObj => 
             {
                 var topic = topicObj as string;
@@ -276,7 +293,9 @@ namespace KonnectChatIRC.ViewModels
         {
             if (_ircService != null)
             {
-                await _ircService.ConnectAsync(address, port, nick, realname, password);
+                // Pass null for server password, as requested user wants password for NickServ only
+            // The password is stored in _password and used in WelcomeReceived
+            await _ircService.ConnectAsync(_address, _port, _currentNick, _realname, null);
             }
         }
 
@@ -296,7 +315,7 @@ namespace KonnectChatIRC.ViewModels
                         }
                         else if (cmd == "/quit")
                         {
-                            string msg = parts.Length > 1 ? text.Substring(6) : "KonnectChat IRC Desktop Client";
+                            string msg = parts.Length > 1 ? text.Substring(6) : DefaultQuitMessage;
                             Disconnect(msg);
                         }
                         else
@@ -901,6 +920,22 @@ namespace KonnectChatIRC.ViewModels
              }
         }
 
+        private void ExecuteOpUser(IrcUser user)
+        {
+            if (user != null && SelectedChannel != null)
+            {
+                _ = _ircService?.SendRawAsync($"MODE {SelectedChannel.Name} +o {user.Nickname}");
+            }
+        }
+
+        private void ExecuteDeopUser(IrcUser user)
+        {
+            if (user != null && SelectedChannel != null)
+            {
+                _ = _ircService?.SendRawAsync($"MODE {SelectedChannel.Name} -o {user.Nickname}");
+            }
+        }
+
         public ServerConfig ToConfig()
         {
             return new ServerConfig
@@ -936,7 +971,7 @@ namespace KonnectChatIRC.ViewModels
 
         private void ExecuteDisconnect()
         {
-            Disconnect("KonnectChat IRC Desktop Client");
+            Disconnect(DefaultQuitMessage);
         }
 
         private void ExecuteRemoveServer()
@@ -958,6 +993,27 @@ namespace KonnectChatIRC.ViewModels
             // Note: Command syntax varies by IRCD. Standard often: GLINE <mask> <duration> :<reason>
             // Some use +duration. Assuming standard numeric duration.
             _ = _ircService?.SendRawAsync($"GLINE {mask} {durationSeconds} :{reason}");
+        }
+
+        public ICommand IdentCommand { get; }
+        public ICommand OperCommand { get; }
+
+        public void PerformIdent(string password)
+        {
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                // /ns id password -> PRIVMSG NickServ :ID password
+                _ = _ircService?.SendRawAsync($"PRIVMSG NickServ :ID {password}");
+            }
+        }
+
+        public void PerformOper(string nick, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(nick) && !string.IsNullOrWhiteSpace(password))
+            {
+                // /oper nick password
+                _ = _ircService?.SendRawAsync($"OPER {nick} {password}");
+            }
         }
     }
 }
